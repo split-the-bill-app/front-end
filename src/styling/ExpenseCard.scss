@@ -1,0 +1,82 @@
+
+.expense-card-div {
+
+    @media (max-width: 800px) {
+        width: 100%;
+        height: auto;
+      }
+  
+      @media (max-width: 500px) {
+        width: 100%;
+        height: auto;
+      }
+
+
+.ui.card {
+    width: 100%;
+    text-align: left;
+
+    .header {
+        text-align: left;
+    }
+
+    .delete-icon::before {
+        padding: 5px;
+        &:hover {
+            background: grey;
+        }
+    }
+
+    .delete-icon {
+       position: absolute;
+       padding: 3px;
+       right: 5px;
+       top: 5px;
+       cursor: pointer;
+       
+    }
+
+    .edit-icon {      
+      
+     }
+
+     .mail-icon {      
+      
+   }
+
+     ui.modal.transition.visible.active {
+         .header {
+            @media (max-width: 800px) {
+                width: 100%;
+                height: auto;
+              }
+          
+              @media (max-width: 500px) {
+                width: 100%;
+                height: auto;
+              }
+    
+         }
+     }
+    
+    .sent-notifications {
+        margin: 5px 0;
+        margin-bottom: 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        p{
+            margin: 5px 0px;
+        }
+
+        .notification {
+            margin: 3px 5px;
+            /*background: rgb(124, 34, 197);*/
+            background: #2eb497;
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+        }
+    }
+    }
+}

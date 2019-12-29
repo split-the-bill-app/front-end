@@ -1,0 +1,39 @@
+.splitproofheader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; 
+  width: 100%;
+  height: 10vh;
+  background: #2eb497;
+  color: white;
+  box-shadow: 0 5px 3px 0 rgb(151, 151, 151);
+
+  @media (max-width: 800px) {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+    height: auto;
+  }
+
+  img {
+   
+
+    @media (max-width: 800px) {
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 500px) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    font-family: 'Megrim', cursive;
+  }
+}
