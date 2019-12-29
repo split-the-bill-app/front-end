@@ -83,7 +83,7 @@ const FormikAddExpenseForm = withFormik({
   //formik handles all side effects so we dont need to use useEffect
   handleSubmit(values, { resetForm, setErrors, setStatus, setSubmitting }) {
     axiosWithAuth()       
-      .post("https://build-split-the-bill.herokuapp.com/api/bills/", {...values, user_id: localStorage.getItem('userId')})
+      .post("https://split-the-bill-app.herokuapp.com/api/bills/", {...values, user_id: localStorage.getItem('userId')})
       .then(res => {
         console.log("add expense", res); // Data was created successfully and logs to console
 

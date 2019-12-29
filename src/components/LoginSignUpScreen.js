@@ -19,7 +19,7 @@ const LoginSignupScreen = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post(
-      'https://build-split-the-bill.herokuapp.com/api/users/login', loginCredentials
+      'https://split-the-bill-app.herokuapp.com/api/users/login', loginCredentials
       )
       .then(res => {
         localStorage.setItem('token', res.data.token);

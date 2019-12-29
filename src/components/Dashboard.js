@@ -37,7 +37,7 @@ export default function Dashboard (props) {
 
     useEffect(() => {
         // get user details and set them to state "user"
-        axiosWithAuth().get(`https://build-split-the-bill.herokuapp.com/api/users/${localStorage.getItem('userId')}`)
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}`)
             .then(res => {
                 console.log(res);
                 setUser(res.data);
@@ -46,7 +46,7 @@ export default function Dashboard (props) {
                 console.log(err);
             })
         // then get all bills for the user and set them to state "expenses"
-        axiosWithAuth().get(`https://build-split-the-bill.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
             .then(res => {
                 console.log(res);
                 setExpenses(res.data);

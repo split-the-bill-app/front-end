@@ -8,7 +8,7 @@ function EditExpenseForm(props) {
 
   useEffect ( () => {
 
-    axiosWithAuth().get(`https://build-split-the-bill.herokuapp.com/api/bills/${props.expenseId}`) 
+    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`) 
       .then(res => {
 
         setExpenseToEdit(res.data) 
@@ -35,7 +35,7 @@ function EditExpenseForm(props) {
 
     event.preventDefault();
 
-    axiosWithAuth().put(`https://build-split-the-bill.herokuapp.com/api/bills/${props.expenseId}`, expenseToEdit)
+    axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`, expenseToEdit)
     .then(res => {
 
     //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS

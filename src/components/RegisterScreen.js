@@ -41,12 +41,12 @@ const RegisterScreen = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://build-split-the-bill.herokuapp.com/api/users/register', newUserInfo)
+    axios.post('https://split-the-bill-app.herokuapp.com/api/users/register', newUserInfo)
     
       .then(res => {
         localStorage.setItem('userId', res.data.id);
         console.log(res);
-        axios.post('https://build-split-the-bill.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
+        axios.post('https://split-the-bill-app.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
           .then(res => {
             localStorage.setItem('token', res.data.token);
             props.history.push('/dashboard');

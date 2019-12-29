@@ -16,7 +16,7 @@ export default function ExpenseCard(props) {
   const [notifications, setNotifications] = useState([])
 
   useEffect(() => {
-    axiosWithAuth().get(`https://build-split-the-bill.herokuapp.com/api/bills/${props.expense.id}/notifications`)
+    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
       .then(res => {
         console.log(res);
         setNotifications(res.data);
@@ -34,11 +34,11 @@ export default function ExpenseCard(props) {
   const deleteExpense = (e, expense) => {
     e.preventDefault();
     if(notifications.length > 0) {
-      axiosWithAuth().delete(`https://build-split-the-bill.herokuapp.com/api/bills/${expense.id}/notifications`)
+      axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}/notifications`)
         .then(res => {
           console.log(res);
           setNotifications([]);
-          axiosWithAuth().delete(`https://build-split-the-bill.herokuapp.com/api/bills/${expense.id}`)
+          axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}`)
             .then(res => {
               console.log(res);
               // filter out the expense we just deleted using its "id"
@@ -52,7 +52,7 @@ export default function ExpenseCard(props) {
           console.log(err);
         })
     } else {
-      axiosWithAuth().delete(`https://build-split-the-bill.herokuapp.com/api/bills/${expense.id}`)
+      axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}`)
         .then(res => {
           console.log(res);
           // filter out the expense we just deleted using its "id"

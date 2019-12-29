@@ -59,13 +59,13 @@ function SendNotificationForm(props) {
 
     e.preventDefault();
     
-    axiosWithAuth().post('https://build-split-the-bill.herokuapp.com/api/notifications', newNotifications)
+    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
       .then(res => {
         setNewNotifications({
           bill_id: props.expenseId,
           email: []
         })
-        axiosWithAuth().get(`https://build-split-the-bill.herokuapp.com/api/bills/${props.expenseId}/notifications`)
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
           .then(res => {
             console.log(res);
             props.setNotifications(res.data);
@@ -99,7 +99,7 @@ function SendNotificationForm(props) {
 
   
 
-  axiosWithAuth().get('https://build-split-the-bill.herokuapp.com/api/notifications')
+  axiosWithAuth().get('https://split-the-bill-app.herokuapp.com/api/notifications')
     .then(res => {
       console.log(res);
     })   
