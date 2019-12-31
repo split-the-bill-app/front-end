@@ -19,8 +19,8 @@ function SendNotificationForm(props) {
   const [inputs, setInputs] = useState([
     {
       name: "email",
-      type: "text",
-      placeholder: "Enter Your Friend's Name/Email/No.",
+      type: "email",
+      placeholder: "Enter Your Friend's Email",
       value: ''
     }
   ])
@@ -32,9 +32,8 @@ function SendNotificationForm(props) {
       ...inputs, 
       {
         name: "email",
-        //type: "email",
-        type: "text",
-        placeholder: "Enter Your Friend's Name/Email/No."
+        type: "email",        
+        placeholder: "Enter Your Friend's Email"
       }
       ])
       
@@ -55,7 +54,7 @@ function SendNotificationForm(props) {
 
   // reset inputs and post the newNotifications object
   const submitNotifications = (e) => {
-    console.log(newNotifications);
+    console.log("new notifications in send notification form", newNotifications);
 
     e.preventDefault();
     
@@ -67,7 +66,7 @@ function SendNotificationForm(props) {
         })
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
           .then(res => {
-            console.log(res);
+            console.log("notifications for a specific bill in send notification form", res);
             props.setNotifications(res.data);
           })
           .catch(err => {
@@ -82,10 +81,9 @@ function SendNotificationForm(props) {
       setInputs([
         {
           name: "email",
-          //type: "email",
-          type: "text",
-          placeholder: "Enter Your Friend's Name/Email/No.",
-          value: ''
+          type: "email",          
+          placeholder: "Enter Your Friend's Email",
+          value: ''          
         }
       ]);
 
@@ -94,14 +92,12 @@ function SendNotificationForm(props) {
   const deleteInput = (event, i) => {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
-    console.log(inputs);
-  }
-
-  
+    console.log("input", inputs);
+  }  
 
   axiosWithAuth().get('https://split-the-bill-app.herokuapp.com/api/notifications')
     .then(res => {
-      console.log(res);
+      console.log("all notifications in send notification form", res);
     })   
   
 
@@ -112,13 +108,7 @@ function SendNotificationForm(props) {
     className="send-notification-form">
 
       {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}
-      <button 
-      type="button"
-      className="add-email-btn"
-      onClick={(e) => addInput(e)}>
-        Add Another Email/Name/No.
-      </button>
-
+      
       {inputs.map((input, index) => {
         return (
           <div key={index}>
@@ -126,7 +116,8 @@ function SendNotificationForm(props) {
             onChange={(event) => handleChange(event, index)}
             placeholder={input.placeholder} 
             name={input.name}
-            type="text"
+            value={input.value}
+            type="email"
             required
             />
             <Icon 
@@ -137,7 +128,18 @@ function SendNotificationForm(props) {
           </div>
         )
       })}
-      <button className="send-notification-btn" type="submit">Submit</button>
+      
+      <div className = "button-div">
+        <button className="send-notification-btn" type="submit">Submit</button>
+
+        <button 
+        type="button"
+        className="send-notification-btn"
+        onClick={(e) => addInput(e)}>
+          Add Another Email
+        </button>
+      </div>
+
     </form>
    
   );

@@ -85,12 +85,12 @@
             @media (max-width: 800px) {
                 width: auto;
                 height: auto;
-              }
+            }
           
-              @media (max-width: 500px) {
-                width: auto;
-                height: auto;
-              }
+            @media (max-width: 500px) {
+              width: auto;
+              height: auto;
+            }
         }
     }
     @keyframes slideIn {
@@ -100,28 +100,60 @@
             margin-right: 0px;
         }
     }
-    .send-notification-btn {
-        font-size: 1.2rem;
-        width: 20%;
-        height: 2rem;
-        margin: 0 auto;
-        outline: none;
-        cursor: pointer;
-        border: none;
-        background: #2e4bb4;
-        color: white;
-        border-radius: 3px;
-        transition: all .3s;
-        box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.507);
 
-        &:hover {
-          background: #4862c4;
-        }
-        &:active {
-          transition: all .1s;
-          background: #798ac7;
-          transform: translateY(3px);
-          box-shadow: none;
-        }
-    }
+    .button-div {     
+      display: flex;
+      width: 50%;
+      height: auto;
+      justify-content: space-around;
+
+      .send-notification-btn {
+          font-size: 1.2rem;
+          width: 45%;
+          height: 2rem;
+          margin: 0 auto;
+          outline: none;
+          cursor: pointer;
+          border: none;
+          background: #2e4bb4;
+          color: white;
+          border-radius: 3px;
+          transition: all .3s;
+          //box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.507);
+
+          &:hover {
+            background: #4862c4;
+          }
+          &:active {
+            transition: all .1s;
+            background: #798ac7;
+            transform: translateY(3px);
+            box-shadow: none;
+          }
+
+          @media (max-width: 800px) {
+            font-size: 1rem;
+            width: 45%;
+            height: 2rem;
+          }
+      
+          @media (max-width: 500px) {
+            font-size: 1rem;
+            width: 45%;
+            height: 2rem;
+          }
+      }
+
+      @media (max-width: 800px) {
+        width: 50%;
+        height: 100%;
+      }
+  
+      @media (max-width: 500px) {
+        width: 70%;
+        height: 100%;
+      }
+
+      
+    }//end button div
 }

@@ -31,21 +31,22 @@ const RegisterScreen = (props) => {
     password: ''
   })
 
-  const handleChange = (e) => {
+  const handleChange = (e) => {   
+    e.preventDefault(); 
     setNewUserInfo({
       ...newUserInfo,
       [e.target.name]: e.target.value
-    })
-    console.log(newUserInfo)
-  }
+    })    
+         
+  };
 
   const handleSubmit = (e) => {
+    console.log("new user info", newUserInfo)  
     e.preventDefault();
-    axios.post('https://split-the-bill-app.herokuapp.com/api/users/register', newUserInfo)
-    
+    axios.post('https://split-the-bill-app.herokuapp.com/api/users/register', newUserInfo)    
       .then(res => {
         localStorage.setItem('userId', res.data.id);
-        console.log(res);
+        console.log("register res", res.data);
         axios.post('https://split-the-bill-app.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
           .then(res => {
             localStorage.setItem('token', res.data.token);
@@ -67,11 +68,10 @@ const RegisterScreen = (props) => {
       <h2 className="register-form-title">Sign Up for Split the Bill</h2>
 
         <form onSubmit={handleSubmit} className="register-form">
-
           
             <input 
             onChange={handleChange}
-            name="firstname"
+            name="firstname"                                    
             placeholder="First Name"
             type="text"
             required
@@ -82,10 +82,7 @@ const RegisterScreen = (props) => {
             placeholder="Last Name"
             type="text"
             required
-            />
-          
-
-         
+            />        
             <input 
             onChange={handleChange}
             name="email"

@@ -7,8 +7,8 @@ import * as Yup from "yup";
 import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 
 function AddExpenseForm(props) {  
-
-   const { errors, touched, isSubmitting, status } = props;
+  
+  const { errors, touched, isSubmitting, status } = props;
 
   //used to display the form data on the screen  
   useEffect(() => {
@@ -23,49 +23,41 @@ function AddExpenseForm(props) {
        
 
         <Form className = "expense-form">
-
                  
-            {/*<Field className = "form-input" type="text" name="expensetitle" placeholder="What is this expense for?" />
-            {touched.expensetitle && errors.expensetitle && <p>{errors.expensetitle}</p>}*/}       
-
-                
-            <Field className = "form-input" type="number" name="split_sum" placeholder="How much was the bill?" />
-            {touched.split_sum && errors.split_sum && <p>{errors.split_sum}</p>}        
-
-            
-            <Field className = "form-input" type="number" name="split_people_count" placeholder="How many people are paying?" />
-            {touched.split_people_count && errors.split_people_count && <p>{errors.split_people_count}</p>}
-         
-
-                 
-           {/* <Field className = "form-input" type="text" name="name" placeholder="Names of your friends" />
-            {touched.name && errors.name && <p>{errors.name}</p>}
-         
-         
-               
-            <Field className = "form-input" type="email" name="email" placeholder="Their Email Addresses" />
-          {touched.email && errors.email && <p>{errors.email}</p>} */}
-                
+          {/*<Field className = "form-input" type="text" name="expensetitle" placeholder="What is this expense for?" />
+          {touched.expensetitle && errors.expensetitle && <p>{errors.expensetitle}</p>}*/}    
+              
+          <Field className = "form-input" type="number" name="split_sum" placeholder="How much was the bill?" />
+          {touched.split_sum && errors.split_sum && <p>{errors.split_sum}</p>}       
+          
+          <Field className = "form-input" type="number" name="split_people_count" placeholder="How many people are paying?" />
+          {touched.split_people_count && errors.split_people_count && <p>{errors.split_people_count}</p>}
+                        
+          <Field className = "form-input" type="text" maxlength="60" name="description" placeholder="What was this for?" />
+          {touched.description && errors.description && <p>{errors.description}</p>}       
+                      
+          {/*<Field className = "form-input" type="email" name="email" placeholder="Their Email Addresses" />
+          {touched.email && errors.email && <p>{errors.email}</p>} */}                
                              
           <button type="submit" disabled={isSubmitting}>Calculate</button>
           
-        </Form>
-       
+        </Form>       
 
     </div>
    
   );
 }
 
-//higher order function that takes LoginForm as an argument and returns a new Form:FormikLoginForm
-const FormikAddExpenseForm = withFormik({
+//higher order function that takes AddExpenseForm as an argument and returns a new Form:FormikAddExpenseForm
+const FormikAddExpenseForm = withFormik({   
 
   /*mapPropsToValues is used to initialise the values of the form state. Formik transfers the results of 
     mapPropsToValues into updatable form state and makes these values available to the new component as props.values.*/
-  mapPropsToValues({ split_sum, split_people_count }) {
+  mapPropsToValues({ split_sum, split_people_count, description }) {
     return { 
       split_sum: split_sum || "",
-      split_people_count: split_people_count || ""       
+      split_people_count: split_people_count || "",      
+      description: description || ""       
      
     };
   },
@@ -76,14 +68,19 @@ const FormikAddExpenseForm = withFormik({
     split_sum: Yup.number()      
       .required("Total is required"), 
     split_people_count: Yup.number()      
-      .required("Number of people is required")
+      .required("Number of people is required"),
+    description: Yup.string()
        
   }),
 
   //formik handles all side effects so we dont need to use useEffect
   handleSubmit(values, { resetForm, setErrors, setStatus, setSubmitting }) {
+
+    const split_each_amount = (values.split_sum/values.split_people_count).toFixed(2);   
+    console.log("split each amount", split_each_amount);
+
     axiosWithAuth()       
-      .post("https://split-the-bill-app.herokuapp.com/api/bills/", {...values, user_id: localStorage.getItem('userId')})
+      .post("https://split-the-bill-app.herokuapp.com/api/bills/", {...values, split_each_amount: split_each_amount, user_id: localStorage.getItem('userId')})
       .then(res => {
         console.log("add expense", res); // Data was created successfully and logs to console
 

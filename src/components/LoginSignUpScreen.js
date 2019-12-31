@@ -13,10 +13,11 @@ const LoginSignupScreen = (props) => {
       ...loginCredentials,
       [e.target.name]: e.target.value
     })
-    console.log('login creds: ', loginCredentials)
+   
   }
 
   const handleSubmit = (e) => {
+    console.log('login creds: ', loginCredentials)
     e.preventDefault();
     axios.post(
       'https://split-the-bill-app.herokuapp.com/api/users/login', loginCredentials

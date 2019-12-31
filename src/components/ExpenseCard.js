@@ -6,6 +6,7 @@ import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 import AddExpenseForm from "./AddExpenseForm";
 import EditExpenseForm from "./EditExpenseForm";
+import ManageNotifications from "./ManageNotifications";
 
 import SendNotificationForm from "./SendNotificationForm";
 
@@ -24,8 +25,7 @@ export default function ExpenseCard(props) {
       .catch(err => {
         console.log(err);
       })
-  }, [])
-  
+  }, [])  
   
 
   {/* calculate what each person owes */}
@@ -88,15 +88,20 @@ export default function ExpenseCard(props) {
 
          <Card.Description>
          <Icon name="money bill alternate" />
-          {`Each of your friends owe you: $${splitBill}`}
+          {`Each of your friends owe you: $${props.expense.split_each_amount}`}
         </Card.Description>     
 
+        <Card.Description className="sent-notifications">
+            {`Details: ${props.expense.description}`}
+        </Card.Description>
+
+        {/*NOTIFICATIONS/EMAIL ADDRESSES DISPLAYED ON THE BILL
         {notifications.length > 0 ? 
           <Card.Description className="sent-notifications">
             <p>Friends who owe you: </p>{notifications.map(
             (notification, index) => <p className="notification" key={index}>{notification.email}</p>)}
           </Card.Description> : null
-        }
+        } */}
 
         {/* THIS WILL DISPLAY 'YOU SENT NOTIFICATIONS TO' INSTEAD OF 'FRIENDS WHO OWE YOU'
         {notifications.length > 0 ? 
@@ -104,10 +109,9 @@ export default function ExpenseCard(props) {
             <p>You sent notifications to: </p>{notifications.map(
             (notification, index) => <p className="notification" key={index}>{notification.email}</p>)}
           </Card.Description> : null
-        }*/}
-        
+        }*/}        
 
-        </Card.Content>
+      </Card.Content>
 
       <Card.Content extra>     
 
@@ -126,27 +130,36 @@ export default function ExpenseCard(props) {
         {/*<Icon onClick={(e) => editExpense (e, props.expense)} name="edit outline" />  */}               
           
 
-        {/*MODAL THAT TRIGGERS SEND NOTIFICATION /> */}
-
-             
+        {/*MODAL THAT TRIGGERS SEND NOTIFICATION /> */}             
         <Modal trigger = {
 
         <Icon className = "mail-icon" name="mail"    />              
         } closeIcon>
 
-        {/*<Modal.Header>Notify Friends</Modal.Header>*/}
-
-        <Modal.Header>Notes</Modal.Header>
+        <Modal.Header>Notify Friends</Modal.Header>        
 
         <SendNotificationForm setNotifications={setNotifications} expenseId={props.expenseId}/>                                   
 
-        </Modal>        
-                    
-        
+        </Modal>   
+
+        {/*MODAL THAT DISPLAYS THE FRIENDS THAT OWE YOU */}
+        <Modal trigger = {
+
+        <Icon  className = "mail-icon" name="dollar sign" />              
+        } closeIcon>
+
+        <Modal.Header>Manage Notifications</Modal.Header>
+
+        {/*NOTIFICATIONS/EMAIL ADDRESSES DISPLAYED ON THE BILL*/}
+        {notifications.length > 0 ? 
+          <ManageNotifications notifications = {notifications}/> : null
+        }      
+
+        </Modal>      
+                  
       </Card.Content>
 
     </Card>
-
    
   </div>
 

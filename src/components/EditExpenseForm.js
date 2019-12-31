@@ -64,16 +64,22 @@ function EditExpenseForm(props) {
 
         <form onSubmit = {submitHandler} className = "expense-form">   
 
-          <input type = "text" 
+          <input type = "number" 
                  name="split_sum"  
                  value = {expenseToEdit.split_sum} 
                  placeholder="How much was the bill?"
                  onChange = {handleChange} />
 
-          <input type = "text" 
+          <input type = "number" 
                  name="split_people_count"  
                  value = {expenseToEdit.split_people_count} 
                  placeholder="How many people are paying?"
+                 onChange = {handleChange} />
+
+          <input type = "text" 
+                 name="description"  
+                 value = {expenseToEdit.description} 
+                 placeholder="What is this for?"
                  onChange = {handleChange} />
 
           <button type="submit" > Calculate </button>

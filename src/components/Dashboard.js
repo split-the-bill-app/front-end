@@ -39,7 +39,7 @@ export default function Dashboard (props) {
         // get user details and set them to state "user"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}`)
             .then(res => {
-                console.log(res);
+                console.log("user object when the app loads", res);
                 setUser(res.data);
             })
             .catch(err => {
@@ -56,10 +56,7 @@ export default function Dashboard (props) {
                 console.log(err);
             })
     }, [])
-    // console.log(user);
-
-    
-    
+    // console.log(user);   
 
     //adds an expense to the expenses array when the calculate button on the add expense form is clicked
     const addExpense = (expense) => {
@@ -145,7 +142,7 @@ export default function Dashboard (props) {
                     null 
                     }*/}
 
-                        <h1>Welcome {user.firstname} </h1>
+                        <h1>Hi {user.firstname}!</h1>
 
                     <Button onClick={logout}> Log Out </Button>                    
         
@@ -181,9 +178,7 @@ export default function Dashboard (props) {
                             <AddExpenseForm addExpense = {addExpense} />                                     
                
                         </Modal>
-                    }                
-                       
-                        
+                    }                               
                                    
                     
                 </div>  {/*end bills-list-div */}
