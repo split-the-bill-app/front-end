@@ -183,7 +183,7 @@ function SendNotificationForm(props) {
       })}
       
       <div className = "button-div">
-        <button className="send-notification-btn" type="submit">Submit</button>
+        <button className="send-notification-btn" type="submit">Send</button>
 
         <button 
         type="button"
