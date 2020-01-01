@@ -16,22 +16,31 @@ export default function Dashboard (props) {
     const [expenses, setExpenses] = useState([]);
 
     //calculates how much your friends owe you
-    let grandTotal = 0;
-    let totalPeople = 0;
+   
     let owedTotal = 0;
-    let count = 0;
+    let eachPersonBill = 0;
+    let owedForEachBill = 0;
+    let owedForEachBillTotal = 0;
 
     if (expenses.length > 0) {
 
         expenses.forEach( expense => {
 
-            grandTotal += expense.split_sum;
-            totalPeople += expense.split_people_count;
-            count = count + 1;       
+            /*grandTotal += expense.split_sum;
+            totalPeople += (expense.split_people_count - 1);
+            count = count + 1; */   
+            
+            eachPersonBill = (expense.split_sum / expense.split_people_count) 
+            owedForEachBill = expense.split_sum - eachPersonBill
+    
+            owedForEachBillTotal += owedForEachBill
 
         });
+       
+        owedTotal = owedForEachBillTotal.toFixed(2);
 
-        owedTotal = ((grandTotal/totalPeople)*(totalPeople-count)).toFixed(2); 
+        //owedTotal = ((grandTotal/totalPeople)*(totalPeople-count)).toFixed(2); 
+        //owedTotal = ((grandTotal / totalPeople) * count).toFixed(2);
 
     }//end if
 

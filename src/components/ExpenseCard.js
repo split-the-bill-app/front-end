@@ -7,14 +7,18 @@ import { axiosWithAuth } from "../utils/axiosWithAuth";
 import AddExpenseForm from "./AddExpenseForm";
 import EditExpenseForm from "./EditExpenseForm";
 import ManageNotifications from "./ManageNotifications";
+import EmptyNotifications from "./ManageNotifications";
 
 import SendNotificationForm from "./SendNotificationForm";
 
 export default function ExpenseCard(props) {
+  
   // keeps track of expenses
   const [expenses, setExpenses] = useState([]);
   // keeps track of notifications
-  const [notifications, setNotifications] = useState([])
+  const [notifications, setNotifications] = useState([])  
+
+  console.log("props.expense.id", props.expense.id);
 
   useEffect(() => {
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
@@ -28,7 +32,8 @@ export default function ExpenseCard(props) {
   }, [])  
   
 
-  {/* calculate what each person owes */}
+  {/* calculate what each person owes. not used anymore, 
+      this is calculated in AddExpenseForm and stored in the db */}
   const splitBill = (props.total/props.numpeople).toFixed(2);
 
   const deleteExpense = (e, expense) => {
@@ -62,9 +67,8 @@ export default function ExpenseCard(props) {
           console.log(err);
         })
     }
-  }
-
-  
+  }  
+    
   return (
 
     <div className = "expense-card-div">
@@ -116,10 +120,9 @@ export default function ExpenseCard(props) {
       <Card.Content extra>     
 
         {/*MODAL THAT TRIGGERS THE EDIT EXPENSE FORM */}
-        <Modal trigger = {
-
-        <Icon  className = "edit-icon" name="edit outline" />              
-        } closeIcon>
+        <Modal trigger = { <Icon  className = "edit-icon" name="edit outline" /> } 
+                       
+        closeIcon>
 
         <Modal.Header>Edit Expense</Modal.Header>
 
@@ -145,15 +148,17 @@ export default function ExpenseCard(props) {
         {/*MODAL THAT DISPLAYS THE FRIENDS THAT OWE YOU */}
         <Modal trigger = {
 
-        <Icon  className = "mail-icon" name="dollar sign" />              
+        <Icon  className = "dollar-icon" name="dollar sign" />              
         } closeIcon>
 
         <Modal.Header>Manage Notifications</Modal.Header>
 
+        <Modal.Content image scrolling>    
+      
         {/*NOTIFICATIONS/EMAIL ADDRESSES DISPLAYED ON THE BILL*/}
-        {notifications.length > 0 ? 
-          <ManageNotifications notifications = {notifications}/> : null
-        }      
+        {notifications.length > 0 ? <ManageNotifications notifications = {notifications}/> : <p>You haven't sent any notifications for this bill.</p> }   
+
+         </Modal.Content>   
 
         </Modal>      
                   

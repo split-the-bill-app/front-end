@@ -11,6 +11,8 @@ import { Icon } from 'semantic-ui-react';
 
 function SendNotificationForm(props) {  
 
+  const [notificationsBeforeAdding, setNotificationsBeforeAdding] = useState([]);
+
   const [newNotifications, setNewNotifications] = useState({
     bill_id: props.expenseId,
     email: []
@@ -43,20 +45,61 @@ function SendNotificationForm(props) {
   // according to the input we get from the user
   const handleChange = (event, i) => {
     event.preventDefault();
-    inputs[i].value = event.target.value;
+
+    inputs[i].value = event.target.value;    
+
+    const newNotificationsBeforeAdding = notificationsBeforeAdding.filter((notification, index) => {
+      console.log("email in newNotifications.email", newNotifications.email[index])
+      console.log("notification.email", notification.email)
+      return notification.email !== inputs[i].value
+      
+    })    
+
+    console.log("inputs[i].value", inputs[i].value);
+    console.log('notificationsBeforeAdding after filter in handleChange ', newNotificationsBeforeAdding);
+
     console.log("inputs", inputs);
+
     setNewNotifications({
       ...newNotifications,
       email: inputs.map(input => input.value)
     })
-    console.log('newnotifs: ', newNotifications);
+    console.log('newnotifs in handleChange: ', newNotifications);
   }
 
   // reset inputs and post the newNotifications object
   const submitNotifications = (e) => {
     console.log("new notifications in send notification form", newNotifications);
 
-    e.preventDefault();
+    e.preventDefault();    
+
+    /*const newNotificationsBeforeAdding =  notificationsBeforeAdding.filter((notification, index) => {
+      console.log("email in newNotifications.email", newNotifications.email[index])
+      console.log("notification.email", notification.email)
+      return notification.email === newNotifications.email[index]
+      
+    })
+
+    console.log("notificationsBeforeAdding after filter", newNotificationsBeforeAdding);
+
+    //if the email was already sent for this bill
+    if(notificationsBeforeAdding.length > 0){
+
+      //add the email addresses only to notificationsBeforeAdding
+      const printEmails = notificationsBeforeAdding.filter(notificationEmail => {
+        return notificationEmail.email
+
+      })
+
+      //and display an alert message with the email addresses
+      window.alert(`You already sent a notification to ${notificationsBeforeAdding}`);
+
+      //and filter through all the notifications to be added and only send to email addresses 
+      //that were not already sent to
+      newNotifications.email.filter((notificationsToAdd, index) => {
+        return notificationsToAdd !== notificationsBeforeAdding[index].email
+      })
+    }*/    
     
     axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
       .then(res => {
@@ -98,7 +141,17 @@ function SendNotificationForm(props) {
   axiosWithAuth().get('https://split-the-bill-app.herokuapp.com/api/notifications')
     .then(res => {
       console.log("all notifications in send notification form", res);
-    })   
+  })   
+
+  //get all notifications of a bill before adding a notification
+  axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
+  .then(res => {
+   setNotificationsBeforeAdding(res.data);
+   console.log("notificationsBeforeAdding right after axios call", notificationsBeforeAdding);
+  })
+  .catch(err => {
+   console.log(err);
+ })
   
 
   return (

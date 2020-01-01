@@ -77,7 +77,7 @@ const FormikAddExpenseForm = withFormik({
   handleSubmit(values, { resetForm, setErrors, setStatus, setSubmitting }) {
 
     const split_each_amount = (values.split_sum/values.split_people_count).toFixed(2);   
-    console.log("split each amount", split_each_amount);
+    console.log("split each amount in add expense form", split_each_amount);
 
     axiosWithAuth()       
       .post("https://split-the-bill-app.herokuapp.com/api/bills/", {...values, split_each_amount: split_each_amount, user_id: localStorage.getItem('userId')})

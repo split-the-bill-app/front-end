@@ -32,31 +32,29 @@ function EditExpenseForm(props) {
   }
 
   const submitHandler = (event) => {
+    const split_each_amount = (expenseToEdit.split_sum/expenseToEdit.split_people_count).toFixed(2);   
+    console.log("split each amount in edit expense form", split_each_amount);    
 
     event.preventDefault();
 
-    axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`, expenseToEdit)
+    axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`, {...expenseToEdit, split_each_amount: split_each_amount})
     .then(res => {
 
-    //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS
-    //OR THE SCREEN IS REFRESHED SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
-    //BY NOT USING event.preventDefault (INSEAD OF USING AN editExpense FUNCTION AND THE UPDATED BILL WILL BE DISPLAYED. AFTER A BILL IS EDITED THE SERVER
-    //RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
+    //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS OR THE SCREEN IS REFRESHED 
+    //SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
+    //BY NOT USING event.preventDefault() OR USE THE editExpense FUNCTION AND THE UPDATED BILL WILL BE DISPLAYED. 
+    //AFTER A BILL IS EDITED THE SERVER RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
 
-     props.editExpense(expenseToEdit);
-            
-      console.log("expense to edit", expenseToEdit);
+     props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
+     
+     //server actually returns a success message and not the edited expense
+     console.log("edited expense returned from server", res);     
 
-      //server actually returns a success message and not the edited expense
-      console.log("edited expense returned from server", res);
     })
     .catch(err => {
       console.log("edit error", err);
     })
-
-
   }
-
 
   return(
 
