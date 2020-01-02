@@ -35,7 +35,7 @@ export default function ExpenseCard(props) {
   {/* calculate what each person owes. not used anymore, 
       this is calculated in AddExpenseForm and stored in the db */}
   const splitBill = (props.total/props.numpeople).toFixed(2);
-
+  
   const deleteExpense = (e, expense) => {
     e.preventDefault();
     if(notifications.length > 0) {
@@ -156,7 +156,10 @@ export default function ExpenseCard(props) {
         <Modal.Content image scrolling>    
       
         {/*NOTIFICATIONS/EMAIL ADDRESSES DISPLAYED ON THE BILL*/}
-        {notifications.length > 0 ? <ManageNotifications notifications = {notifications}/> : <p>You haven't sent any notifications for this bill.</p> }   
+        {notifications.length > 0 ? 
+        <ManageNotifications notifications = {notifications} setNotifications = {setNotifications}/> 
+        : 
+        <p>You haven't sent any notifications for this bill.</p> }   
 
          </Modal.Content>   
 
