@@ -29,7 +29,7 @@ export default function ExpenseCard(props) {
       .catch(err => {
         console.log(err);
       })
-  }, [])  
+  }, [notifications])  
   
 
   {/* calculate what each person owes. not used anymore, 
