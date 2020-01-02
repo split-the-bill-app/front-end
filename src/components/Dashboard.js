@@ -234,7 +234,4 @@ const [receivedNotifications, setReceivedNotifications] = useState([]);
 
 </div>
 
-
-
-
 */

@@ -18,12 +18,12 @@ export default function ExpenseCard(props) {
   // keeps track of notifications
   const [notifications, setNotifications] = useState([])  
 
-  console.log("props.expense.id", props.expense.id);
+  //console.log("props.expense.id", props.expense.id);
 
   useEffect(() => {
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
       .then(res => {
-        console.log(res);
+        //console.log(res);
         setNotifications(res.data);
       })
       .catch(err => {
@@ -67,7 +67,8 @@ export default function ExpenseCard(props) {
           console.log(err);
         })
     }
-  }  
+  }   
+  
     
   return (
 
