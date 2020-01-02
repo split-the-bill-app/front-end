@@ -151,7 +151,7 @@ export default function ExpenseCard(props) {
         <Icon  className = "dollar-icon" name="dollar sign" />              
         } closeIcon>
 
-        <Modal.Header>Manage Notifications</Modal.Header>
+        <Modal.Header>Manage Sent Notifications</Modal.Header>
 
         <Modal.Content image scrolling>    
       

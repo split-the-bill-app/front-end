@@ -27,6 +27,17 @@
             color: white;
             padding: 5px;
             border-radius: 3px;
+            position: relative;
+
+            .delete-notification-icon {
+                position: absolute;
+                padding: 3px;
+                right: 5px;
+                top: 5px;
+                cursor: pointer;
+                color: white;
+                
+            }
         }
 }
 

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { axiosWithAuth } from "../utils/axiosWithAuth.js";
+import { Icon, Card, Modal } from "semantic-ui-react";
 
 function ManageNotifications(props){    
 
@@ -7,9 +8,60 @@ function ManageNotifications(props){
 
     let paidStatus = "";
 
-    //let notifications = [];   
+    let notifications = [];
 
-    //console.log("notifications at the start of manage notifs", notifications);
+    console.log("notifications after delete at start of manage notifs", notifications); 
+    
+    useEffect( () => {       
+
+        //either have the server return the edited notification
+        //or use a props.editedNotification function
+        //props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.notifications[0].bill_id}/notifications`)
+        .then(res => {
+            console.log("notifications after update", res.data);
+            notifications = res.data;
+            console.log("new notifications after delete", res.data);
+            console.log("new notifications after delete", notifications);
+        })       
+        .catch(err => {
+        console.log("edit error", err);
+        })      
+        
+
+    }, [props.notifications])
+
+    const deleteNotification = (e, notification) => {
+        console.log("delete notification clicked");
+
+        e.preventDefault();
+
+        axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/notifications/${notification.id}`)
+        .then(res => { 
+                 
+         //server actually returns a success message and not the edited expense
+         console.log("edited expense returned from server", res);
+
+        })
+        /*.then( () => {
+
+            //either have the server return the edited notification
+            //or use a props.editedNotification function
+            //props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
+            axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.notifications[0].bill_id}/notifications`)
+            .then(res => {
+                console.log("notifications after update", res.data);
+                notifications = res.data;
+                console.log("new notifications after delete", res.data);
+                console.log("new notifications after delete", notifications);
+            })       
+            .catch(err => {
+            console.log("edit error", err);
+            }) 
+        
+        })*/
+
+    }
 
     const paidHandler = (event) => {
         event.preventDefault();
@@ -55,6 +107,7 @@ function ManageNotifications(props){
         /*<div className="manage-notifications">
             {notifications.map((notification, index) => {
             return <div className="notification" key={index}>
+                <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
                 <p className = "email">{notification.email} </p>
                 <p>${notification.split_each_amount} </p>
                 <p>{notification.description} </p>
@@ -75,13 +128,15 @@ function ManageNotifications(props){
                 </p>
             </div>
             })}
-        </div>  */
+        </div>  
 
-        //:
+        :*/
 
-        <div className="manage-notifications">
+        <div className="manage-notifications">            
+
             {props.notifications.map((notification, index) => {
             return <div className="notification" key={index}>
+                <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
                 <p className = "email">{notification.email} </p>
                 <p>${notification.split_each_amount} </p>
                 <p>{notification.description} </p>
@@ -94,16 +149,13 @@ function ManageNotifications(props){
 
                         <option value ="" disabled selected hidden>{notification.paid ? "paid" : "unpaid"}</option>
                         <option value = "paid">paid</option>
-                        <option value = "unpaid">unpaid</option> 
-                        
+                        <option value = "unpaid">unpaid</option>                         
 
-                    </select>
-                    
+                    </select>                    
                 </p>
             </div>
             })}
         </div> 
-
 
     );
 
