@@ -142,7 +142,7 @@ export default function ExpenseCard(props) {
 
         <Modal.Header>Notify Friends</Modal.Header>        
 
-        <SendNotificationForm setNotifications={setNotifications} expenseId={props.expenseId}/>                                   
+        <SendNotificationForm notifications = {notifications} setNotifications={setNotifications} expenseId={props.expenseId}/>                                   
 
         </Modal>   
 

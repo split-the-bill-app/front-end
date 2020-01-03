@@ -112,9 +112,8 @@ export default function Dashboard (props) {
         <div className = "dashboard-container">
 
             {/* logo and log out button */}
-            <div className = "navbar">                    
-
-                                        
+            <div className = "navbar">                  
+                                       
     
             </div>
 
@@ -124,18 +123,18 @@ export default function Dashboard (props) {
                 {/* dashboard*/}
                 <div className = "dashboard-header-div">
 
-                <Modal trigger = {
+                    <Modal trigger = {
 
-                <Button>Add Expense</Button>               
-                } closeIcon>
+                    <Button>Add Expense</Button>               
+                    } closeIcon>
 
-                <Modal.Header>Add Expense</Modal.Header>
+                    <Modal.Header>Add Expense</Modal.Header>
 
-                <AddExpenseForm addExpense = {addExpense}/>                                     
+                    <AddExpenseForm addExpense = {addExpense}/>                                     
 
-                </Modal>
+                    </Modal>
 
-                {/*{  
+                   {/*{  
                     expenses.length > 0 ?
                     <Modal trigger = {
 
@@ -153,14 +152,19 @@ export default function Dashboard (props) {
 
                         <h1>Hi {user.firstname}!</h1>
 
-                    <Button onClick={logout}> Log Out </Button>                    
-        
-                   
+                    <Button onClick={logout}> Log Out </Button>                   
+                           
         
                 </div>
                 
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
                 <div className="totals-summary-div">
+
+                    <div className = "total-div">                    
+                        You Owe Your Friends
+                        <p className = "owedTotal"> $0 </p> {/* update the totals here */}
+
+                    </div>
                     
 
                     <div className = "total-div">                    
