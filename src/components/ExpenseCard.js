@@ -121,7 +121,7 @@ export default function ExpenseCard(props) {
       <Card.Content extra>     
 
         {/*MODAL THAT TRIGGERS THE EDIT EXPENSE FORM */}
-        <Modal trigger = { <Icon  className = "edit-icon" name="edit outline" /> } 
+        <Modal trigger = { <Icon  className = "edit-icon" name="edit outline" size = "large" /> } 
                        
         closeIcon>
 
@@ -137,7 +137,7 @@ export default function ExpenseCard(props) {
         {/*MODAL THAT TRIGGERS SEND NOTIFICATION /> */}             
         <Modal trigger = {
 
-        <Icon className = "mail-icon" name="mail"    />              
+        <Icon className = "mail-icon" name="mail"size = "large" />              
         } closeIcon>
 
         <Modal.Header>Notify Friends</Modal.Header>        
@@ -149,7 +149,7 @@ export default function ExpenseCard(props) {
         {/*MODAL THAT DISPLAYS THE FRIENDS THAT OWE YOU */}
         <Modal trigger = {
 
-        <Icon  className = "dollar-icon" name="dollar sign" />              
+        <Icon  className = "dollar-icon" name="dollar sign" size = "large" />              
         } closeIcon>
 
         <Modal.Header>Manage Sent Notifications</Modal.Header>

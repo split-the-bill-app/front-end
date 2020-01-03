@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal } from 'semantic-ui-react';
+import { Icon, Button, Modal } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
 //import "../styling/App.css";
@@ -7,13 +7,18 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
+import ManageNotifications from "./ManageNotifications";
 
 export default function Dashboard (props) {
 
+    //logged in user
     const [user, setUser] = useState({});
 
     //keeps track of expenses
     const [expenses, setExpenses] = useState([]);
+
+    //keeps track of outstanding notifications
+    const [owedNotifications, setOwedNotifications] = useState([]);
 
     //calculates how much your friends owe you
    
@@ -60,6 +65,16 @@ export default function Dashboard (props) {
                 console.log(res);
                 setExpenses(res.data);
                 console.log("list of bills for the user when the app loads", res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        // then get all bills for the user and set them to state "expenses"
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${user.email}/notifications`)
+            .then(res => {
+                console.log(res);
+                setOwedNotifications(res.data);
+                console.log("list of notifications for the user when the app loads", res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -112,9 +127,8 @@ export default function Dashboard (props) {
         <div className = "dashboard-container">
 
             {/* logo and log out button */}
-            <div className = "navbar">                  
-                                       
-    
+            <div className = "navbar">                 
+               
             </div>
 
             {/* dashboard*/}
@@ -160,14 +174,29 @@ export default function Dashboard (props) {
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
                 <div className="totals-summary-div">
 
-                    <div className = "total-div">                    
-                        You Owe Your Friends
-                        <p className = "owedTotal"> $0 </p> {/* update the totals here */}
+                    <Modal trigger = {
 
-                    </div>
-                    
+                    <div className = "owe-div">  
+                    <Icon className = "owe-notification-icon" name="bell" size = "large"/>
 
-                    <div className = "total-div">                    
+                    You Owe Your Friends
+                    <p className = "owedTotal"> $0 </p> {/* update the totals here */}
+                    </div>               
+                
+                    } closeIcon>
+
+                    <Modal.Header>View Outstanding Bills</Modal.Header>
+
+                    <Modal.Content image scrolling> 
+
+                        <p>You have no outstanding bills.</p>       
+
+                    </Modal.Content>                            
+
+                    </Modal>
+                                        
+
+                    <div className = "owed-div">                    
                         Your Friends Owe You
                         <p className = "owedTotal"> ${owedTotal} </p> {/* update the totals here */}
 
