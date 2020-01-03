@@ -7,7 +7,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
-import ManageNotifications from "./ManageNotifications";
+import OwedNotifications from "./OwedNotifications";
 
 export default function Dashboard (props) {
 
@@ -55,6 +55,21 @@ export default function Dashboard (props) {
             .then(res => {
                 console.log("user object when the app loads", res);
                 setUser(res.data);
+                console.log("user object when the app loads => user", user);
+
+                // then get all bills for the user and set them to state "expenses"
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
+        .then(res => {
+            console.log(res);
+            setOwedNotifications(res.data);
+            console.log("list of notifications for the user when the app loads", res.data);
+            console.log("list of notifications for the user when the app loads=>owedNotifications", res.data);
+        })
+        .catch(err => {
+            console.log(err.response);
+        })
+
+
             })
             .catch(err => {
                 console.log(err);
@@ -69,16 +84,7 @@ export default function Dashboard (props) {
             .catch(err => {
                 console.log(err);
             })
-        // then get all bills for the user and set them to state "expenses"
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${user.email}/notifications`)
-            .then(res => {
-                console.log(res);
-                setOwedNotifications(res.data);
-                console.log("list of notifications for the user when the app loads", res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        
     }, [])
     // console.log(user);   
 
@@ -189,7 +195,13 @@ export default function Dashboard (props) {
 
                     <Modal.Content image scrolling> 
 
-                        <p>You have no outstanding bills.</p>       
+                    {owedNotifications.length > 0 ?
+
+                     <OwedNotifications owedNotifications = {owedNotifications} />
+                    :
+                    <p>You have no outstanding bills.</p> 
+
+                    }                            
 
                     </Modal.Content>                            
 
