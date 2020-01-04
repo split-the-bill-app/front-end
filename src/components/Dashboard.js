@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Button, Modal } from 'semantic-ui-react';
+import Badge from '@material-ui/core/Badge';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
-//import "../styling/App.css";
+
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 import AddExpenseForm from "./AddExpenseForm";
@@ -10,6 +11,8 @@ import ExpenseDetails from "./ExpenseDetails.js";
 import OwedNotifications from "./OwedNotifications";
 
 export default function Dashboard (props) {
+
+    //let owedNotificationsCount = 0;
 
     //logged in user
     const [user, setUser] = useState({});
@@ -20,8 +23,13 @@ export default function Dashboard (props) {
     //keeps track of outstanding notifications
     const [owedNotifications, setOwedNotifications] = useState([]);
 
-    //calculates how much your friends owe you
-   
+    //keeps track of the number of outstanding notifications
+    const [owedNotificationsCount, setOwedNotificationsCount] = useState(0);
+
+    //keeps track of the dollar amount of outstanding notifications
+    const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);
+
+    //calculates how much your friends owe you   
     let owedTotal = 0;
     let eachPersonBill = 0;
     let owedForEachBill = 0;
@@ -57,22 +65,31 @@ export default function Dashboard (props) {
                 setUser(res.data);
                 console.log("user object when the app loads => user", user);
 
-                // then get all bills for the user and set them to state "expenses"
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
-        .then(res => {
-            console.log(res);
-            setOwedNotifications(res.data);
-            console.log("list of notifications for the user when the app loads", res.data);
-            console.log("list of notifications for the user when the app loads=>owedNotifications", res.data);
-        })
-        .catch(err => {
-            console.log(err.response);
-        })
+                // then get all notifications for the user and set them to state owedNotifications
+                axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
+                .then(res => {
+                    console.log(res);
+                    setOwedNotifications(res.data);
+                    const unpaidNotifications = res.data.filter(notification => {
+                        return notification.paid === false
+                    })
 
+                    let unpaidTotal = 0;
 
+                    unpaidNotifications.forEach(notification => {
+                        return unpaidTotal += notification.split_each_amount;
+                    })
+
+                    console.log("unpaid notifications total", unpaidTotal);
+                    setOwedNotificationsCount(unpaidNotifications.length);
+                    setOwedNotificationsTotal(unpaidTotal);
+                })
+                .catch(err => {
+                    console.log("get all notifications for a user error", err);
+                })
             })
             .catch(err => {
-                console.log(err);
+                console.log("get logged in user details error", err);
             })
         // then get all bills for the user and set them to state "expenses"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
@@ -82,7 +99,7 @@ export default function Dashboard (props) {
                 console.log("list of bills for the user when the app loads", res.data);
             })
             .catch(err => {
-                console.log(err);
+                console.log("get all bills for uer error", err);
             })
         
     }, [])
@@ -113,11 +130,9 @@ export default function Dashboard (props) {
         
         //after making the switch, replace the expenses array with the expensesCopy array 
         setExpenses (expensesCopy);
-    }   
-    
-    
+    } 
+        
     //const initialExpense = expenses.find(expense => expense.id.toString() === props.match.params.id);
-
 
     // fire on logout button, clears token and pushes user back to login page
     const logout = (e) => {
@@ -125,7 +140,6 @@ export default function Dashboard (props) {
         localStorage.clear();
         props.history.push('/');
     }
-
 
     return (
 
@@ -172,22 +186,24 @@ export default function Dashboard (props) {
 
                         <h1>Hi {user.firstname}!</h1>
 
-                    <Button onClick={logout}> Log Out </Button>                   
+                    <Button onClick={logout}> Log Out </Button>                  
                            
-        
                 </div>
                 
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
                 <div className="totals-summary-div">
 
+                    {console.log("owedNotificationsCount in render", owedNotificationsCount)}
+                    {console.log("owedNotifications in render", owedNotifications)}
+
                     <Modal trigger = {
+                        <Badge className = "owe-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
+                            <div className = "owe-div">                      
 
-                    <div className = "owe-div">  
-                    <Icon className = "owe-notification-icon" name="bell" size = "large"/>
-
-                    You Owe Your Friends
-                    <p className = "owedTotal"> $0 </p> {/* update the totals here */}
-                    </div>               
+                                You Owe Your Friends
+                                <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal}` : "$0"} </p> {/* update the totals here */}
+                            </div>    
+                        </Badge>           
                 
                     } closeIcon>
 
@@ -207,12 +223,13 @@ export default function Dashboard (props) {
 
                     </Modal>
                                         
+                    <Badge className = "owed-badge" badgeContent={4} color="primary">
+                        <div className = "owed-div">                    
+                            Your Friends Owe You
+                            <p className = "owedTotal"> ${owedTotal} </p> {/* update the totals here */}
 
-                    <div className = "owed-div">                    
-                        Your Friends Owe You
-                        <p className = "owedTotal"> ${owedTotal} </p> {/* update the totals here */}
-
-                    </div>
+                        </div>
+                    </Badge>
                 </div>
                 
                 {/* LIST OF BILLS HISTORY */}

@@ -235,26 +235,58 @@
               height: 100%;             
             }
 
-            .owe-div {
-                //border: 1px solid red;
+            .owe-badge {
+              width: 36.5%;
+
+              .owe-div {                  
+                  cursor: pointer;
+                  //width: 36.5%;
+                  width: 100%;
+                  height: auto;
+                  padding: 5px 0;
+                  border-radius: 5px;
+                  background: #2eb497;
+                  color: white;
+                  position: relative;                
+
+                  .owe-notification-icon {
+                    position: absolute;
+                    padding: 3px;
+                    right: 5px;
+                    top: 1px;
+                    cursor: pointer;
+                    color: red;
+                    
+                }
+                
+                @media (max-width: 800px) {
+                  width: 40%;
+                  height: 100%;  
+                  margin-bottom: 5%;               
+                }
+            
+                @media (max-width: 500px) {
+                  width: 40%;
+                  height: 100%;
+                  margin-bottom: 5%;
+                  
+                }
+              }
+
+            }
+
+            .owed-badge {
+              width: 36.5%;
+
+              .owed-div {                
+                //width: 36.5%;
                 cursor: pointer;
-                width: 36.5%;
+                width: 100%;
                 height: auto;
                 padding: 5px 0;
                 border-radius: 5px;
                 background: #2eb497;
                 color: white;
-                position: relative;                
-
-                .owe-notification-icon {
-                  position: absolute;
-                  padding: 3px;
-                  right: 5px;
-                  top: 1px;
-                  cursor: pointer;
-                  color: red;
-                  
-              }
                 
                 @media (max-width: 800px) {
                   width: 40%;
@@ -270,27 +302,6 @@
                 }
             }
 
-            .owed-div {
-              //border: 1px solid red;
-              width: 36.5%;
-              height: auto;
-              padding: 5px 0;
-              border-radius: 5px;
-              background: #2eb497;
-              color: white;
-              
-              @media (max-width: 800px) {
-                width: 40%;
-                height: 100%;  
-                margin-bottom: 5%;               
-              }
-          
-              @media (max-width: 500px) {
-                width: 40%;
-                height: 100%;
-                margin-bottom: 5%;
-                
-              }
           }
         }
         .dark-mode {
