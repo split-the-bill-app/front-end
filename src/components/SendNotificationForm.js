@@ -18,9 +18,11 @@ function SendNotificationForm(props) {
   let enabledState = true;
   let [iterator, setIterator] = useState(0);
   //the nummber of people splitting the bill or the no. of ppl to send notifications to
-  const splitPeopleCountTracker = props.notifications[0].split_people_count - 1;
 
-  console.log("split people count tracker", splitPeopleCountTracker);
+  //check if props.notifications[0] is undefined
+  //const splitPeopleCountTracker = props.notifications[0].split_people_count - 1;
+
+  //console.log("split people count tracker", splitPeopleCountTracker);
 
   const [notificationsBeforeAdding, setNotificationsBeforeAdding] = useState([]);
 
@@ -37,6 +39,20 @@ function SendNotificationForm(props) {
       value: ''
     }
   ])
+
+  useEffect(() => {
+
+    //get all notifications of a bill
+    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
+    .then(res => {
+      setNotificationsBeforeAdding(res.data);
+      console.log("notificationsBeforeAdding right after axios call", notificationsBeforeAdding);
+    })
+    .catch(err => {
+      console.log("get all notifications of a bill before adding error", err);
+    })
+
+  }, [])
 
   //adds another input field
   const addInput = (e) => {
@@ -57,18 +73,8 @@ function SendNotificationForm(props) {
   const handleChange = (event, i) => {
     event.preventDefault();
 
-    inputs[i].value = event.target.value;    
-
-    const newNotificationsBeforeAdding = notificationsBeforeAdding.filter((notification, index) => {
-      //console.log("email in newNotifications.email", newNotifications.email[index])
-      //console.log("notification.email", notification.email)
-      return notification.email !== inputs[i].value
-      
-    })    
-
-    console.log("inputs[i].value", inputs[i].value);
-    console.log('notificationsBeforeAdding after filter in handleChange ', newNotificationsBeforeAdding);
-
+    inputs[i].value = event.target.value; 
+    
     console.log("inputs", inputs);
 
     setNewNotifications({
@@ -83,6 +89,38 @@ function SendNotificationForm(props) {
     //console.log("new notifications in send notification form", newNotifications);
 
     e.preventDefault();    
+
+    console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);
+
+    var equals = notificationsBeforeAdding.every((e, i) => e.email === newNotifications.email[i]);
+
+    console.log("newNotifications.email[0]", newNotifications.email[0]);
+    console.log("equals", equals);
+
+    var result = notificationsBeforeAdding.filter(function(o1){
+      // filter out (!) items in result2
+      return newNotifications.email.some(function(o2){
+          return o1.email === o2;          // assumes unique id
+      });
+    
+    });
+
+    //extract the email addresses from result
+    const resultEmails = result.map(result => {
+      return result.email;
+    })
+
+    console.log("result emails", resultEmails);
+
+    //display a window.alert with the duplicate email adresses
+    if(result.length > 0){          
+      window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n"))        
+    }
+
+    console.log("result", result);
+
+    //**filter out the duplicate emails from newNotifictaions and then add the unique ones on line 153    
+
 
     /*const newNotificationsBeforeAdding =  notificationsBeforeAdding.filter((notification, index) => {
       console.log("email in newNotifications.email", newNotifications.email[index])
@@ -147,24 +185,10 @@ function SendNotificationForm(props) {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
     console.log("input", inputs);
-  }  
+  }   
+  
 
-  axiosWithAuth().get('https://split-the-bill-app.herokuapp.com/api/notifications')
-    .then(res => {
-      //console.log("all notifications in send notification form", res);
-  })   
-
-  //get all notifications of a bill before adding a notification
-  axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
-  .then(res => {
-   setNotificationsBeforeAdding(res.data);
-   //console.log("notificationsBeforeAdding right after axios call", notificationsBeforeAdding);
-  })
-  .catch(err => {
-   console.log(err);
- })
-
- const showButtons = () => {
+ /*const showButtons = () => {
 
     console.log("iterator every time add is clicked", iterator);
     
@@ -175,7 +199,7 @@ function SendNotificationForm(props) {
     //}
 
     
- }
+ }*/
   
 
   return (
@@ -218,9 +242,9 @@ function SendNotificationForm(props) {
       className="send-notification-btn"
       onClick={(e) => {
         return console.log("clicked"),
-        addInput(e), 
-        showButtons(),
-        setIterator(iterator + 1)
+        addInput(e) 
+        //showButtons(),
+        //setIterator(iterator + 1)
       }}>
         Add Another Email
       </button>

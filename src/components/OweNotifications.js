@@ -12,11 +12,11 @@ function OweNotifications(props){
 
             {props.oweNotifications.map((notification, index) => {
             return <div className="notification" key={index}> 
-                <Moment format="MM/DD/YYYY">
-                <p className = "email">
+               
+                <p className = "date">
                     {notification.created_at} 
                 </p>    
-                </Moment>           
+                           
                 <p className = "email">{notification.firstname} {notification.lastname} ({notification.email}) </p>
                 <p>${notification.split_each_amount} </p>
                 <p>{notification.description} </p>                
