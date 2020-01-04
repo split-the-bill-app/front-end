@@ -13,7 +13,7 @@ function SendNotificationForm(props) {
 
   //console.log("props.notification in send notification form", props.notifications);
 
-  //console.log("props.notifications split people count", props.notifications[0].split_people_count);
+  //console.log("props.notifications split people count", props.notifications[0].split_people_count);  
 
   let enabledState = true;
   let [iterator, setIterator] = useState(0);
@@ -29,7 +29,7 @@ function SendNotificationForm(props) {
   const [newNotifications, setNewNotifications] = useState({
     bill_id: props.expenseId,
     email: []
-  })
+  })  
 
   const [inputs, setInputs] = useState([
     {
@@ -82,6 +82,7 @@ function SendNotificationForm(props) {
       email: inputs.map(input => input.value)
     })
     console.log('newnotifs in handleChange: ', newNotifications);
+   
   }
 
   // reset inputs and post the newNotifications object
@@ -92,12 +93,27 @@ function SendNotificationForm(props) {
 
     console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);
 
-    var equals = notificationsBeforeAdding.every((e, i) => e.email === newNotifications.email[i]);
+    //var equals = notificationsBeforeAdding.every((e, i) => e.email === newNotifications.email[i]);
 
     console.log("newNotifications.email[0]", newNotifications.email[0]);
-    console.log("equals", equals);
+    //console.log("equals", equals);
 
-    var result = notificationsBeforeAdding.filter(function(o1){
+    //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
+    var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
+        return inputArray.indexOf(item) == index;
+    });
+    
+    //display window alert if the same email was entered more than once in the input fields before submission
+    if(filterNewNotifications.length !== newNotifications.email.length){
+      window.alert("You entered the same email address more than once:\n" +
+                    filterNewNotifications.join("\n") + "\n" +
+                   "Please check your entries and try again.");
+      console.log("filterNewNotifications", filterNewNotifications);
+
+    } else {//if duplicate values were not entered before hitting send
+    
+    //check if any of the emails were already sent for that bill    
+    var emailsAlreadyAdded = notificationsBeforeAdding.filter(function(o1){
       // filter out (!) items in result2
       return newNotifications.email.some(function(o2){
           return o1.email === o2;          // assumes unique id
@@ -105,52 +121,41 @@ function SendNotificationForm(props) {
     
     });
 
-    //extract the email addresses from result
-    const resultEmails = result.map(result => {
+    //extract the email addresses from emailsAlreadyAdded
+    const resultEmails = emailsAlreadyAdded.map(result => {
       return result.email;
     })
 
     console.log("result emails", resultEmails);
 
-    //display a window.alert with the duplicate email adresses
-    if(result.length > 0){          
-      window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n"))        
+    console.log("newNotifications.email", newNotifications.email);
+
+    //if they were already added display a window.alert with the duplicate email adresses
+    if(emailsAlreadyAdded.length > 0){          
+      window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n" +
+                   "Please delete the existing notification(s) if you would like to resend.")   
+                   
+      //check if any of the emails were already sent for that bill    
+      var nonDupNotifs = newNotifications.email.filter(function(o1){
+        // filter out (!) items in resultEmails
+        return !resultEmails.some(function(o2){
+            return o1 === o2;          // assumes unique id
+        });
+    
+      });
+
+      console.log("emailsAlreadyAdded", emailsAlreadyAdded);
+
+      console.log("nonDupNotifs", nonDupNotifs);
+
+      console.log("newNotifications.email after filter", newNotifications.email);
+      
     }
 
-    console.log("result", result);
-
-    //**filter out the duplicate emails from newNotifictaions and then add the unique ones on line 153    
-
-
-    /*const newNotificationsBeforeAdding =  notificationsBeforeAdding.filter((notification, index) => {
-      console.log("email in newNotifications.email", newNotifications.email[index])
-      console.log("notification.email", notification.email)
-      return notification.email === newNotifications.email[index]
-      
-    })
-
-    console.log("notificationsBeforeAdding after filter", newNotificationsBeforeAdding);
-
-    //if the email was already sent for this bill
-    if(notificationsBeforeAdding.length > 0){
-
-      //add the email addresses only to notificationsBeforeAdding
-      const printEmails = notificationsBeforeAdding.filter(notificationEmail => {
-        return notificationEmail.email
-
-      })
-
-      //and display an alert message with the email addresses
-      window.alert(`You already sent a notification to ${notificationsBeforeAdding}`);
-
-      //and filter through all the notifications to be added and only send to email addresses 
-      //that were not already sent to
-      newNotifications.email.filter((notificationsToAdd, index) => {
-        return notificationsToAdd !== notificationsBeforeAdding[index].email
-      })
-    }*/    
-    
-    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
+    console.log("new notifications right before submissiion", newNotifications);
+   
+    //replace the email to be sent with the emails addresses that were not already sent for that notification   
+    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', {...newNotifications, email: nonDupNotifs})
       .then(res => {
         setNewNotifications({
           bill_id: props.expenseId,
@@ -178,6 +183,8 @@ function SendNotificationForm(props) {
           value: ''          
         }
       ]);
+
+    }//end else
 
   }//end submitNotifications
 
