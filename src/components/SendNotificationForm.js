@@ -87,7 +87,7 @@ function SendNotificationForm(props) {
 
   // reset inputs and post the newNotifications object
   const submitNotifications = (e) => {
-    //console.log("new notifications in send notification form", newNotifications);
+    var nonDupNotifs = [];
 
     e.preventDefault();    
 
@@ -133,10 +133,10 @@ function SendNotificationForm(props) {
     //if they were already added display a window.alert with the duplicate email adresses
     if(emailsAlreadyAdded.length > 0){          
       window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n" +
-                   "Please delete the existing notification(s) if you would like to resend.")   
+                   "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")   
                    
       //check if any of the emails were already sent for that bill    
-      var nonDupNotifs = newNotifications.email.filter(function(o1){
+      nonDupNotifs = newNotifications.email.filter(function(o1){
         // filter out (!) items in resultEmails
         return !resultEmails.some(function(o2){
             return o1 === o2;          // assumes unique id
@@ -153,8 +153,12 @@ function SendNotificationForm(props) {
     }
 
     console.log("new notifications right before submissiion", newNotifications);
+
+    console.log("nonDupNotifs if empty", nonDupNotifs);
    
     //replace the email to be sent with the emails addresses that were not already sent for that notification   
+    {nonDupNotifs.length > 0 ? 
+    
     axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', {...newNotifications, email: nonDupNotifs})
       .then(res => {
         setNewNotifications({
@@ -173,6 +177,29 @@ function SendNotificationForm(props) {
       .catch(err => {
         console.log(err);
       })
+
+    :
+
+    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
+      .then(res => {
+        setNewNotifications({
+          bill_id: props.expenseId,
+          email: []
+        })
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
+          .then(res => {
+            //console.log("notifications for a specific bill in send notification form", res);
+            props.setNotifications(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    }//end ternary
 
       // reset inputs
       setInputs([
