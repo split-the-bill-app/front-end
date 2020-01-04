@@ -1,16 +1,22 @@
 import React, {useState, useEffect} from "react";
 import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 import { Icon, Card, Modal } from "semantic-ui-react";
+import Moment from 'react-moment';
 
-function OwedNotifications(props){       
+//bills that you need to pay
+function OweNotifications(props){       
 
     return (
 
         <div className="manage-notifications">            
 
-            {props.owedNotifications.map((notification, index) => {
+            {props.oweNotifications.map((notification, index) => {
             return <div className="notification" key={index}> 
-                <p>{notification.created_at} </p>               
+                <Moment format="MM/DD/YYYY">
+                <p className = "email">
+                    {notification.created_at} 
+                </p>    
+                </Moment>           
                 <p className = "email">{notification.firstname} {notification.lastname} ({notification.email}) </p>
                 <p>${notification.split_each_amount} </p>
                 <p>{notification.description} </p>                
@@ -23,4 +29,4 @@ function OwedNotifications(props){
 
 }
 
-export default OwedNotifications;
+export default OweNotifications;

@@ -11,6 +11,17 @@ import { Icon } from 'semantic-ui-react';
 
 function SendNotificationForm(props) {  
 
+  //console.log("props.notification in send notification form", props.notifications);
+
+  //console.log("props.notifications split people count", props.notifications[0].split_people_count);
+
+  let enabledState = true;
+  let [iterator, setIterator] = useState(0);
+  //the nummber of people splitting the bill or the no. of ppl to send notifications to
+  const splitPeopleCountTracker = props.notifications[0].split_people_count - 1;
+
+  console.log("split people count tracker", splitPeopleCountTracker);
+
   const [notificationsBeforeAdding, setNotificationsBeforeAdding] = useState([]);
 
   const [newNotifications, setNewNotifications] = useState({
@@ -49,8 +60,8 @@ function SendNotificationForm(props) {
     inputs[i].value = event.target.value;    
 
     const newNotificationsBeforeAdding = notificationsBeforeAdding.filter((notification, index) => {
-      console.log("email in newNotifications.email", newNotifications.email[index])
-      console.log("notification.email", notification.email)
+      //console.log("email in newNotifications.email", newNotifications.email[index])
+      //console.log("notification.email", notification.email)
       return notification.email !== inputs[i].value
       
     })    
@@ -69,7 +80,7 @@ function SendNotificationForm(props) {
 
   // reset inputs and post the newNotifications object
   const submitNotifications = (e) => {
-    console.log("new notifications in send notification form", newNotifications);
+    //console.log("new notifications in send notification form", newNotifications);
 
     e.preventDefault();    
 
@@ -109,7 +120,7 @@ function SendNotificationForm(props) {
         })
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
           .then(res => {
-            console.log("notifications for a specific bill in send notification form", res);
+            //console.log("notifications for a specific bill in send notification form", res);
             props.setNotifications(res.data);
           })
           .catch(err => {
@@ -140,18 +151,31 @@ function SendNotificationForm(props) {
 
   axiosWithAuth().get('https://split-the-bill-app.herokuapp.com/api/notifications')
     .then(res => {
-      console.log("all notifications in send notification form", res);
+      //console.log("all notifications in send notification form", res);
   })   
 
   //get all notifications of a bill before adding a notification
   axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
   .then(res => {
    setNotificationsBeforeAdding(res.data);
-   console.log("notificationsBeforeAdding right after axios call", notificationsBeforeAdding);
+   //console.log("notificationsBeforeAdding right after axios call", notificationsBeforeAdding);
   })
   .catch(err => {
    console.log(err);
  })
+
+ const showButtons = () => {
+
+    console.log("iterator every time add is clicked", iterator);
+    
+    //for (iterator; iterator <= splitPeopleCountTracker;){
+
+      iterator <= splitPeopleCountTracker ? enabledState = true: enabledState = false    
+
+    //}
+
+    
+ }
   
 
   return (
@@ -180,18 +204,31 @@ function SendNotificationForm(props) {
             />
           </div>
         )
-      })}
+      })}     
+            
       
-      <div className = "button-div">
-        <button className="send-notification-btn" type="submit">Send</button>
 
-        <button 
-        type="button"
-        className="send-notification-btn"
-        onClick={(e) => addInput(e)}>
-          Add Another Email
-        </button>
+      <div className = "button-div">
+
+      <button enabled = {enabledState} className="send-notification-btn" type="submit">Send</button>
+
+      <button
+      enabled = {enabledState} 
+      type="button"
+      className="send-notification-btn"
+      onClick={(e) => {
+        return console.log("clicked"),
+        addInput(e), 
+        showButtons(),
+        setIterator(iterator + 1)
+      }}>
+        Add Another Email
+      </button>
+
       </div>
+       
+        
+      
 
     </form>
    

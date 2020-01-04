@@ -8,7 +8,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
-import OwedNotifications from "./OwedNotifications";
+import OweNotifications from "./OweNotifications.js";
 
 export default function Dashboard (props) {
 
@@ -21,13 +21,13 @@ export default function Dashboard (props) {
     const [expenses, setExpenses] = useState([]);
 
     //keeps track of outstanding notifications
-    const [owedNotifications, setOwedNotifications] = useState([]);
+    const [oweNotifications, setOweNotifications] = useState([]);
 
     //keeps track of the number of outstanding notifications
-    const [owedNotificationsCount, setOwedNotificationsCount] = useState(0);
+    const [oweNotificationsCount, setOweNotificationsCount] = useState(0);
 
     //keeps track of the dollar amount of outstanding notifications
-    const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);
+    const [oweNotificationsTotal, setOweNotificationsTotal] = useState(0);
 
     //calculates how much your friends owe you   
     let owedTotal = 0;
@@ -65,11 +65,11 @@ export default function Dashboard (props) {
                 setUser(res.data);
                 console.log("user object when the app loads => user", user);
 
-                // then get all notifications for the user and set them to state owedNotifications
+                // then get all notifications for the user and set them to state oweNotifications
                 axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
                 .then(res => {
                     console.log(res);
-                    setOwedNotifications(res.data);
+                    setOweNotifications(res.data);
                     const unpaidNotifications = res.data.filter(notification => {
                         return notification.paid === false
                     })
@@ -81,8 +81,8 @@ export default function Dashboard (props) {
                     })
 
                     console.log("unpaid notifications total", unpaidTotal);
-                    setOwedNotificationsCount(unpaidNotifications.length);
-                    setOwedNotificationsTotal(unpaidTotal);
+                    setOweNotificationsCount(unpaidNotifications.length);
+                    setOweNotificationsTotal(unpaidTotal);
                 })
                 .catch(err => {
                     console.log("get all notifications for a user error", err);
@@ -193,15 +193,15 @@ export default function Dashboard (props) {
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
                 <div className="totals-summary-div">
 
-                    {console.log("owedNotificationsCount in render", owedNotificationsCount)}
-                    {console.log("owedNotifications in render", owedNotifications)}
+                    {console.log("oweNotificationsCount in render", oweNotificationsCount)}
+                    {console.log("oweNotifications in render", oweNotifications)}
 
                     <Modal trigger = {
-                        <Badge className = "owe-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
+                        <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
                             <div className = "owe-div">                      
 
                                 You Owe Your Friends
-                                <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal}` : "$0"} </p> {/* update the totals here */}
+                                <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal}` : "$0"} </p> {/* update the totals here */}
                             </div>    
                         </Badge>           
                 
@@ -211,9 +211,9 @@ export default function Dashboard (props) {
 
                     <Modal.Content image scrolling> 
 
-                    {owedNotifications.length > 0 ?
+                    {oweNotifications.length > 0 ?
 
-                     <OwedNotifications owedNotifications = {owedNotifications} />
+                     <OweNotifications oweNotifications = {oweNotifications} />
                     :
                     <p>You have no outstanding bills.</p> 
 

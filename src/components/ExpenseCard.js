@@ -11,7 +11,7 @@ import EmptyNotifications from "./ManageNotifications";
 
 import SendNotificationForm from "./SendNotificationForm";
 
-export default function ExpenseCard(props) {
+export default function ExpenseCard(props) { 
   
   // keeps track of expenses
   const [expenses, setExpenses] = useState([]);
