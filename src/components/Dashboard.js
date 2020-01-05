@@ -12,9 +12,7 @@ import OweNotifications from "./OweNotifications.js";
 import OwedNotifications from "./OwedNotifications.js";
 
 export default function Dashboard (props) {
-
-    //let owedNotificationsCount = 0;
-
+    
     //logged in user
     const [user, setUser] = useState({});
 
@@ -39,7 +37,8 @@ export default function Dashboard (props) {
     //keeps track of the dollar amount of notifications/bills your friends owe you
     const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);
 
-    //calculates how much your friends owe you   
+    //calculates how much your friends owe you  
+    /* THIS IS NOT BEING USED ANYMORE. UNPAID BILLS ARE NOW BEING READ FROM THE SERVER AND CALCULATED
     let owedTotal = 0;
     let eachPersonBill = 0;
     let owedForEachBill = 0;
@@ -49,9 +48,9 @@ export default function Dashboard (props) {
 
         expenses.forEach( expense => {
 
-            /*grandTotal += expense.split_sum;
-            totalPeople += (expense.split_people_count - 1);
-            count = count + 1; */   
+            ///grandTotal += expense.split_sum;
+            //totalPeople += (expense.split_people_count - 1);
+            //count = count + 1;  
             
             eachPersonBill = (expense.split_sum / expense.split_people_count) 
             owedForEachBill = expense.split_sum - eachPersonBill
@@ -66,6 +65,7 @@ export default function Dashboard (props) {
         //owedTotal = ((grandTotal / totalPeople) * count).toFixed(2);
 
     }//end if
+    */
 
     useEffect(() => {
         // get user details and set them to state "user"
@@ -314,38 +314,3 @@ export default function Dashboard (props) {
 
 }//end function
 
-/************************************TO DISPLAY RECEIVED NOTIFICATIONS***************************/
-/*
-const [receivedNotifications, setReceivedNotifications] = useState([]);
-
-//put this inside the useEffect()
- axiosWithAuth().get(`https://build-split-the-bill.herokuapp.com/api/notifications`)
-            .then(res => {
-              console.log("you have notifications", res.data.notifications);
-              setReceivedNotifications(res.data.notifications);
-            })
-            .catch(err => {
-              console.log(err);
-            })
-
-//put this in the <div className = "navbar">
- <div className = "notifications-received-display">
-
-            <div className = "notification-title">
-
-            <h3>Outstanding Bills</h3>
-
-            </div>
-
-            <div className = "notification-alerts">
-
-            {receivedNotifications.map( (notification, index) => 
-
-            <p className = "alerts">{`${notification.email} `}</p>               
-
-                
-            )}
-
-</div>
-
-*/

@@ -1,33 +1,5 @@
 .dashboard-container {
 
-  //***************used for outstanding bills display********************
-  /*display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;*/
-  /*.notifications-received-display {
-    display: flex;
-    flex-direction: column;
-    width: 100%;         
-    height: auto;
-        
-  }
-
-  .notification-alerts {
-    display: flex;
-  flex-direction: column;
-    justify-content: space-between;
-
-    .alerts {
-      margin: 3px 5px;
-      background: rgb(124, 34, 197);
-      color: white;      
-      padding: 5px;
-      border-radius: 3px;
-  }
-   */
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -145,7 +117,7 @@
               background: #2e4bb4;
               color: white;
               transition: all .3s;
-              
+              cursor: pointer;
 
               @media (max-width: 800px) {
                 width: 100%;
@@ -187,6 +159,7 @@
                 background: #2e4bb4;
                 color: white;
                 transition: all .3s;
+                cursor: pointer;
 
                 @media (max-width: 800px) {
                   width: auto;
@@ -237,36 +210,28 @@
 
             .owe-badge {
               width: 36.5%;
+              cursor: pointer;
 
-              .owe-div {                  
-                  cursor: pointer;
-                  //width: 36.5%;
-                  width: 100%;
-                  height: auto;
-                  padding: 5px 0;
-                  border-radius: 5px;
-                  background: #2eb497;
-                  color: white;
-                  position: relative;                
+              .owe-div {               
+                width: 36.5%;
+                width: 100%;
+                height: auto;
+                padding: 5px 0;
+                border-radius: 5px;
+                background: #2eb497;
+                color: white;
+                position: relative; 
+                cursor: pointer;            
 
-                  .owe-notification-icon {
-                    position: absolute;
-                    padding: 3px;
-                    right: 5px;
-                    top: 1px;
-                    cursor: pointer;
-                    color: red;
-                    
-                }
-                
+                                  
                 @media (max-width: 800px) {
-                  width: 40%;
+                  width: 100%;
                   height: 100%;  
                   margin-bottom: 5%;               
                 }
             
                 @media (max-width: 500px) {
-                  width: 40%;
+                  width: 100%;
                   height: 100%;
                   margin-bottom: 5%;
                   
@@ -277,25 +242,26 @@
 
             .owed-badge {
               width: 36.5%;
+              cursor: pointer;
 
               .owed-div {                
-                //width: 36.5%;
-                cursor: pointer;
+                width: 36.5%;                
                 width: 100%;
                 height: auto;
                 padding: 5px 0;
                 border-radius: 5px;
                 background: #2eb497;
                 color: white;
+                cursor: pointer;
                 
                 @media (max-width: 800px) {
-                  width: 40%;
+                  width: 100%;
                   height: 100%;  
                   margin-bottom: 5%;               
                 }
             
                 @media (max-width: 500px) {
-                  width: 40%;
+                  width: 100%;
                   height: 100%;
                   margin-bottom: 5%;
                   
