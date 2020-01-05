@@ -9,7 +9,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
 import OweNotifications from "./OweNotifications.js";
-import OwedNotifications from "./OweNotifications.js";
+import OwedNotifications from "./OwedNotifications.js";
 
 export default function Dashboard (props) {
 
@@ -103,7 +103,7 @@ export default function Dashboard (props) {
             })
 
         //get all notifications/bills sent by the user (you friends owe you) and set them to state owedNotifications
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${localStorage.getItem('userId')}`)
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
         .then(res => {           
             console.log("your friends owe you returned from server", res.data);
             setOwedNotifications(res.data);            
@@ -116,10 +116,10 @@ export default function Dashboard (props) {
 
             console.log("your friends owe you total", owedTotal);
             setOwedNotificationsCount(res.data.length);
-            setOweNotificationsTotal(owedTotal);
+            setOwedNotificationsTotal(owedTotal);
         })
         .catch(err => {
-            console.log("get all notifications/bills your friends owe you error", err);
+            console.log("get all notifications/bills your friends owe you error", err.response);
         })
 
         // then get all bills for the user and set them to state "expenses"
@@ -233,7 +233,7 @@ export default function Dashboard (props) {
                             <div className = "owe-div">                      
 
                                 You Owe Your Friends
-                                <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal}` : "$0"} </p> {/* update the totals here */}
+                                <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal.toFixed(2)}` : "$0"} </p> {/* update the totals here */}
                             </div>    
                         </Badge>           
                 
@@ -261,7 +261,7 @@ export default function Dashboard (props) {
                             <div className = "owed-div">                    
                                 Your Friends Owe You
                                 {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
-                                <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal}` : "$0"}  </p> {/* update the totals here */}
+                                <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal.toFixed(2)}` : "$0"}  </p> {/* update the totals here */}
 
                             </div>
                         </Badge>
