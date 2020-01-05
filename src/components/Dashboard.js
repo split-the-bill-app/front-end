@@ -9,6 +9,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
 import OweNotifications from "./OweNotifications.js";
+import OwedNotifications from "./OweNotifications.js";
 
 export default function Dashboard (props) {
 
@@ -20,14 +21,23 @@ export default function Dashboard (props) {
     //keeps track of expenses
     const [expenses, setExpenses] = useState([]);
 
-    //keeps track of outstanding notifications
+    //keeps track of outstanding notifications/bills you owe
     const [oweNotifications, setOweNotifications] = useState([]);
 
-    //keeps track of the number of outstanding notifications
+    //keeps track of outstanding notifications/bills owed to you
+    const [owedNotifications, setOwedNotifications] = useState([]);    
+
+    //keeps track of the number of notifications/bills you owe your friends
     const [oweNotificationsCount, setOweNotificationsCount] = useState(0);
 
-    //keeps track of the dollar amount of outstanding notifications
+    //keeps track of the number of notifications/bills your friends owe you
+    const [owedNotificationsCount, setOwedNotificationsCount] = useState(0);
+
+    //keeps track of the dollar amount of notifications/bills you owe your friends
     const [oweNotificationsTotal, setOweNotificationsTotal] = useState(0);
+
+    //keeps track of the dollar amount of notifications/bills your friends owe you
+    const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);
 
     //calculates how much your friends owe you   
     let owedTotal = 0;
@@ -65,7 +75,7 @@ export default function Dashboard (props) {
                 setUser(res.data);
                 console.log("user object when the app loads => user", user);
 
-                // then get all notifications for the user and set them to state oweNotifications
+                // then get all notifications sent to the user (you owe your friends) and set them to state oweNotifications
                 axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
                 .then(res => {
                     console.log(res);
@@ -85,12 +95,33 @@ export default function Dashboard (props) {
                     setOweNotificationsTotal(unpaidTotal);
                 })
                 .catch(err => {
-                    console.log("get all notifications for a user error", err);
+                    console.log("get all notifications/bills you owe your friends error", err);
                 })
-            })
+            })//end then
             .catch(err => {
                 console.log("get logged in user details error", err);
             })
+
+        //get all notifications/bills sent by the user (you friends owe you) and set them to state owedNotifications
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${localStorage.getItem('userId')}`)
+        .then(res => {           
+            console.log("your friends owe you returned from server", res.data);
+            setOwedNotifications(res.data);            
+
+            let owedTotal = 0;
+
+            res.data.forEach(notification => {
+                return owedTotal += notification.split_each_amount;
+            })
+
+            console.log("your friends owe you total", owedTotal);
+            setOwedNotificationsCount(res.data.length);
+            setOweNotificationsTotal(owedTotal);
+        })
+        .catch(err => {
+            console.log("get all notifications/bills your friends owe you error", err);
+        })
+
         // then get all bills for the user and set them to state "expenses"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
             .then(res => {
@@ -196,6 +227,7 @@ export default function Dashboard (props) {
                     {console.log("oweNotificationsCount in render", oweNotificationsCount)}
                     {console.log("oweNotifications in render", oweNotifications)}
 
+                    {/* DISPLAYS WHAT YOU OWE */}
                     <Modal trigger = {
                         <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
                             <div className = "owe-div">                      
@@ -207,29 +239,49 @@ export default function Dashboard (props) {
                 
                     } closeIcon>
 
-                    <Modal.Header>View Outstanding Bills</Modal.Header>
+                        <Modal.Header>View Bills You Owe Your Friends</Modal.Header>
 
-                    <Modal.Content image scrolling> 
+                        <Modal.Content image scrolling> 
 
-                    {oweNotifications.length > 0 ?
+                        {oweNotifications.length > 0 ?
 
-                     <OweNotifications oweNotifications = {oweNotifications} />
-                    :
-                    <p>You have no outstanding bills.</p> 
+                        <OweNotifications oweNotifications = {oweNotifications} />
+                        :
+                        <p>You have no outstanding bills.</p> 
 
-                    }                            
+                        }                            
 
-                    </Modal.Content>                            
+                        </Modal.Content>                            
 
                     </Modal>
-                                        
-                    <Badge className = "owed-badge" badgeContent={4} color="primary">
-                        <div className = "owed-div">                    
-                            Your Friends Owe You
-                            <p className = "owedTotal"> ${owedTotal} </p> {/* update the totals here */}
 
-                        </div>
-                    </Badge>
+                    {/* DISPLAYS WHAT YOU ARE OWED */}    
+                    <Modal trigger = {                
+                        <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
+                            <div className = "owed-div">                    
+                                Your Friends Owe You
+                                {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
+                                <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal}` : "$0"}  </p> {/* update the totals here */}
+
+                            </div>
+                        </Badge>
+                    } closeIcon>
+
+                        <Modal.Header>View Bills Your Friends Owe You</Modal.Header>
+
+                        <Modal.Content image scrolling> 
+
+                        {owedNotifications.length > 0 ?
+
+                        <OwedNotifications owedNotifications = {owedNotifications} />
+                        :
+                        <p>Your friends have no outstanding bills.</p> 
+
+                        }                            
+
+                        </Modal.Content>   
+
+                    </Modal>
                 </div>
                 
                 {/* LIST OF BILLS HISTORY */}

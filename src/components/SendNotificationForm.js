@@ -154,9 +154,10 @@ function SendNotificationForm(props) {
 
     console.log("new notifications right before submissiion", newNotifications);
 
-    console.log("nonDupNotifs if empty", nonDupNotifs);
-   
-    //replace the email to be sent with the emails addresses that were not already sent for that notification   
+    console.log("nonDupNotifs if empty", nonDupNotifs);   
+       
+    //if there are duplicate email
+    //replace the email to be sent with the email addresses that were not already sent for that notification
     {nonDupNotifs.length > 0 ? 
     
     axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', {...newNotifications, email: nonDupNotifs})
@@ -178,7 +179,7 @@ function SendNotificationForm(props) {
         console.log(err);
       })
 
-    :
+    : //if there are no duplicate emails
 
     axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
       .then(res => {
