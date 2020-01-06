@@ -110,95 +110,56 @@ function SendNotificationForm(props) {
 
     } else {//if duplicate values were not entered before hitting send
     
-    //check if any of the emails were already sent for that bill    
-    var emailsAlreadyAdded = notificationsBeforeAdding.filter(function(o1){
-      // filter out (!) items in result2
-      return newNotifications.email.some(function(o2){
-          return o1.email === o2;          // assumes unique id
-      });
-    
-    });
-
-    //extract the email addresses from emailsAlreadyAdded
-    const resultEmails = emailsAlreadyAdded.map(result => {
-      return result.email;
-    })
-
-    console.log("result emails", resultEmails);
-
-    console.log("newNotifications.email", newNotifications.email);
-
-    //if they were already added display a window.alert with the duplicate email adresses
-    if(emailsAlreadyAdded.length > 0){          
-      window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n" +
-                   "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")   
-                   
       //check if any of the emails were already sent for that bill    
-      nonDupNotifs = newNotifications.email.filter(function(o1){
-        // filter out (!) items in resultEmails
-        return !resultEmails.some(function(o2){
-            return o1 === o2;          // assumes unique id
+      var emailsAlreadyAdded = notificationsBeforeAdding.filter(function(o1){
+        // filter out (!) items in result2
+        return newNotifications.email.some(function(o2){
+            return o1.email === o2;          // assumes unique id
         });
-    
+      
       });
 
-      console.log("emailsAlreadyAdded", emailsAlreadyAdded);
+      //extract the email addresses from emailsAlreadyAdded
+      const resultEmails = emailsAlreadyAdded.map(result => {
+        return result.email;
+      })
 
-      console.log("nonDupNotifs", nonDupNotifs);
+      console.log("result emails", resultEmails);
 
-      console.log("newNotifications.email after filter", newNotifications.email);
-      
-    }
+      console.log("newNotifications.email", newNotifications.email);
 
-    console.log("new notifications right before submissiion", newNotifications);
+      //if they were already added display a window.alert with the duplicate email adresses
+      if(emailsAlreadyAdded.length > 0){          
+        window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n" +
+                    "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")   
+                    
+        
+        
+      }//end if
 
-    console.log("nonDupNotifs if empty", nonDupNotifs);   
-       
-    //if there are duplicate email
-    //replace the email to be sent with the email addresses that were not already sent for that notification
-    {nonDupNotifs.length > 0 ? 
-    
-    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', {...newNotifications, email: nonDupNotifs})
-      .then(res => {
-        setNewNotifications({
-          bill_id: props.expenseId,
-          email: []
+    else {     
+             
+
+      axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
+        .then(res => {
+          setNewNotifications({
+            bill_id: props.expenseId,
+            email: []
+          })
+          axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
+            .then(res => {
+              //console.log("notifications for a specific bill in send notification form", res);
+              props.setNotifications(res.data);
+            })
+            .catch(err => {
+              console.log(err);
+            })
         })
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
-          .then(res => {
-            //console.log("notifications for a specific bill in send notification form", res);
-            props.setNotifications(res.data);
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      })
-      .catch(err => {
-        console.log(err);
-      })
-
-    : //if there are no duplicate emails
-
-    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
-      .then(res => {
-        setNewNotifications({
-          bill_id: props.expenseId,
-          email: []
+        .catch(err => {
+          console.log(err);
         })
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
-          .then(res => {
-            //console.log("notifications for a specific bill in send notification form", res);
-            props.setNotifications(res.data);
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      })
-      .catch(err => {
-        console.log(err);
-      })
 
-    }//end ternary
+     
 
       // reset inputs
       setInputs([
@@ -210,7 +171,9 @@ function SendNotificationForm(props) {
         }
       ]);
 
-    }//end else
+      }//end emailsAlreadyAdded else
+
+    }//end filterNewNotifications else
 
   }//end submitNotifications
 
