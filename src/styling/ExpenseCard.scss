@@ -53,6 +53,10 @@
         
         }
 
+        .expense-card-modal  {            
+            display:flex;
+        }
+
         ui.modal.transition.visible.active {
             .header {
                 @media (max-width: 800px) {

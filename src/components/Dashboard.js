@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Button, Modal } from 'semantic-ui-react';
+import { Icon, Button, Modal, Popup } from 'semantic-ui-react';
 import Badge from '@material-ui/core/Badge';
+import Tooltip from '@material-ui/core/Tooltip';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
 
@@ -10,6 +11,11 @@ import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
 import OweNotifications from "./OweNotifications.js";
 import OwedNotifications from "./OwedNotifications.js";
+
+//popup/tooltip style
+const style = {    
+    opacity: 0.7    
+}
 
 export default function Dashboard (props) {
     
@@ -197,25 +203,9 @@ export default function Dashboard (props) {
 
                     <AddExpenseForm addExpense = {addExpense}/>                                     
 
-                    </Modal>
+                    </Modal>                  
 
-                   {/*{  
-                    expenses.length > 0 ?
-                    <Modal trigger = {
-
-                        <Button>Add Expense</Button>               
-                        } closeIcon>
-
-                        <Modal.Header>Add Expense</Modal.Header>
-
-                        <AddExpenseForm addExpense = {addExpense}/>                                     
-           
-                    </Modal>
-                    :
-                    null 
-                    }*/}
-
-                        <h1>Hi {user.firstname}!</h1>
+                        <h1>Hi&nbsp;<p>{user.firstname}</p>!</h1>
 
                     <Button onClick={logout}> Log Out </Button>                  
                            
@@ -228,15 +218,17 @@ export default function Dashboard (props) {
                     {console.log("oweNotifications in render", oweNotifications)}
 
                     {/* DISPLAYS WHAT YOU OWE */}
-                    <Modal trigger = {
+                    <Modal trigger = {                        
                         <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
+                            <Popup content='Click to View Bills You Owe' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owe-div">                      
 
                                 You Owe Your Friends
                                 <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal.toFixed(2)}` : "$0"} </p> {/* update the totals here */}
-                            </div>    
+                            </div>  
+                            } /> {/*end popup */}  
                         </Badge>           
-                
+                        
                     } closeIcon>
 
                         <Modal.Header>View Bills You Owe Your Friends</Modal.Header>
@@ -256,15 +248,20 @@ export default function Dashboard (props) {
                     </Modal>
 
                     {/* DISPLAYS WHAT YOU ARE OWED */}    
-                    <Modal trigger = {                
+                    <Modal trigger = {  
+                         
+                                     
                         <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
+                            <Popup content='Click to View Bills Owed To You' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owed-div">                    
                                 Your Friends Owe You
                                 {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
                                 <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal.toFixed(2)}` : "$0"}  </p> {/* update the totals here */}
 
                             </div>
+                            } /> {/*end popup*/}
                         </Badge>
+                       
                     } closeIcon>
 
                         <Modal.Header>View Bills Your Friends Owe You</Modal.Header>

@@ -99,7 +99,7 @@
             align-items: center;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
             background: white;
-
+            
             @media (max-width: 800px) {
               width: 100%;
               height: auto;
@@ -140,7 +140,12 @@
             }//end button
             
             h1 {
-                //margin: 10px auto;
+                //margin: 10px auto;                
+                display: flex;               
+
+                p:first-letter {              
+                  text-transform: capitalize;            
+                }
 
                 @media (max-width: 800px) {
                   width: 100%;
@@ -208,6 +213,11 @@
               height: 100%;             
             }
 
+            .popup {
+              background: gray;
+              color: white;
+
+            }
             .owe-badge {
               width: 36.5%;
               cursor: pointer;

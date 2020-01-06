@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Icon, Card, Modal } from "semantic-ui-react";
+import { Icon, Card, Modal, Popup } from "semantic-ui-react";
+import Tooltip from '@material-ui/core/Tooltip';
+import Badge from '@material-ui/core/Badge';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
 import { axiosWithAuth } from "../utils/axiosWithAuth";
@@ -10,6 +12,11 @@ import ManageNotifications from "./ManageNotifications";
 import EmptyNotifications from "./ManageNotifications";
 
 import SendNotificationForm from "./SendNotificationForm";
+
+//popup/tooltip style
+const style = {    
+    opacity: 0.7,    
+}
 
 export default function ExpenseCard(props) { 
   
@@ -98,32 +105,23 @@ export default function ExpenseCard(props) {
 
         <Card.Description className="sent-notifications">
             {`Details: ${props.expense.description}`}
-        </Card.Description>
-
-        {/*NOTIFICATIONS/EMAIL ADDRESSES DISPLAYED ON THE BILL
-        {notifications.length > 0 ? 
-          <Card.Description className="sent-notifications">
-            <p>Friends who owe you: </p>{notifications.map(
-            (notification, index) => <p className="notification" key={index}>{notification.email}</p>)}
-          </Card.Description> : null
-        } */}
-
-        {/* THIS WILL DISPLAY 'YOU SENT NOTIFICATIONS TO' INSTEAD OF 'FRIENDS WHO OWE YOU'
-        {notifications.length > 0 ? 
-          <Card.Description className="sent-notifications">
-            <p>You sent notifications to: </p>{notifications.map(
-            (notification, index) => <p className="notification" key={index}>{notification.email}</p>)}
-          </Card.Description> : null
-        }*/}        
+        </Card.Description>        
 
       </Card.Content>
 
-      <Card.Content extra>     
+      <Card.Content extra className = "expense-card-modal">     
 
         {/*MODAL THAT TRIGGERS THE EDIT EXPENSE FORM */}
-        <Modal trigger = { <Icon  className = "edit-icon" name="edit outline" size = "large" /> } 
-                       
-        closeIcon>
+        <Modal trigger = { 
+        <div>
+        <Popup content='Click to Edit Bill' inverted style = {style} trigger = {
+       
+        <Icon  className = "edit-icon" name="edit" size = "large" /> 
+       
+        }/>
+        </div>
+
+        }closeIcon>
 
         <Modal.Header>Edit Expense</Modal.Header>
 
@@ -136,8 +134,11 @@ export default function ExpenseCard(props) {
 
         {/*MODAL THAT TRIGGERS SEND NOTIFICATION /> */}             
         <Modal trigger = {
-
-        <Icon className = "mail-icon" name="mail"size = "large" />              
+        <div>
+        <Popup content='Click to Send Notifications' inverted style = {style} trigger = {
+        <Icon className = "mail-icon" name="send" size = "large" />   
+        }/>
+        </div>        
         } closeIcon>
 
         <Modal.Header>Notify Friends</Modal.Header>        
@@ -146,10 +147,13 @@ export default function ExpenseCard(props) {
 
         </Modal>   
 
-        {/*MODAL THAT DISPLAYS THE FRIENDS THAT OWE YOU */}
+        {/*MODAL THAT TRIGGERS SENT NOTIFICATIONS */}
         <Modal trigger = {
-
-        <Icon  className = "dollar-icon" name="dollar sign" size = "large" />              
+        <div>
+        <Popup content='Click to Manage Sent Notifications' inverted style = {style} trigger = {        
+        <Icon  className = "dollar-icon" name="mail" size = "large" /> 
+        }/>
+        </div>             
         } closeIcon>
 
         <Modal.Header>Manage Sent Notifications</Modal.Header>

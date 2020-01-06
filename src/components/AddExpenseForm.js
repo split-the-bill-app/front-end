@@ -19,8 +19,7 @@ function AddExpenseForm(props) {
 
   return (
 
-    <div className = "expense-form-div">  
-       
+    <div className = "expense-form-div">         
 
         <Form className = "expense-form">
                  
@@ -33,7 +32,7 @@ function AddExpenseForm(props) {
           <Field className = "form-input" type="number" name="split_people_count" placeholder="How many people are paying?" />
           {touched.split_people_count && errors.split_people_count && <p>{errors.split_people_count}</p>}
                         
-          <Field className = "form-input" type="text" maxlength="60" name="description" placeholder="What was this for?" />
+          <Field className = "form-input" type="text" maxlength="20" name="description" placeholder="What was this for?" />
           {touched.description && errors.description && <p>{errors.description}</p>}       
                       
           {/*<Field className = "form-input" type="email" name="email" placeholder="Their Email Addresses" />
