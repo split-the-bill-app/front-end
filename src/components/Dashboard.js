@@ -24,6 +24,12 @@ export default function Dashboard (props) {
 
     //keeps track of expenses
     const [expenses, setExpenses] = useState([]);
+    
+    //keeps track of all the bills your friends have paid
+    const [paidBills, setPaidBills] = useState([]);
+
+    //keeps track of the total $amount all the bills your friends have paid
+    const [paidBillsTotal, setPaidBillsTotal] = useState([]);
 
     //keeps track of outstanding notifications/bills you owe
     const [oweNotifications, setOweNotifications] = useState([]);
@@ -43,9 +49,11 @@ export default function Dashboard (props) {
     //keeps track of the dollar amount of notifications/bills your friends owe you
     const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);
 
+    
+
     //calculates how much your friends owe you  
-    /* THIS IS NOT BEING USED ANYMORE. UNPAID BILLS ARE NOW BEING READ FROM THE SERVER AND CALCULATED
-    let owedTotal = 0;
+    //THIS IS NOT BEING USED ANYMORE. UNPAID BILLS ARE NOW BEING READ FROM THE SERVER AND CALCULATED
+    let owedGrandTotal = 0;
     let eachPersonBill = 0;
     let owedForEachBill = 0;
     let owedForEachBillTotal = 0;
@@ -59,19 +67,25 @@ export default function Dashboard (props) {
             //count = count + 1;  
             
             eachPersonBill = (expense.split_sum / expense.split_people_count) 
-            owedForEachBill = expense.split_sum - eachPersonBill
+            owedForEachBill = expense.split_sum - eachPersonBill //subtract bill creator's portion
     
             owedForEachBillTotal += owedForEachBill
 
         });
        
-        owedTotal = owedForEachBillTotal.toFixed(2);
+        owedGrandTotal = owedForEachBillTotal.toFixed(2);
 
         //owedTotal = ((grandTotal/totalPeople)*(totalPeople-count)).toFixed(2); 
         //owedTotal = ((grandTotal / totalPeople) * count).toFixed(2);
 
     }//end if
-    */
+
+    const yourFriendsOweYou = owedGrandTotal - paidBillsTotal;
+
+    console.log("paidBillsTotal", paidBillsTotal);
+    console.log("owedGrandTotal", owedGrandTotal);
+    console.log("your friends owe you", yourFriendsOweYou);
+    
 
     useEffect(() => {
         // get user details and set them to state "user"
@@ -103,30 +117,51 @@ export default function Dashboard (props) {
                 .catch(err => {
                     console.log("get all notifications/bills you owe your friends error", err);
                 })
-            })//end then
-            .catch(err => {
-                console.log("get logged in user details error", err);
-            })
-
-        //get all notifications/bills sent by the user (you friends owe you) and set them to state owedNotifications
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
-        .then(res => {           
-            console.log("your friends owe you returned from server", res.data);
-            setOwedNotifications(res.data);            
-
-            let owedTotal = 0;
-
-            res.data.forEach(notification => {
-                return owedTotal += notification.split_each_amount;
-            })
-
-            console.log("your friends owe you total", owedTotal);
-            setOwedNotificationsCount(res.data.length);
-            setOwedNotificationsTotal(owedTotal);
-        })
+                
+        })//end then
         .catch(err => {
-            console.log("get all notifications/bills your friends owe you error", err.response);
+            console.log("get logged in user details error", err);
         })
+
+        //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
+            .then(res => {           
+                console.log("your friends owe you returned from server", res.data);
+                setOwedNotifications(res.data);            
+
+                let owedTotal = 0;
+
+                res.data.forEach(notification => {
+                    return owedTotal += notification.split_each_amount;
+                })
+
+                console.log("your friends owe you total", owedTotal);
+                setOwedNotificationsCount(res.data.length);
+                setOwedNotificationsTotal(owedTotal);
+            })
+            .catch(err => {
+                console.log("get all notifications/bills your friends owe you error", err.response);
+            })
+
+        //get all paid bills your friends owe you and set them to state paidBills
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/paid/${localStorage.getItem('userId')}`)
+            .then(res => {           
+                console.log("paid bills your friends owe you returned from server", res.data);
+                setPaidBills(res.data);            
+    
+                let paidTotal = 0;
+    
+                res.data.forEach(paidBill => {
+                    return paidTotal += paidBill.split_each_amount;
+                })
+    
+                console.log("paid bills your friends owe you total", paidTotal);             
+                setPaidBillsTotal(paidTotal);
+            })
+            .catch(err => {
+                console.log("paid bills your friends owe you total error", err.response);
+            })
+    
 
         // then get all bills for the user and set them to state "expenses"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
@@ -138,7 +173,7 @@ export default function Dashboard (props) {
             .catch(err => {
                 console.log("get all bills for uer error", err);
             })
-        
+    
     }, [])
     // console.log(user);   
 
@@ -248,15 +283,14 @@ export default function Dashboard (props) {
                     </Modal>
 
                     {/* DISPLAYS WHAT YOU ARE OWED */}    
-                    <Modal trigger = {  
-                         
+                    <Modal trigger = {                           
                                      
                         <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
                             <Popup content='Click to View Bills Owed To You' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owed-div">                    
                                 Your Friends Owe You
                                 {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
-                                <p className = "owedTotal"> {owedNotificationsTotal > 0 ? `$${owedNotificationsTotal.toFixed(2)}` : "$0"}  </p> {/* update the totals here */}
+                                <p className = "owedTotal"> {yourFriendsOweYou > 0 ? `$${yourFriendsOweYou.toFixed(2)}` : "$0"}  </p> {/* update the totals here */}
 
                             </div>
                             } /> {/*end popup*/}
