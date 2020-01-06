@@ -10,20 +10,14 @@ import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 import { Icon } from 'semantic-ui-react';
 
 function SendNotificationForm(props) {  
-
-  //console.log("props.notification in send notification form", props.notifications);
-
-  //console.log("props.notifications split people count", props.notifications[0].split_people_count);  
-
-  let enabledState = true;
+    
   let [iterator, setIterator] = useState(0);
-  //the nummber of people splitting the bill or the no. of ppl to send notifications to
+  const numNotifications = props.notifications.length;
+  const numPeople = props.numPeople;
+  //let inputsToDisplay = numPeople - numNotifications;
 
-  //check if props.notifications[0] is undefined
-  //const splitPeopleCountTracker = props.notifications[0].split_people_count - 1;
-
-  //console.log("split people count tracker", splitPeopleCountTracker);
-
+  let[inputsToDisplay, setInputsToDisplay] = useState(numPeople - numNotifications);  
+  
   const [notificationsBeforeAdding, setNotificationsBeforeAdding] = useState([]);
 
   const [newNotifications, setNewNotifications] = useState({
@@ -38,8 +32,13 @@ function SendNotificationForm(props) {
       placeholder: "Enter Your Friend's Email",
       value: ''
     }
-  ])
+  ])  
 
+  console.log("number of notifs", numNotifications); 
+  console.log("number of ppl", numPeople); 
+  console.log("inputsToDisplay", inputsToDisplay); 
+  console.log("inputs.length", inputs.length); 
+    
   useEffect(() => {
 
     //get all notifications of a bill
@@ -56,7 +55,8 @@ function SendNotificationForm(props) {
 
   //adds another input field
   const addInput = (e) => {
-    e.preventDefault();
+    e.preventDefault();  
+    
     setInputs([
       ...inputs, 
       {
@@ -65,6 +65,7 @@ function SendNotificationForm(props) {
         placeholder: "Enter Your Friend's Email"
       }
       ])
+      
       
   }//end addInput
 
@@ -91,12 +92,9 @@ function SendNotificationForm(props) {
 
     e.preventDefault();    
 
-    console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);
+    console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);    
 
-    //var equals = notificationsBeforeAdding.every((e, i) => e.email === newNotifications.email[i]);
-
-    console.log("newNotifications.email[0]", newNotifications.email[0]);
-    //console.log("equals", equals);
+    console.log("newNotifications.email[0]", newNotifications.email[0]);   
 
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
     var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
@@ -220,28 +218,16 @@ function SendNotificationForm(props) {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
     console.log("input", inputs);
-  }   
+  }     
+
   
-
- /*const showButtons = () => {
-
-    console.log("iterator every time add is clicked", iterator);
-    
-    //for (iterator; iterator <= splitPeopleCountTracker;){
-
-      iterator <= splitPeopleCountTracker ? enabledState = true: enabledState = false    
-
-    //}
-
-    
- }*/
-  
-
   return (
 
+    numNotifications < numPeople ?    
+    
     <form 
     onSubmit={(e) => submitNotifications(e)} 
-    className="send-notification-form">
+    className="send-notification-form">        
 
       {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}
       
@@ -263,33 +249,37 @@ function SendNotificationForm(props) {
             />
           </div>
         )
-      })}     
-            
+      })}               
       
-
       <div className = "button-div">
 
-      <button enabled = {enabledState} className="send-notification-btn" type="submit">Send</button>
+      <button  className="send-notification-btn" type="submit">Send</button>
 
-      <button
-      enabled = {enabledState} 
-      type="button"
-      className="send-notification-btn"
-      onClick={(e) => {
-        return console.log("clicked"),
-        addInput(e) 
-        //showButtons(),
-        //setIterator(iterator + 1)
-      }}>
-        Add Another Email
-      </button>
+      {inputs.length < inputsToDisplay ? 
+      <button        
+        type="button"
+        className="send-notification-btn"
+        onClick={(e) => {
+          return console.log("clicked"),              
+          addInput(e)      
+        }}>
+          Add Another Email
+        </button>
 
-      </div>
-       
+        :
+
+        null
         
-      
+      }
 
-    </form>
+      </div>     
+              
+
+    </form>    
+
+    :
+
+    <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>
    
   );
 }

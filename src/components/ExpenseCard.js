@@ -143,7 +143,7 @@ export default function ExpenseCard(props) {
 
         <Modal.Header>Notify Friends</Modal.Header>        
 
-        <SendNotificationForm notifications = {notifications} setNotifications={setNotifications} expenseId={props.expenseId}/>                                   
+        <SendNotificationForm numPeople = {props.numpeople} notifications = {notifications} setNotifications={setNotifications} expenseId={props.expenseId}/>                                   
 
         </Modal>   
 
@@ -158,9 +158,8 @@ export default function ExpenseCard(props) {
 
         <Modal.Header>Manage Sent Notifications</Modal.Header>
 
-        <Modal.Content image scrolling>    
-      
-        {/*NOTIFICATIONS/EMAIL ADDRESSES DISPLAYED ON THE BILL*/}
+        <Modal.Content image scrolling>          
+        
         {notifications.length > 0 ? 
         <ManageNotifications notifications = {notifications} setNotifications = {setNotifications}/> 
         : 
