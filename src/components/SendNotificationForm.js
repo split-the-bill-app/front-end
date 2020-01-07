@@ -12,11 +12,11 @@ import { Icon } from 'semantic-ui-react';
 function SendNotificationForm(props) {  
     
   let [iterator, setIterator] = useState(0);
-  const numNotifications = props.notifications.length;
+  const [numNotifications, setNumNotifications] = useState(props.notifications.length);
   const numPeople = props.numPeople - 1;
   //let inputsToDisplay = numPeople - numNotifications;
 
-  let[inputsToDisplay, setInputsToDisplay] = useState((numPeople) - numNotifications);  
+  let[inputsToDisplay, setInputsToDisplay] = useState(numPeople - numNotifications);  
   
   const [notificationsBeforeAdding, setNotificationsBeforeAdding] = useState([]);
 
@@ -132,8 +132,7 @@ function SendNotificationForm(props) {
       if(emailsAlreadyAdded.length > 0){          
         window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n" +
                     "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")   
-                  
-        
+            
         
       }//end if
 
@@ -149,6 +148,12 @@ function SendNotificationForm(props) {
             .then(res => {
               //console.log("notifications for a specific bill in send notification form", res);
               props.setNotifications(res.data);
+              setNumNotifications(res.data.length);
+              console.log("props.notifications.length after axios get", res.data.length);
+
+              //reset the number of inputs to display after send is clicked
+              setInputsToDisplay(numPeople - res.data.length);
+              console.log("num inputs to display after axios get", inputsToDisplay);
             })
             .catch(err => {
               console.log(err);

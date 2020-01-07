@@ -115,7 +115,7 @@ export default function Dashboard (props) {
                     setOweNotificationsTotal(unpaidTotal);
                 })
                 .catch(err => {
-                    console.log("get all notifications/bills you owe your friends error", err);
+                    console.log("get all notifications/bills you owe your friends error", err.response);
                 })
                 
         })//end then
