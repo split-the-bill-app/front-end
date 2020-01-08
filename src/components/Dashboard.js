@@ -91,14 +91,14 @@ export default function Dashboard (props) {
         // get user details and set them to state "user"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}`)
             .then(res => {
-                console.log("user object when the app loads", res);
+                //console.log("user object when the app loads", res);
                 setUser(res.data);
-                console.log("user object when the app loads => user", user);
+                //console.log("user object when the app loads => user", user);
 
                 // then get all notifications sent to the user (you owe your friends) and set them to state oweNotifications
                 axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
                 .then(res => {
-                    console.log(res);
+                    //console.log(res);
                     setOweNotifications(res.data);
                     const unpaidNotifications = res.data.filter(notification => {
                         return notification.paid === false
@@ -110,12 +110,12 @@ export default function Dashboard (props) {
                         return unpaidTotal += notification.split_each_amount;
                     })
 
-                    console.log("unpaid notifications total", unpaidTotal);
+                    //console.log("unpaid notifications total", unpaidTotal);
                     setOweNotificationsCount(unpaidNotifications.length);
                     setOweNotificationsTotal(unpaidTotal);
                 })
                 .catch(err => {
-                    console.log("get all notifications/bills you owe your friends error", err.response);
+                    //console.log("get all notifications/bills you owe your friends error", err.response);
                 })
                 
         })//end then
@@ -126,7 +126,7 @@ export default function Dashboard (props) {
         //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
             .then(res => {           
-                console.log("your friends owe you returned from server", res.data);
+                //console.log("your friends owe you returned from server", res.data);
                 setOwedNotifications(res.data);            
 
                 let owedTotal = 0;
@@ -135,18 +135,18 @@ export default function Dashboard (props) {
                     return owedTotal += notification.split_each_amount;
                 })
 
-                console.log("your friends owe you total", owedTotal);
+                //console.log("your friends owe you total", owedTotal);
                 setOwedNotificationsCount(res.data.length);
                 setOwedNotificationsTotal(owedTotal);
             })
             .catch(err => {
-                console.log("get all notifications/bills your friends owe you error", err.response);
+                //console.log("get all notifications/bills your friends owe you error", err.response);
             })
 
         //get all paid bills your friends owe you and set them to state paidBills
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/paid/${localStorage.getItem('userId')}`)
             .then(res => {           
-                console.log("paid bills your friends owe you returned from server", res.data);
+                //console.log("paid bills your friends owe you returned from server", res.data);
                 setPaidBills(res.data);            
     
                 let paidTotal = 0;
@@ -155,23 +155,23 @@ export default function Dashboard (props) {
                     return paidTotal += paidBill.split_each_amount;
                 })
     
-                console.log("paid bills your friends owe you total", paidTotal);             
+                //console.log("paid bills your friends owe you total", paidTotal);             
                 setPaidBillsTotal(paidTotal);
             })
             .catch(err => {
-                console.log("paid bills your friends owe you total error", err.response);
+                //console.log("paid bills your friends owe you total error", err.response);
             })
     
 
         // then get all bills for the user and set them to state "expenses"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 setExpenses(res.data);
                 console.log("list of bills for the user when the app loads", res.data);
             })
             .catch(err => {
-                console.log("get all bills for uer error", err);
+                //console.log("get all bills for uer error", err);
             })
     
     }, [])
@@ -202,7 +202,7 @@ export default function Dashboard (props) {
         
         //after making the switch, replace the expenses array with the expensesCopy array 
         setExpenses (expensesCopy);
-    } 
+    }     
         
     //const initialExpense = expenses.find(expense => expense.id.toString() === props.match.params.id);
 
@@ -320,7 +320,17 @@ export default function Dashboard (props) {
                    
                     {
                         expenses.length > 0 ? 
-                        <ExpenseDetails setExpenses={setExpenses} expenses = {expenses} addExpense = {addExpense} editExpense = {editExpense}/> 
+                        <ExpenseDetails 
+                            setExpenses={setExpenses} 
+                            expenses = {expenses} 
+                            addExpense = {addExpense} 
+                            editExpense = {editExpense}
+                            setPaidBillsTotal = {setPaidBillsTotal}
+                            setOwedNotifications = {setOwedNotifications}
+                            setOwedNotificationsTotal = {setOwedNotificationsTotal}
+                            setOwedNotificationsCount = {setOwedNotificationsCount}                            
+                        /> 
+
                         : 
                         <Modal trigger = {
 

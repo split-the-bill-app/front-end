@@ -74,9 +74,8 @@ export default function ExpenseCard(props) {
           console.log(err);
         })
     }
-  }   
-  
-    
+  }
+
   return (
 
     <div className = "expense-card-div">
@@ -161,7 +160,15 @@ export default function ExpenseCard(props) {
         <Modal.Content image scrolling>          
         
         {notifications.length > 0 ? 
-        <ManageNotifications notifications = {notifications} setNotifications = {setNotifications}/> 
+        <ManageNotifications 
+          notifications = {notifications} 
+          setNotifications = {setNotifications}
+          setPaidBillsTotal = {props.setPaidBillsTotal}
+          setOwedNotifications = {props.setOwedNotifications}
+          setOwedNotificationsCount = {props.setOwedNotificationsCount}
+          setOwedNotificationsTotal = {props.setOwedNotificationsTotal}
+          setExpenses = {props.setExpenses}
+        /> 
         : 
         <p>You haven't sent any notifications for this bill.</p> }   
 

@@ -7,7 +7,67 @@ function ManageNotifications(props){
     //console.log("props in manage notifs", props.notifications);
     //const [notificationToEdit, setNotificationToEdit] = useState({});
 
-    let paidStatus = "";      
+    useEffect( () => {
+         
+         
+            //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
+            axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
+            .then(res => {           
+                console.log("friends owe you returned from server ManageNotifiations.js", res.data);
+                props.setOwedNotifications(res.data);            
+
+                let owedTotal = 0;
+
+                res.data.forEach(notification => {
+                    return owedTotal += notification.split_each_amount;
+                })
+
+                console.log("friends owe you total ManageNotifications.js", owedTotal);
+                props.setOwedNotificationsCount(res.data.length);
+                props.setOwedNotificationsTotal(owedTotal);
+
+                
+            })
+            .catch(err => {
+                console.log("get all notifications/bills your friends owe you error ManageNotifications.js", err.response);
+
+                // then get all bills for the user and set them to state "expenses"
+           
+                         
+            })
+
+            //get all paid bills your friends owe you and call props.setPaidBillsTotal
+            axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/paid/${localStorage.getItem('userId')}`)
+            .then(res => {           
+                console.log("paid bills friends owe you returned from server in ManageNotifications.js", res.data);
+                
+                let paidTotal = 0;
+
+                res.data.forEach(paidBill => {
+                    return paidTotal += paidBill.split_each_amount;
+                })
+
+                console.log("paid bills friends owe you total ManageNotifications.js", paidTotal);             
+                props.setPaidBillsTotal(paidTotal);
+            })
+            .catch(err => {
+                console.log("paid bills friends owe you total error ManageNotifications.js", err.response);
+               
+            }) 
+
+            /*axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
+            .then(res => {
+                //console.log(res);
+                props.setExpenses(res.data);
+                console.log("list of bills for the user ManageNotifications.js", res.data);
+            })
+            .catch(err => {
+                console.log("get all bills for uer error ManageNotifications.js", err);
+            })*/         
+    }, [props.notifications])
+
+    let paidStatus = "";    
+       
    
     const deleteNotification = (e, notificationIn) => {
         console.log("delete notification clicked");
@@ -23,34 +83,14 @@ function ManageNotifications(props){
          //call props.setNotifications in ExpenseCard.js and removes/filters out the notification that was just deleted
          props.setNotifications(props.notifications.filter(notification => notification.id !== notificationIn.id))
 
-        })        
+        }) 
+        .catch(err => {
+            console.log("delete notification error", err.response);
+        })       
 
-    }
+    }    
 
-    /*const updateNotification = (updatedNotification) => {
-
-        console.log("updated notification in updateNotifaction", updatedNotification);
-       
-        //create an array called expensesCopy and spread in the contents of the expenses array
-        const notificationsCopy = [...props.notifications];
-        
-        //find the index in the notificationsCopy array where the id of the notificatiion at that index is equal 
-        //to the id of the notification passed down from the editExpenseForm (submitHandler function) 
-        const notificationIndex = notificationsCopy.findIndex(notification => notification.id === updatedNotification.id);
-    
-        //when a match is found, replace the notification at the matched index with the notification passed down 
-        //(updatedNotification) from ManageNotifications.js
-        notificationsCopy[notificationIndex] = updatedNotification;
-        
-        //after making the switch, replace the notifications array with the notificationsCopy array 
-        props.setNotifications (notificationsCopy);
-
-        console.log("notifications copy", notificationsCopy);
-
-        console.log("update notification method", props.notifications);
-    }*/  
-
-    const paidHandler = (event, notificationId) => {
+    const paidHandler = async (event, notificationId) => {
         event.preventDefault();
 
         paidStatus = event.target.value;
@@ -59,27 +99,14 @@ function ManageNotifications(props){
         console.log("notificationId", notificationId); 
 
         {event.target.value === "paid" ? paidStatus = true : paidStatus = false}
-        console.log("paidStatus", paidStatus);  
-        
-        /*setNotificationToEdit ({
-            ...notificationToEdit, 
-                id: notificationId,
-                paid: paidStatus
-        })*/
+        console.log("paidStatus", paidStatus);              
 
-        axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/notifications/${notificationId}`, {paid: paidStatus})
+         axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/notifications/${notificationId}`, {paid: paidStatus})
         .then(res => { 
                          
-         //server actually returns a success message and not the edited expense
-         console.log("edited expense returned from server", res.data);
-
-         //page is refreshed and updated payment status is reflected after modal is closed 
-         //because notifications is added to the dependency array in ExpenseCard.js
-         //call props.setNotifications in ExpenseCard.js and removes/filters out the notification that was just deleted
-         
-         //updateNotification(notificationToEdit);
-
-         //console.log("notification to edit", notificationToEdit);
+            //server actually returns a success message and not the edited expense
+            console.log("edited notification response returned from server", res.data);                      
+           
         })  
         
         
@@ -112,9 +139,7 @@ function ManageNotifications(props){
             </div>
             })}
         </div> 
-
     );
-
 }
 
 export default ManageNotifications;

@@ -4,8 +4,8 @@ import { Icon, Card, Modal } from "semantic-ui-react";
 import Moment from 'react-moment';
 
 //bills that you need to pay
-function OwedNotifications(props){       
-
+function OwedNotifications(props){  
+      
     return (
 
         <div className="manage-notifications">            

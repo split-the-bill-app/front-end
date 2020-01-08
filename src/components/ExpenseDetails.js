@@ -2,7 +2,17 @@ import React from "react";
 
 import ExpenseCard from "./ExpenseCard.js";
 
-export default function ExpenseDetails({expenses, setExpenses, addExpense, editExpense}) {
+export default function ExpenseDetails({
+                                          expenses, 
+                                          setExpenses, 
+                                          addExpense, 
+                                          editExpense, 
+                                          setPaidBillsTotal,
+                                          setOwedNotifications,
+                                          setOwedNotificationsCount,
+                                          setOwedNotificationsTotal                                          
+
+                                    }) {
 
     
       return (
@@ -16,7 +26,11 @@ export default function ExpenseDetails({expenses, setExpenses, addExpense, editE
                          numfriends = {expense.numfriends} name = {expense.name} email = {expense.email}
             />  */
             
-            <ExpenseCard 
+            <ExpenseCard              
+            setOwedNotificationsTotal = {setOwedNotificationsTotal}
+            setOwedNotifications = {setOwedNotifications} 
+            setOwedNotificationsCount = {setOwedNotificationsCount}
+            setPaidBillsTotal = {setPaidBillsTotal}         
             editExpense={editExpense} 
             addExpense={addExpense} 
             expenses={expenses} 
