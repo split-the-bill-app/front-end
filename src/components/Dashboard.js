@@ -140,7 +140,7 @@ export default function Dashboard (props) {
                 setOwedNotificationsTotal(owedTotal);
             })
             .catch(err => {
-                //console.log("get all notifications/bills your friends owe you error", err.response);
+                //console.log("get all notifications/bills your friends owe you error", err.response);                                         
             })
 
         //get all paid bills your friends owe you and set them to state paidBills
@@ -159,7 +159,8 @@ export default function Dashboard (props) {
                 setPaidBillsTotal(paidTotal);
             })
             .catch(err => {
-                //console.log("paid bills your friends owe you total error", err.response);
+                //console.log("paid bills your friends owe you total error", err.response);                
+                         
             })
     
 
@@ -184,7 +185,8 @@ export default function Dashboard (props) {
 
     //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS
     //OR THE SCREEN IS REFRESHED SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
-    //BY NOT USING event.preventDefault (INSEAD OF USING AN editExpense FUNCTION AND THE UPDATED BILL WILL BE DISPLAYED. AFTER A BILL IS EDITED THE SERVER
+    //BY NOT USING event.preventDefault (INSEAD OF USING AN editExpense FUNCTION AND THE UPDATED BILL WILL 
+    //BE DISPLAYED. AFTER A BILL IS EDITED THE SERVER
     //RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
 
     const editExpense = (editedExpense) => {
@@ -274,7 +276,7 @@ export default function Dashboard (props) {
 
                         <OweNotifications oweNotifications = {oweNotifications} />
                         :
-                        <p>You have no outstanding bills.</p> 
+                        <p>You have no outstanding notifications.</p> 
 
                         }                            
 
@@ -306,7 +308,7 @@ export default function Dashboard (props) {
 
                         <OwedNotifications owedNotifications = {owedNotifications} />
                         :
-                        <p>Your friends have no outstanding bills.</p> 
+                        <p>Your friends have no outstanding notifications.</p> 
 
                         }                            
 

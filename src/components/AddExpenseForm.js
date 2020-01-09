@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
@@ -7,15 +7,29 @@ import * as Yup from "yup";
 import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 
 function AddExpenseForm(props) {  
-  
-  const { errors, touched, isSubmitting, status } = props;
 
+  let [counter, setCounter] = useState(0);
+  const wordCount = 20;
+  
+  const { errors, touched, isSubmitting, status, handleChange} = props;
+ 
   //used to display the form data on the screen  
   useEffect(() => {
     if (status) {//status is a default prop on Formik
         props.addExpense(status); //calls the addExpense function in Dashboard.js
     }
   }, [status]);
+
+  const counterHandler = (event) => {
+
+    //use Formik's handleChange prop, destructured on line 14
+    handleChange(event);
+
+    if(counter >= 0 && counter <= wordCount){
+      setCounter(wordCount - event.target.value.length)
+    }     
+
+  }
 
   return (
 
@@ -31,12 +45,19 @@ function AddExpenseForm(props) {
           
           <Field className = "form-input" type="number" name="split_people_count" placeholder="How many people are paying?" />
           {touched.split_people_count && errors.split_people_count && <p>{errors.split_people_count}</p>}
-                        
-          <Field className = "form-input" type="text" maxlength="20" name="description" placeholder="What was this for?" />
-          {touched.description && errors.description && <p>{errors.description}</p>}       
-                      
-          {/*<Field className = "form-input" type="email" name="email" placeholder="Their Email Addresses" />
-          {touched.email && errors.email && <p>{errors.email}</p>} */}                
+
+          <div className = "expense-description">   
+            {/*Formik's onChange syntax */}          
+            <Field onChange = {e => counterHandler(e)} 
+                  className = "form-input-description" 
+                  type="text" maxlength="20" 
+                  name="description" 
+                  placeholder="What was this for?" />                  
+            {touched.description && errors.description && <p>{errors.description}</p>}                                   
+
+            <div className = "counter">{counter}/{wordCount}</div>    
+
+          </div>          
                              
           <button type="submit" disabled={isSubmitting}>Calculate</button>
           

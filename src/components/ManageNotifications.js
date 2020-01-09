@@ -7,8 +7,7 @@ function ManageNotifications(props){
     //console.log("props in manage notifs", props.notifications);
     //const [notificationToEdit, setNotificationToEdit] = useState({});
 
-    useEffect( () => {
-         
+    useEffect( () => {         
          
             //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
             axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
@@ -25,15 +24,12 @@ function ManageNotifications(props){
                 console.log("friends owe you total ManageNotifications.js", owedTotal);
                 props.setOwedNotificationsCount(res.data.length);
                 props.setOwedNotificationsTotal(owedTotal);
-
                 
             })
             .catch(err => {
                 console.log("get all notifications/bills your friends owe you error ManageNotifications.js", err.response);
-
-                // then get all bills for the user and set them to state "expenses"
-           
-                         
+                
+                                         
             })
 
             //get all paid bills your friends owe you and call props.setPaidBillsTotal
@@ -51,20 +47,12 @@ function ManageNotifications(props){
                 props.setPaidBillsTotal(paidTotal);
             })
             .catch(err => {
-                console.log("paid bills friends owe you total error ManageNotifications.js", err.response);
+                console.log("paid bills friends owe you total error ManageNotifications.js", err.response);            
                
             }) 
 
-            /*axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
-            .then(res => {
-                //console.log(res);
-                props.setExpenses(res.data);
-                console.log("list of bills for the user ManageNotifications.js", res.data);
-            })
-            .catch(err => {
-                console.log("get all bills for uer error ManageNotifications.js", err);
-            })*/         
-    }, [props.notifications])
+             
+    }, [])
 
     let paidStatus = "";    
        

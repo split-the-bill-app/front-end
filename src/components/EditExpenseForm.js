@@ -6,11 +6,15 @@ function EditExpenseForm(props) {
 
   const [expenseToEdit, setExpenseToEdit] = useState({});
 
+  let [counter, setCounter] = useState(0);
+  const wordCount = 20;
+
   useEffect ( () => {
 
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`) 
       .then(res => {
 
+        //prepopulates the edit expense form with the expense to edit
         setExpenseToEdit(res.data) 
         console.log("expense to edit", res.data);
 
@@ -22,9 +26,15 @@ function EditExpenseForm(props) {
       }) 
     
   }, [])
+  
 
-  const handleChange = (event) => {
+  const handleChange = (event) => {  
 
+    if(counter >= 0 && counter <= wordCount){
+      setCounter(wordCount - event.target.value.length)
+    }
+    
+    
     setExpenseToEdit ({
       ...expenseToEdit, [event.target.name]: event.target.value
     })
@@ -47,7 +57,7 @@ function EditExpenseForm(props) {
 
      props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
      
-     //server actually returns a success message and not the edited expense
+     //server actually returns a success message and not the edited expense     
      console.log("edited expense returned from server", res);     
 
     })
@@ -74,11 +84,18 @@ function EditExpenseForm(props) {
                  placeholder="How many people are paying?"
                  onChange = {handleChange} />
 
-          <input type = "text" 
-                 name="description"  
-                 value = {expenseToEdit.description} 
-                 placeholder="What is this for?"
-                 onChange = {handleChange} />
+          <div className = "expense-description">    
+            <input type = "text" 
+                  className = "form-input-description"
+                  name="description"  
+                  value = {expenseToEdit.description} 
+                  placeholder="What is this for?"
+                  maxlength="20"
+                  onChange = {handleChange}/>
+
+            <div className = "counter">{counter}/{wordCount}</div>  
+
+          </div>  
 
           <button type="submit" > Calculate </button>
 
