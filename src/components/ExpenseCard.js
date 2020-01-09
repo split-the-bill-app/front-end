@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Card, Modal, Popup } from "semantic-ui-react";
-import Tooltip from '@material-ui/core/Tooltip';
-import Badge from '@material-ui/core/Badge';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
+import Tooltip from '@material-ui/core/Tooltip';
+import Badge from '@material-ui/core/Badge';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 import AddExpenseForm from "./AddExpenseForm";
@@ -25,7 +32,17 @@ export default function ExpenseCard(props) {
   // keeps track of notifications
   const [notifications, setNotifications] = useState([])  
 
-  //console.log("props.expense.id", props.expense.id);
+  //delete confirmation modal
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   useEffect(() => {
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
@@ -83,7 +100,36 @@ export default function ExpenseCard(props) {
     {/* semantic ui card component that displays each expense details */}
     <Card>
       <Card.Content>
-        <Card.Header> {`Bill # ${props.expenseId}`}  <Icon onClick={(e) => deleteExpense(e, props.expense)} className = "delete-icon" name='delete' /> </Card.Header>
+        <Card.Header> {`Bill # ${props.expenseId}`}  
+      
+        {/*DELETE CONFIRMATION MODAL THAT APPEARS WHEN X IS CLICKED ON EACH BILL */}
+        <Icon className = "delete-icon" name='delete' onClick={handleClickOpen}/>
+        <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description">
+
+        <DialogTitle id="alert-dialog-title">{"Delete Bill"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+             Are you sure you want to delete this bill? This will completely remove this bill and its
+             notifications for everyone involved, not just you.              
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button class = "delete-bill-button" onClick={(e) => deleteExpense(e, props.expense)}>
+            DELETE
+          </Button>
+          <Button class = "cancel-delete-bill-button" onClick={handleClose} color="primary">
+            CANCEL
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+        
+        
+        </Card.Header>
 
         <Card.Description>
           {`Date: ${props.date}`}

@@ -103,9 +103,10 @@ function SendNotificationForm(props) {
     
     //display window alert if the same email was entered more than once in the input fields before submission
     if(filterNewNotifications.length !== newNotifications.email.length){
-      window.alert("You entered the same email address more than once:\n" +
-                    filterNewNotifications.join("\n") + "\n" +
+      window.alert("You entered the following email address(es) more than once:\n" +
+                    filterNewNotifications.join("\n") + "\n\n" +
                    "Please check your entries and try again.");
+
       console.log("filterNewNotifications", filterNewNotifications);
 
     } else {//if duplicate values were not entered before hitting send
@@ -130,9 +131,8 @@ function SendNotificationForm(props) {
 
       //if they were already added display a window.alert with the duplicate email adresses
       if(emailsAlreadyAdded.length > 0){          
-        window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n" +
-                    "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")   
-            
+        window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n\n" +
+                     "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")               
         
       }//end if
 

@@ -20,7 +20,7 @@
 
         .header {
             text-align: left;
-        }
+        }        
 
         .delete-icon::before {
             padding: 5px;
@@ -35,7 +35,15 @@
         right: 5px;
         top: 5px;
         cursor: pointer;
-        
+
+            .delete-bill-button {
+                background: red;               
+            }
+
+            .delete-bill-button {
+                background: green;
+            }
+         
         }
 
         .edit-icon {    
