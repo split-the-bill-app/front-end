@@ -7,7 +7,7 @@ function EditExpenseForm(props) {
   const [expenseToEdit, setExpenseToEdit] = useState({});
 
   let [counter, setCounter] = useState(0);
-  const wordCount = 20;
+  const wordCount = 15;
 
   useEffect ( () => {
 
@@ -30,10 +30,10 @@ function EditExpenseForm(props) {
 
   const handleChange = (event) => {  
 
+    //shows remaining characters in the description field (out of 15)
     if(counter >= 0 && counter <= wordCount){
       setCounter(wordCount - event.target.value.length)
-    }
-    
+    }    
     
     setExpenseToEdit ({
       ...expenseToEdit, [event.target.name]: event.target.value
@@ -59,6 +59,8 @@ function EditExpenseForm(props) {
      
      //server actually returns a success message and not the edited expense     
      console.log("edited expense returned from server", res);     
+
+     window.location.reload(true);
 
     })
     .catch(err => {
@@ -90,7 +92,7 @@ function EditExpenseForm(props) {
                   name="description"  
                   value = {expenseToEdit.description} 
                   placeholder="What is this for?"
-                  maxlength="20"
+                  maxlength="15"
                   onChange = {handleChange}/>
 
             <div className = "counter">{counter}/{wordCount}</div>  

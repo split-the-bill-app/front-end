@@ -109,7 +109,8 @@ function SendNotificationForm(props) {
 
       console.log("filterNewNotifications", filterNewNotifications);
 
-    } else {//if duplicate values were not entered before hitting send
+    } 
+    else {//if duplicate values were not entered before hitting send
     
       //check if any of the emails were already sent for that bill    
       var emailsAlreadyAdded = notificationsBeforeAdding.filter(function(o1){
@@ -175,9 +176,14 @@ function SendNotificationForm(props) {
         }
       ]);
 
+      window.location.reload(true);
+
       }//end emailsAlreadyAdded else
 
+      
+
     }//end filterNewNotifications else
+    
 
   }//end submitNotifications
 

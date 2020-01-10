@@ -27,9 +27,16 @@ function ManageNotifications(props){
                 
             })
             .catch(err => {
-                console.log("get all notifications/bills your friends owe you error ManageNotifications.js", err.response);
-                
-                                         
+                //console.log("get all notifications/bills your friends owe you error ManageNotifications.js", err.response);
+                if(err.response.status === 404){
+                    props.setOwedNotifications([])
+                    props.setOwedNotificationsCount(0)
+                    console.log("get all notifications/bills your friends owe you error", err.response)
+                }
+                else {
+                    console.log("get all notifications/bills your friends owe you error", err.response)
+                }                
+                                                         
             })
 
             //get all paid bills your friends owe you and call props.setPaidBillsTotal
@@ -47,12 +54,17 @@ function ManageNotifications(props){
                 props.setPaidBillsTotal(paidTotal);
             })
             .catch(err => {
-                console.log("paid bills friends owe you total error ManageNotifications.js", err.response);            
-               
+                console.log("paid bills friends owe you total error ManageNotifications.js", err.response);                          
+                if(err.response.status === 404){
+                    props.setPaidBillsTotal(0);                    
+                }
+                else {
+                    console.log("paid bills friends owe you total error ManageNotifications.js", err.response);
+                }      
             }) 
 
              
-    }, [])
+    }/*, []*/)
 
     let paidStatus = "";    
        

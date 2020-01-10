@@ -85,7 +85,50 @@ export default function Dashboard (props) {
     console.log("paidBillsTotal", paidBillsTotal);
     console.log("owedGrandTotal", owedGrandTotal);
     console.log("your friends owe you", yourFriendsOweYou);
+
+    useEffect(() => {
+
+        //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
+            .then(res => {           
+                //console.log("your friends owe you returned from server", res.data);
+                setOwedNotifications(res.data);            
+
+                let owedTotal = 0;
+
+                res.data.forEach(notification => {
+                    return owedTotal += notification.split_each_amount;
+                })
+
+                //console.log("your friends owe you total", owedTotal);
+                setOwedNotificationsCount(res.data.length);
+                setOwedNotificationsTotal(owedTotal);
+            })
+            .catch(err => {
+                console.log("get all notifications/bills your friends owe you error Dashboard", err.response);                                                        
+            })
+
+        //get all paid bills your friends owe you and set them to state paidBills
+        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/paid/${localStorage.getItem('userId')}`)
+            .then(res => {           
+                //console.log("paid bills your friends owe you returned from server", res.data);
+                setPaidBills(res.data);            
     
+                let paidTotal = 0;
+    
+                res.data.forEach(paidBill => {
+                    return paidTotal += paidBill.split_each_amount;
+                })
+    
+                //console.log("paid bills your friends owe you total", paidTotal);             
+                setPaidBillsTotal(paidTotal);
+            })
+            .catch(err => {
+                console.log("paid bills your friends owe you total error Dashboard", err.response);                
+                         
+            })   
+
+    }, [])    
 
     useEffect(() => {
         // get user details and set them to state "user"
@@ -121,48 +164,7 @@ export default function Dashboard (props) {
         })//end then
         .catch(err => {
             console.log("get logged in user details error", err);
-        })
-
-        //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
-            .then(res => {           
-                //console.log("your friends owe you returned from server", res.data);
-                setOwedNotifications(res.data);            
-
-                let owedTotal = 0;
-
-                res.data.forEach(notification => {
-                    return owedTotal += notification.split_each_amount;
-                })
-
-                //console.log("your friends owe you total", owedTotal);
-                setOwedNotificationsCount(res.data.length);
-                setOwedNotificationsTotal(owedTotal);
-            })
-            .catch(err => {
-                //console.log("get all notifications/bills your friends owe you error", err.response);                                         
-            })
-
-        //get all paid bills your friends owe you and set them to state paidBills
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/paid/${localStorage.getItem('userId')}`)
-            .then(res => {           
-                //console.log("paid bills your friends owe you returned from server", res.data);
-                setPaidBills(res.data);            
-    
-                let paidTotal = 0;
-    
-                res.data.forEach(paidBill => {
-                    return paidTotal += paidBill.split_each_amount;
-                })
-    
-                //console.log("paid bills your friends owe you total", paidTotal);             
-                setPaidBillsTotal(paidTotal);
-            })
-            .catch(err => {
-                //console.log("paid bills your friends owe you total error", err.response);                
-                         
-            })
-    
+        })       
 
         // then get all bills for the user and set them to state "expenses"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
@@ -257,7 +259,7 @@ export default function Dashboard (props) {
                     {/* DISPLAYS WHAT YOU OWE */}
                     <Modal trigger = {                        
                         <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
-                            <Popup content='Click to View Bills You Owe' position= 'bottom center' style={style} inverted trigger={
+                            <Popup content='Click to View Received Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owe-div">                      
 
                                 You Owe Your Friends
@@ -268,7 +270,7 @@ export default function Dashboard (props) {
                         
                     } closeIcon>
 
-                        <Modal.Header>View Bills You Owe Your Friends</Modal.Header>
+                        <Modal.Header>View Notifications You Owe Your Friends</Modal.Header>
 
                         <Modal.Content image scrolling> 
 
@@ -288,7 +290,7 @@ export default function Dashboard (props) {
                     <Modal trigger = {                           
                                      
                         <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
-                            <Popup content='Click to View Bills Owed To You' position= 'bottom center' style={style} inverted trigger={
+                            <Popup content='Click to View Sent Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owed-div">                    
                                 Your Friends Owe You
                                 {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
@@ -300,7 +302,7 @@ export default function Dashboard (props) {
                        
                     } closeIcon>
 
-                        <Modal.Header>View Bills Your Friends Owe You</Modal.Header>
+                        <Modal.Header>View Notifications Your Friends Owe You</Modal.Header>
 
                         <Modal.Content image scrolling> 
 

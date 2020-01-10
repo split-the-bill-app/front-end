@@ -91,6 +91,9 @@ export default function ExpenseCard(props) {
           console.log(err);
         })
     }
+
+    window.location.reload(true);
+
   }
 
   return (
@@ -192,14 +195,14 @@ export default function ExpenseCard(props) {
 
         </Modal>   
 
-        {/*MODAL THAT TRIGGERS SENT NOTIFICATIONS */}
+        {/*MODAL THAT TRIGGERS SENT/MANAGE NOTIFICATIONS */}
         <Modal trigger = {
         <div>
         <Popup content='Click to Manage Sent Notifications' inverted style = {style} trigger = {        
         <Icon  className = "dollar-icon" name="mail" size = "large" /> 
         }/>
         </div>             
-        } closeIcon>
+        } closeIcon >
 
         <Modal.Header>Manage Sent Notifications</Modal.Header>
 

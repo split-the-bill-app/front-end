@@ -9,7 +9,7 @@ import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 function AddExpenseForm(props) {  
 
   let [counter, setCounter] = useState(0);
-  const wordCount = 20;
+  const wordCount = 15;
   
   const { errors, touched, isSubmitting, status, handleChange} = props;
  
@@ -25,6 +25,7 @@ function AddExpenseForm(props) {
     //use Formik's handleChange prop, destructured on line 14
     handleChange(event);
 
+    //shows remaining characters in the description field (out of 15)
     if(counter >= 0 && counter <= wordCount){
       setCounter(wordCount - event.target.value.length)
     }     
@@ -50,7 +51,7 @@ function AddExpenseForm(props) {
             {/*Formik's onChange syntax */}          
             <Field onChange = {e => counterHandler(e)} 
                   className = "form-input-description" 
-                  type="text" maxlength="20" 
+                  type="text" maxlength="15" 
                   name="description" 
                   placeholder="What was this for?" />                  
             {touched.description && errors.description && <p>{errors.description}</p>}                                   
