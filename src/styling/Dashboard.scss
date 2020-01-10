@@ -118,6 +118,7 @@
               color: white;
               transition: all .3s;
               cursor: pointer;
+              margin-left: 2px;
 
               @media (max-width: 800px) {
                 width: 100%;
@@ -140,13 +141,8 @@
             }//end button
             
             h1 {
-                //margin: 10px auto;                
-                display: flex;               
-
-                p:first-letter {              
-                  text-transform: capitalize;            
-                }
-
+                margin: 10px auto;                
+               
                 @media (max-width: 800px) {
                   width: 100%;
                   height: 100%;
@@ -319,7 +315,6 @@
                   width: auto;
                   height: auto;
                 }
-
         
                 &:hover {
                   background: #4862c4;
@@ -353,11 +348,8 @@
                 }
             }
             
-          }
-        
+          }        
           
-      }//end dashboard-div 
-    
-
+      }//end dashboard-div   
 
 }//end dashboard-container

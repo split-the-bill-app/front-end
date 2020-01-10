@@ -28,7 +28,7 @@ function ManageNotifications(props){
             })
             .catch(err => {
                 //console.log("get all notifications/bills your friends owe you error ManageNotifications.js", err.response);
-                if(err.response.status === 404){
+                if(err.response && err.response.status === 404){
                     props.setOwedNotifications([])
                     props.setOwedNotificationsCount(0)
                     console.log("get all notifications/bills your friends owe you error", err.response)
@@ -55,7 +55,7 @@ function ManageNotifications(props){
             })
             .catch(err => {
                 console.log("paid bills friends owe you total error ManageNotifications.js", err.response);                          
-                if(err.response.status === 404){
+                if(err.response && err.response.status === 404){
                     props.setPaidBillsTotal(0);                    
                 }
                 else {
@@ -118,11 +118,23 @@ function ManageNotifications(props){
 
             {props.notifications.map((notification, index) => {
             return <div className="notification" key={index}>
-                <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
-                <p className = "email">{notification.email} </p>
+                
+                {notification.email !== null && notification.email.length > 10 ? (
+                        <p className = "email">{notification.email.slice(0, 13)}...</p>
+                    ): (
+                        <p className = "email">{notification.email}</p>
+                    )
+                }
                 <p>${notification.split_each_amount} </p>
-                <p>{notification.description} </p>
-                <p>
+                
+                {notification.description !== null && notification.description.length > 10 ? (
+                        <p className = "description">{notification.description.slice(0, 8)}...</p>
+                    ): (
+                        <p className = "description">{notification.description}</p>
+                    )
+                }
+
+                <p className = "paid-select">
                     <select 
                         key={notification.id}                                           
                         type="select"
@@ -135,6 +147,9 @@ function ManageNotifications(props){
                         <option value = "unpaid">unpaid</option>                         
 
                     </select>                    
+                </p>
+                <p className = "delete-p">
+                <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
                 </p>
             </div>
             })}

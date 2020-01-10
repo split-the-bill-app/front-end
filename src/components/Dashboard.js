@@ -244,7 +244,7 @@ export default function Dashboard (props) {
 
                     </Modal>                  
 
-                        <h1>Hi&nbsp;<p>{user.firstname}</p>!</h1>
+                        <h1>Hi {user.firstname}!</h1>
 
                     <Button onClick={logout}> Log Out </Button>                  
                            
