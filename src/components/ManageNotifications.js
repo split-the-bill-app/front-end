@@ -102,13 +102,11 @@ function ManageNotifications(props){
         console.log("paidStatus", paidStatus);              
 
          axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/notifications/${notificationId}`, {paid: paidStatus})
-        .then(res => { 
-                         
+        .then(res => {                          
             //server actually returns a success message and not the edited expense
-            console.log("edited notification response returned from server", res.data);                      
+            console.log("edited notification response returned from server", res.data);                    
            
-        })  
-        
+        })          
         
     }   
 
