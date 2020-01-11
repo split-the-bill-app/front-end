@@ -141,6 +141,7 @@ function SendNotificationForm(props) {
 
       axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
         .then(res => {
+          console.log("response after sending a notification", res);
           setNewNotifications({
             bill_id: props.expenseId,
             email: []
@@ -161,7 +162,7 @@ function SendNotificationForm(props) {
             })
         })
         .catch(err => {
-          console.log(err);
+          console.log("post notification error", err.response);
         })
 
      

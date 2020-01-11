@@ -270,7 +270,7 @@ export default function Dashboard (props) {
                         
                     } closeIcon>
 
-                        <Modal.Header>View Notifications You Owe Your Friends</Modal.Header>
+                        <Modal.Header>View Received Notifications</Modal.Header>
 
                         <Modal.Content image scrolling> 
 
@@ -302,7 +302,7 @@ export default function Dashboard (props) {
                        
                     } closeIcon>
 
-                        <Modal.Header>View Notifications Your Friends Owe You</Modal.Header>
+                        <Modal.Header>View Sent Notifications</Modal.Header>
 
                         <Modal.Content image scrolling> 
 

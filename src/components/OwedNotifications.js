@@ -26,12 +26,14 @@ function OwedNotifications(props){
                     
                 <p>${notification.split_each_amount} </p>
 
-                {notification.description !== null && notification.description.length > 10 ? (
+                {/*{notification.description !== null && notification.description.length > 10 ? (
                         <p className = "description">{notification.description.slice(0, 8)}...</p>
                     ): (
                         <p className = "description">{notification.description}</p>
                     )
-                }
+                }*/}
+
+                <p className = "description">{notification.description}</p>
                                
                 <p> {notification.paid ? "paid" : "unpaid"} </p>                    
             </div>

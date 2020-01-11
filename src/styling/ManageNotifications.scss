@@ -30,6 +30,14 @@
                 margin: 0px;                
               }
 
+              p.date {
+                width: 10%;
+              }
+
+              p.description {
+                width: 30%;
+              }
+
               p.email{
                 margin: 5px 0px;
                 width: 20%;                
@@ -56,7 +64,8 @@
                
             p{
                 margin: 5px 0px;
-                width: 20%;                
+                width: 20%;      
+                //border: 1px solid red;          
     
                   @media (max-width: 800px) {
                     width: 20%;
