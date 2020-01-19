@@ -148,17 +148,29 @@ export default function ExpenseCard(props) {
          <Card.Description>
          <Icon name="money bill alternate" />
           {`Each of your friends owe you: $${props.expense.split_each_amount}`}
-        </Card.Description>    
-
-        <Card.Description className="sent-notifications">
-            {`Notes: ${props.expense.notes}`}
         </Card.Description>   
+
+        {props.expense.notes.length > 0 ? 
+
+          <Card.Description className="sent-notifications">
+              {`Notes: ${props.expense.notes}`}
+          </Card.Description>   
+
+          :
+        null}
+
+      {props.expense.description.length > 0 ? 
 
         <Card.Description className="sent-notifications">
             {`Details: ${props.expense.description}`}
-        </Card.Description>        
+        </Card.Description>   
+        
+        :
+        null}
 
       </Card.Content>
+
+     
 
       <Card.Content extra className = "expense-card-modal">     
 
