@@ -6,8 +6,10 @@ function EditExpenseForm(props) {
 
   const [expenseToEdit, setExpenseToEdit] = useState({});
 
-  let [counter, setCounter] = useState(0);
-  const wordCount = 15;
+  let [notesCounter, setNotesCounter] = useState(0);
+  let [descCounter, setDescCounter] = useState(0);
+  const notesWordCount = 35;
+  const descWordCount = 15;
 
   useEffect ( () => {
 
@@ -30,10 +32,15 @@ function EditExpenseForm(props) {
 
   const handleChange = (event) => {  
 
+    //shows remaining characters in the notes field (out of 35)
+    if(notesCounter >= 0 && notesCounter <= notesWordCount){
+      setNotesCounter(notesWordCount - event.target.value.length)
+    }     
+    
     //shows remaining characters in the description field (out of 15)
-    if(counter >= 0 && counter <= wordCount){
-      setCounter(wordCount - event.target.value.length)
-    }    
+    if(descCounter >= 0 && descCounter <= descWordCount){
+      setDescCounter(descWordCount - event.target.value.length)
+    }     
     
     setExpenseToEdit ({
       ...expenseToEdit, [event.target.name]: event.target.value
@@ -89,13 +96,26 @@ function EditExpenseForm(props) {
           <div className = "expense-description">    
             <input type = "text" 
                   className = "form-input-description"
+                  name="notes"  
+                  value = {expenseToEdit.notes} 
+                  placeholder="Notes... only you will be able to see this..."
+                  maxlength="35"
+                  onChange = {handleChange}/>
+
+            <div className = "counter">{notesCounter}/{notesWordCount}</div>  
+
+          </div>  
+
+          <div className = "expense-description">    
+            <input type = "text" 
+                  className = "form-input-description"
                   name="description"  
                   value = {expenseToEdit.description} 
                   placeholder="What is this for?"
                   maxlength="15"
                   onChange = {handleChange}/>
 
-            <div className = "counter">{counter}/{wordCount}</div>  
+            <div className = "counter">{descCounter}/{descWordCount}</div>  
 
           </div>  
 

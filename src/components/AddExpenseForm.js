@@ -8,8 +8,10 @@ import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 
 function AddExpenseForm(props) {  
 
-  let [counter, setCounter] = useState(0);
-  const wordCount = 15;
+  let [notesCounter, setNotesCounter] = useState(0);
+  let [descCounter, setDescCounter] = useState(0);
+  const notesWordCount = 35;
+  const descWordCount = 15;
   
   const { errors, touched, isSubmitting, status, handleChange} = props;
  
@@ -20,17 +22,30 @@ function AddExpenseForm(props) {
     }
   }, [status]);
 
-  const counterHandler = (event) => {
+  const notesCounterHandler = (event) => {
 
     //use Formik's handleChange prop, destructured on line 14
     handleChange(event);
 
     //shows remaining characters in the description field (out of 15)
-    if(counter >= 0 && counter <= wordCount){
-      setCounter(wordCount - event.target.value.length)
+    if(notesCounter >= 0 && notesCounter <= notesWordCount){
+      setNotesCounter(notesWordCount - event.target.value.length)
     }     
 
   }
+
+  const descCounterHandler = (event) => {
+
+    //use Formik's handleChange prop, destructured on line 14
+    handleChange(event);
+
+    //shows remaining characters in the description field (out of 15)
+    if(descCounter >= 0 && descCounter <= descWordCount){
+      setDescCounter(descWordCount - event.target.value.length)
+    }     
+
+  }
+
 
   return (
 
@@ -49,14 +64,27 @@ function AddExpenseForm(props) {
 
           <div className = "expense-description">   
             {/*Formik's onChange syntax */}          
-            <Field onChange = {e => counterHandler(e)} 
+            <Field onChange = {e => notesCounterHandler(e)} 
+                  className = "form-input-description" 
+                  type="text" maxlength="35" 
+                  name="notes" 
+                  placeholder="Notes... only you will be able to see this..." />                  
+            {touched.notes && errors.notes && <p>{errors.notes}</p>} 
+
+            <div className = "counter">{notesCounter}/{notesWordCount}</div> 
+
+          </div> 
+
+          <div className = "expense-description">   
+            {/*Formik's onChange syntax */}          
+            <Field onChange = {e => descCounterHandler(e)} 
                   className = "form-input-description" 
                   type="text" maxlength="15" 
                   name="description" 
-                  placeholder="What was this for?" />                  
+                  placeholder="What was this for?...this will be shared with friends" />                  
             {touched.description && errors.description && <p>{errors.description}</p>}                                   
 
-            <div className = "counter">{counter}/{wordCount}</div>    
+            <div className = "counter">{descCounter}/{descWordCount}</div>    
 
           </div>          
                              
@@ -74,10 +102,11 @@ const FormikAddExpenseForm = withFormik({
 
   /*mapPropsToValues is used to initialise the values of the form state. Formik transfers the results of 
     mapPropsToValues into updatable form state and makes these values available to the new component as props.values.*/
-  mapPropsToValues({ split_sum, split_people_count, description }) {
+  mapPropsToValues({ split_sum, split_people_count, notes, description }) {
     return { 
       split_sum: split_sum || "",
-      split_people_count: split_people_count || "",      
+      split_people_count: split_people_count || "", 
+      notes: notes || "",     
       description: description || ""       
      
     };

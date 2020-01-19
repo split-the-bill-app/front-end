@@ -43,7 +43,6 @@ export default function ExpenseCard(props) {
     setOpen(false);
   };
 
-
   useEffect(() => {
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
       .then(res => {
@@ -149,7 +148,11 @@ export default function ExpenseCard(props) {
          <Card.Description>
          <Icon name="money bill alternate" />
           {`Each of your friends owe you: $${props.expense.split_each_amount}`}
-        </Card.Description>     
+        </Card.Description>    
+
+        <Card.Description className="sent-notifications">
+            {`Notes: ${props.expense.notes}`}
+        </Card.Description>   
 
         <Card.Description className="sent-notifications">
             {`Details: ${props.expense.description}`}
