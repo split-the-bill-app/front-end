@@ -15,7 +15,6 @@ function App() {
     // will route users to dashboard once signed in or registered
     <Router>
       <div className="App">
-
         <SplitProofHeader />
         <Navbar/>
         

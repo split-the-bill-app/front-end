@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux'; //connect component to redux
 import useDarkMode from "../utils/hook";
 
 const Navbar = () => {
@@ -110,4 +111,11 @@ const RegisterScreen = (props) => {
     </div>
   );
 }
-export default RegisterScreen;
+
+const mapStateToProps = state => {
+  return {
+    
+  }
+
+}
+export default connect(null, {})(RegisterScreen);
