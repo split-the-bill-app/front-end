@@ -4,9 +4,9 @@ import { expensesReducer } from './expensesReducer.js';
 import { notificationsReducer } from './notificationsReducer.js';
 
 const rootReducer = combineReducers({
-    users: usersReducer,
-    expenses: expensesReducer,
-    notifications: notificationsReducer
+    usersReducerIndex: usersReducer,
+    expensesReducerIndex: expensesReducer,
+    notificationsReducerIndex: notificationsReducer
 
 });
 

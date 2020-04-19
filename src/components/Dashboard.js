@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Button, Modal, Popup } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { logoutUser } from '../redux_store/actions';
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import 'semantic-ui-css/semantic.css'; 
@@ -17,7 +19,7 @@ const style = {
     opacity: 0.7    
 }
 
-export default function Dashboard (props) {
+function Dashboard (props) {
     
     //logged in user
     const [user, setUser] = useState({});
@@ -211,8 +213,10 @@ export default function Dashboard (props) {
     //const initialExpense = expenses.find(expense => expense.id.toString() === props.match.params.id);
 
     // fire on logout button, clears token and pushes user back to login page
-    const logout = (e) => {
+    const logoutHandler = (e) => {
         e.preventDefault();
+        props.logoutUser();    
+        
         localStorage.clear();
         props.history.push('/');
     }
@@ -246,7 +250,7 @@ export default function Dashboard (props) {
 
                         <h1>Hi {user.firstname}!</h1>
 
-                    <Button onClick={logout}> Log Out </Button>                  
+                    <Button onClick={logoutHandler}> Log Out </Button>                  
                            
                 </div>
                 
@@ -358,4 +362,12 @@ export default function Dashboard (props) {
     );//end return
 
 }//end function
+
+const mapStateToProps = state => {
+    return {
+        loggedOut: state.usersReducerIndex.loggedOut
+    }
+}
+
+export default connect(mapStateToProps, {logoutUser})(Dashboard);
 

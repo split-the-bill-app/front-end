@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { loginUser } from '../redux_store/actions';
 import axios from 'axios';
 
 const LoginSignupScreen = (props) => {
@@ -8,6 +10,23 @@ const LoginSignupScreen = (props) => {
     password: ''
   });
 
+  //useEffect that checks for updated state from the redux store and update userId & token accordingly
+  useEffect(() => {
+
+    if(props.userId){      
+      localStorage.setItem('userId', props.userId);
+    }
+
+    if(props.token){      
+      localStorage.setItem('token', props.token);
+    }
+
+    if(props.loggedIn){      
+      props.history.push('/dashboard')
+    }
+
+  }, [props.userId, props.token, props.loggedIn])
+  
   const handleChange = (e) => {
     setLoginCredentials({
       ...loginCredentials,
@@ -18,18 +37,8 @@ const LoginSignupScreen = (props) => {
 
   const handleSubmit = (e) => {
     console.log('login creds: ', loginCredentials)
-    e.preventDefault();
-    axios.post(
-      'https://split-the-bill-app.herokuapp.com/api/users/login', loginCredentials
-      )
-      .then(res => {
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('userId', res.data.user.id);
-        props.history.push('/dashboard');
-      })
-      .catch (err => {
-        console.log(err);
-      })
+    e.preventDefault();   
+    props.loginUser(loginCredentials);        
   }
 
   return (
@@ -68,4 +77,16 @@ const LoginSignupScreen = (props) => {
   );
 }
 
-export default LoginSignupScreen;
+const mapStateToProps = state => {  
+  return {     
+    isLoggingIn: state.usersReducerIndex.isLoggingIn,
+    loggedIn: state.usersReducerIndex.loggedIn,
+    loginError: state.usersReducerIndex.loginError,
+    userId: state.usersReducerIndex.userId,
+    token: state.usersReducerIndex.token,
+    user: state.usersReducerIndex.user
+  } 
+
+}
+
+export default connect(mapStateToProps, {loginUser})(LoginSignupScreen);

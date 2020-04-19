@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux'; //connect component to redux
+import { registerUser, loginUser } from '../redux_store/actions';
 import useDarkMode from "../utils/hook";
 
 const Navbar = () => {
@@ -32,6 +33,23 @@ const RegisterScreen = (props) => {
     password: ''
   })
 
+  //useEffect that checks for updated state from the redux store and update userId & token accordingly
+  useEffect(() => {
+
+    if(props.userId){      
+      localStorage.setItem('userId', props.userId);
+    }
+
+    if(props.token){      
+      localStorage.setItem('token', props.token);
+    }
+
+    if(props.loggedIn){      
+      props.history.push('/dashboard')
+    }    
+
+  }, [props.userId, props.token, props.loggedIn])
+
   const handleChange = (e) => {   
     e.preventDefault(); 
     setNewUserInfo({
@@ -40,26 +58,12 @@ const RegisterScreen = (props) => {
     })    
          
   };
-
+  
   const handleSubmit = (e) => {
     console.log("new user info", newUserInfo)  
     e.preventDefault();
-    axios.post('https://split-the-bill-app.herokuapp.com/api/users/register', newUserInfo)    
-      .then(res => {
-        localStorage.setItem('userId', res.data.id);
-        console.log("register res", res.data);
-        axios.post('https://split-the-bill-app.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
-          .then(res => {
-            localStorage.setItem('token', res.data.token);
-            props.history.push('/dashboard');
-          })
-          .catch(err => {
-            console.log(err);
-          })
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    props.registerUser(newUserInfo); 
+      
   }
 
   return (
@@ -114,8 +118,16 @@ const RegisterScreen = (props) => {
 
 const mapStateToProps = state => {
   return {
-    
+    isRegistering: state.usersReducerIndex.isRegistering,
+    registered: state.usersReducerIndex.registered,
+    registerError: state.usersReducerIndex.registerError,    
+    isLoggingIn: state.usersReducerIndex.isLoggingIn,
+    loggedIn: state.usersReducerIndex.loggedIn,
+    loginError: state.usersReducerIndex.loginError,
+    userId: state.usersReducerIndex.userId,
+    token: state.usersReducerIndex.token,
+    user: state.usersReducerIndex.user
   }
 
 }
-export default connect(null, {})(RegisterScreen);
+export default connect(mapStateToProps, {registerUser, loginUser})(RegisterScreen);
