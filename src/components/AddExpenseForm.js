@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-
 // import ExpenseDetails from "./ExpenseDetails.js";
 import { axiosWithAuth } from "../utils/axiosWithAuth.js";
 
@@ -46,35 +45,32 @@ function AddExpenseForm(props) {
 
   }
 
-
   return (
 
     <div className = "expense-form-div">         
 
-        <Form className = "expense-form">
-                 
-          {/*<Field className = "form-input" type="text" name="expensetitle" placeholder="What is this expense for?" />
-          {touched.expensetitle && errors.expensetitle && <p>{errors.expensetitle}</p>}*/}    
-              
+        <Form className = "expense-form">                       
           <Field className = "form-input" type="number" name="split_sum" placeholder="How much was the bill?" />
           {touched.split_sum && errors.split_sum && <p>{errors.split_sum}</p>}       
           
           <Field className = "form-input" type="number" name="split_people_count" placeholder="How many people are paying?" />
           {touched.split_people_count && errors.split_people_count && <p>{errors.split_people_count}</p>}
 
+          {/*notes text field*/}
           <div className = "expense-description">   
             {/*Formik's onChange syntax */}          
             <Field onChange = {e => notesCounterHandler(e)} 
                   className = "form-input-description" 
                   type="text" maxlength="35" 
                   name="notes" 
-                  placeholder="Notes... only you will be able to see this..." />                  
+                  placeholder="Notes... only you will be able to see this" />                  
             {touched.notes && errors.notes && <p>{errors.notes}</p>} 
 
             <div className = "counter">{notesCounter}/{notesWordCount}</div> 
 
           </div> 
 
+          {/*what was this for? text field*/}
           <div className = "expense-description">   
             {/*Formik's onChange syntax */}          
             <Field onChange = {e => descCounterHandler(e)} 

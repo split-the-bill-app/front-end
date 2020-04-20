@@ -61,6 +61,7 @@ export default function ExpenseCard(props) {
   
   const deleteExpense = (e, expense) => {
     e.preventDefault();
+    //if there are notifications for a bill, delete them first before deleting the bill
     if(notifications.length > 0) {
       axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}/notifications`)
         .then(res => {
@@ -80,9 +81,10 @@ export default function ExpenseCard(props) {
           console.log(err);
         })
     } else {
+      //if there are no notifications for a bill
       axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}`)
         .then(res => {
-          console.log(res);
+          console.log("delete expeses res", res);
           // filter out the expense we just deleted using its "id"
           props.setExpenses(props.expenses.filter(expense => expense.id !== props.expense.id))
         })

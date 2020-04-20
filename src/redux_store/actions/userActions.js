@@ -15,6 +15,9 @@ export const registerUser = newUserInfo => dispatch => {
         console.log("register data in actions", res)            
         dispatch({ type: REGISTER_USER_SUCCESS, payload: res.data })        
     })
+    .catch(err => {
+        dispatch({ type: REGISTER_USER_FAILURE, error: err })
+    })    
     //automatically logs the user in after registration
     .then(() => {
         dispatch ({ type: LOGIN_USER_START });
@@ -26,9 +29,6 @@ export const registerUser = newUserInfo => dispatch => {
     })
     .catch(err => {
         dispatch({ type: LOGIN_USER_FAILURE, error: err })
-    })
-    .catch(err => {
-        dispatch({ type: REGISTER_USER_FAILURE, error: err })
     })    
 
 }//end registerUser
