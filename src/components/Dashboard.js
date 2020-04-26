@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { Icon, Button, Modal, Popup } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux_store/actions';
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import 'semantic-ui-css/semantic.css'; 
-import 'semantic-ui-css/semantic.min.css'; 
-
-import { axiosWithAuth } from '../utils/axiosWithAuth';
-
+import 'semantic-ui-css/semantic.min.css';
 import AddExpenseForm from "./AddExpenseForm";
 import ExpenseDetails from "./ExpenseDetails.js";
 import OweNotifications from "./OweNotifications.js";
@@ -23,35 +21,24 @@ function Dashboard (props) {
     
     //logged in user
     const [user, setUser] = useState({});
-
     //keeps track of expenses
-    const [expenses, setExpenses] = useState([]);
-    
+    const [expenses, setExpenses] = useState([]);    
     //keeps track of all the bills your friends have paid
     const [paidBills, setPaidBills] = useState([]);
-
     //keeps track of the total $amount all the bills your friends have paid
     const [paidBillsTotal, setPaidBillsTotal] = useState([]);
-
     //keeps track of outstanding notifications/bills you owe
     const [oweNotifications, setOweNotifications] = useState([]);
-
     //keeps track of outstanding notifications/bills owed to you
-    const [owedNotifications, setOwedNotifications] = useState([]);    
-
+    const [owedNotifications, setOwedNotifications] = useState([]);
     //keeps track of the number of notifications/bills you owe your friends
     const [oweNotificationsCount, setOweNotificationsCount] = useState(0);
-
     //keeps track of the number of notifications/bills your friends owe you
     const [owedNotificationsCount, setOwedNotificationsCount] = useState(0);
-
     //keeps track of the dollar amount of notifications/bills you owe your friends
     const [oweNotificationsTotal, setOweNotificationsTotal] = useState(0);
-
     //keeps track of the dollar amount of notifications/bills your friends owe you
-    const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);
-
-    
+    const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);    
 
     //calculates how much your friends owe you  
     //THIS IS NOT BEING USED ANYMORE. UNPAID BILLS ARE NOW BEING READ FROM THE SERVER AND CALCULATED
@@ -61,13 +48,10 @@ function Dashboard (props) {
     let owedForEachBillTotal = 0;
 
     if (expenses.length > 0) {
-
         expenses.forEach( expense => {
-
             ///grandTotal += expense.split_sum;
             //totalPeople += (expense.split_people_count - 1);
-            //count = count + 1;  
-            
+            //count = count + 1;              
             eachPersonBill = (expense.split_sum / expense.split_people_count) 
             owedForEachBill = expense.split_sum - eachPersonBill //subtract bill creator's portion
     
@@ -76,10 +60,8 @@ function Dashboard (props) {
         });
        
         owedGrandTotal = owedForEachBillTotal.toFixed(2);
-
         //owedTotal = ((grandTotal/totalPeople)*(totalPeople-count)).toFixed(2); 
         //owedTotal = ((grandTotal / totalPeople) * count).toFixed(2);
-
     }//end if
 
     const yourFriendsOweYou = owedGrandTotal - paidBillsTotal;
@@ -226,7 +208,6 @@ function Dashboard (props) {
 
         /*main container for the dashboard elements */
         <div className = "dashboard-container">
-
             {/* logo and log out button */}
             <div className = "navbar">                 
                
@@ -338,8 +319,7 @@ function Dashboard (props) {
                             setOwedNotifications = {setOwedNotifications}
                             setOwedNotificationsTotal = {setOwedNotificationsTotal}
                             setOwedNotificationsCount = {setOwedNotificationsCount}                            
-                        /> 
-
+                        />
                         : 
                         <Modal trigger = {
 
@@ -351,8 +331,8 @@ function Dashboard (props) {
                             <AddExpenseForm addExpense = {addExpense} />                                     
                
                         </Modal>
-                    }                               
-                                   
+                    }          
+                    
                     
                 </div>  {/*end bills-list-div */}
 
