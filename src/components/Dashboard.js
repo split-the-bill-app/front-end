@@ -185,6 +185,7 @@ function Dashboard (props) {
     //adds an expense to the expenses array when the calculate button on the add expense form is clicked
     const addExpense = (expense) => {
         setExpenses([...expenses, expense]);
+        console.log("add expense when calculate button is clicked on add expense form", expense)
     }
 
     //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS

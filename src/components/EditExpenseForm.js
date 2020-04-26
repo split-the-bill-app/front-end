@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from "react";
+import { connect } from "react-redux";
+import { getExpenseToEdit, editExistingExpense } from "../redux_store/actions"
 import axios from "axios";
 import {axiosWithAuth} from "../utils/axiosWithAuth.js";
 
@@ -11,23 +13,49 @@ function EditExpenseForm(props) {
   const notesWordCount = 35;
   const descWordCount = 15;
 
-  useEffect ( () => {
+  useEffect (() => {
 
-    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`) 
-      .then(res => {
-
-        //prepopulates the edit expense form with the expense to edit
-        setExpenseToEdit(res.data) 
-        console.log("expense to edit", res.data);
-
-      })
-      .catch(err => {
-
-        console.log(err.response);
-
-      }) 
+    console.log("expense id in edit expense form", props.expenseId)
+    props.getExpenseToEdit(props.expenseId);    
     
   }, [])
+
+  useEffect (() => {
+    
+    console.log("expense to edit in edit expense form before if", props.returnedExpenseToEdit);
+    
+    if(props.returnedExpenseToEdit){
+      setExpenseToEdit(props.returnedExpenseToEdit); //props.expenseToEdit is the redux state
+      console.log("expense to edit in edit expense form", props.returnedExpenseToEdit);
+    }   
+    
+  }, [props.returnedExpenseToEdit])
+
+  useEffect( () => {
+    const split_each_amount = (expenseToEdit.split_sum/expenseToEdit.split_people_count).toFixed(2); 
+
+    if(props.editExpenseConfirmation){
+      props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
+     
+      //server actually returns a success message and not the edited expense     
+      console.log("edited expense returned from server", props.editExpenseConfirmation);     
+
+      window.location.reload(true);
+
+      //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS OR THE SCREEN IS REFRESHED 
+      //SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
+      //BY NOT USING event.preventDefault() OR USING window.location.reload(true) 
+      //OR USE THE props.editExpense function in dashboard FUNCTION AND THE UPDATED BILL WILL BE DISPLAYED. 
+      //AFTER A BILL IS EDITED THE SERVER RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
+
+      //props.editExpense in dashboard
+      //props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
+     
+      //window.location.reload(true);
+    
+    }
+
+  }, [props.editExpenseConfirmation])
   
 
   const handleChange = (event) => {  
@@ -54,25 +82,7 @@ function EditExpenseForm(props) {
 
     event.preventDefault();
 
-    axiosWithAuth().put(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}`, {...expenseToEdit, split_each_amount: split_each_amount})
-    .then(res => {
-
-    //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS OR THE SCREEN IS REFRESHED 
-    //SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
-    //BY NOT USING event.preventDefault() OR USE THE editExpense FUNCTION AND THE UPDATED BILL WILL BE DISPLAYED. 
-    //AFTER A BILL IS EDITED THE SERVER RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
-
-     props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
-     
-     //server actually returns a success message and not the edited expense     
-     console.log("edited expense returned from server", res);     
-
-     window.location.reload(true);
-
-    })
-    .catch(err => {
-      console.log("edit error", err);
-    })
+    props.editExistingExpense({...expenseToEdit, split_each_amount: split_each_amount}, props.expenseId);    
   }
 
   return(
@@ -99,7 +109,7 @@ function EditExpenseForm(props) {
                   name="notes"  
                   value = {expenseToEdit.notes} 
                   placeholder="Notes... only you will be able to see this..."
-                  maxlength="35"
+                  maxLength="35"
                   onChange = {handleChange}/>
 
             <div className = "counter">{notesCounter}/{notesWordCount}</div>  
@@ -112,7 +122,7 @@ function EditExpenseForm(props) {
                   name="description"  
                   value = {expenseToEdit.description} 
                   placeholder="What is this for?"
-                  maxlength="15"
+                  maxLength="15"
                   onChange = {handleChange}/>
 
             <div className = "counter">{descCounter}/{descWordCount}</div>  
@@ -121,7 +131,6 @@ function EditExpenseForm(props) {
 
           <button type="submit" > Calculate </button>
 
-
         </form>            
 
     </div>
@@ -129,4 +138,18 @@ function EditExpenseForm(props) {
   );
 }
 
-export default EditExpenseForm;
+const mapStateToProps = state => {
+  //console.log("returned expense to edit in map state to props", state.expensesReducerIndex.expenseToEdit)
+  return {
+    isGettingExpenseToEdit: state.expensesReducerIndex.isGettingExpenseToEdit,                
+    returnedExpenseToEdit: state.expensesReducerIndex.expenseToEdit,
+    getExpenseToEditSuccess: state.expensesReducerIndex.getExpenseToEditSuccess,
+    getExpenseToEditError: state.expensesReducerIndex.getExpenseToEditError,   
+    editExpenseError: state.expensesReducerIndex.editExpenseError,
+    isEditingExpense: state.expensesReducerIndex.isEditingExpense,
+    editExpenseSuccess: state.expensesReducerIndex.editExpenseSuccess,
+    editExpenseConfirmation: state.expensesReducerIndex.editExpenseConfirmation
+  }
+}
+
+export default connect(mapStateToProps, { getExpenseToEdit, editExistingExpense })(EditExpenseForm);

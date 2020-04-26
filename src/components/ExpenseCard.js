@@ -153,7 +153,6 @@ export default function ExpenseCard(props) {
         </Card.Description>   
 
         {props.expense.notes.length > 0 ? 
-
           <Card.Description className="sent-notifications">
               {`Notes: ${props.expense.notes}`}
           </Card.Description>   

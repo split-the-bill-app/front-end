@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { loginUser } from '../redux_store/actions';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { loginUser } from "../redux_store/actions";
+import axios from "axios";
 
 const LoginSignupScreen = (props) => {
   const [loginCredentials, setLoginCredentials] = useState({
@@ -89,4 +89,4 @@ const mapStateToProps = state => {
 
 }
 
-export default connect(mapStateToProps, {loginUser})(LoginSignupScreen);
+export default connect(mapStateToProps, { loginUser })(LoginSignupScreen);

@@ -2,6 +2,9 @@ import {
     ADD_EXPENSE_START,
     ADD_EXPENSE_SUCCESS,
     ADD_EXPENSE_FAILURE,
+    GET_EXPENSE_TO_EDIT_START,
+    GET_EXPENSE_TO_EDIT_SUCCESS,
+    GET_EXPENSE_TO_EDIT_FAILURE,
     EDIT_EXPENSE_START,
     EDIT_EXPENSE_SUCCESS,
     EDIT_EXPENSE_FAILURE,
@@ -17,7 +20,11 @@ const initialState = {
     addExpenseError: null,
     isAddingExpense: false,
     addedExpenseSuccess: false,
-    expense: {},
+    addedExpense: {},
+    getExpenseToEditError: null,
+    isGettingExpenseToEdit: false,
+    getExpenseToEditSuccess: false,
+    expenseToEdit: {},
     editExpenseError: null,
     isEditingExpense: false,
     editExpenseSuccess: false,
@@ -45,7 +52,7 @@ export const expensesReducer = (state = initialState, action) => {
             return{
                 ...state,
                 isAddingExpense: false,
-                expense: action.payload,                
+                addedExpense: action.payload,                
                 addedExpenseSuccess: true,
                 addExpenseError: null
             };
@@ -55,6 +62,27 @@ export const expensesReducer = (state = initialState, action) => {
                 addExpenseError: action.error,
                 isAddingExpense: false
             };
+        case GET_EXPENSE_TO_EDIT_START:
+            return{
+                ...state,
+                isGettingExpenseToEdit: true,
+                getExpenseToEditError: null, //for cases where we are transitioning from an error state
+            };
+        case GET_EXPENSE_TO_EDIT_SUCCESS:
+            //console.log("expense to edit in reducer", action.payload)
+            return{
+                ...state,                
+                isGettingExpenseToEdit: false,                
+                expenseToEdit: action.payload,
+                getExpenseToEditSuccess: true,
+                getExpenseToEditError: null,                               
+            };            
+        case GET_EXPENSE_TO_EDIT_FAILURE:
+            return{
+                ...state,
+                getExpenseToEditError: action.error,
+                isGettingExpenseToEdit: false
+            };        
         case EDIT_EXPENSE_START:
             return{
                 ...state,
