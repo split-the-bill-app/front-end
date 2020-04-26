@@ -79,7 +79,7 @@ export const expensesReducer = (state = initialState, action) => {
             };            
         case GET_EXPENSE_TO_EDIT_FAILURE:
             return{
-                ...state,
+                ...state,                  
                 getExpenseToEditError: action.error,
                 isGettingExpenseToEdit: false
             };        

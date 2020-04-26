@@ -66,9 +66,8 @@ function ManageNotifications(props){
              
     }/*, []*/)
 
-    let paidStatus = "";    
-       
-   
+    let paidStatus = ""; 
+          
     const deleteNotification = (e, notificationIn) => {
         console.log("delete notification clicked");
 
@@ -77,8 +76,8 @@ function ManageNotifications(props){
         axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/notifications/${notificationIn.id}`)
         .then(res => { 
                  
-         //server actually returns a success message and not the edited expense
-         console.log("deleted expense response returned from server", res.data);
+         //server actually returns a success message and not the deleted notification
+         console.log("deleted notification response returned from server", res.data);
          
          //call props.setNotifications in ExpenseCard.js and removes/filters out the notification that was just deleted
          props.setNotifications(props.notifications.filter(notification => notification.id !== notificationIn.id))

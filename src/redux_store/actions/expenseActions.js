@@ -57,12 +57,12 @@ export const editExistingExpense = (editExpenseInfo, expenseId) => dispatch => {
 
 }//end editExpense
 
-export const deleteExpense = (expense) => dispatch => {
+export const deleteExpense = (expenseId) => dispatch => {
     dispatch({ type: DELETE_EXPENSE_START })
-    axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}`)
+    axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expenseId}`)
     .then(res => {
         console.log("delete expense data in actions", res.data)
-        dispatch({ type:  DELETE_EXPENSE_SUCCESS, payload: res.data})
+        dispatch({ type: DELETE_EXPENSE_SUCCESS, payload: res.data})
     })
     .catch(err => {
         dispatch({ type: DELETE_EXPENSE_FAILURE, error: err})

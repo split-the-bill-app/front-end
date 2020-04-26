@@ -41,7 +41,7 @@ function SendNotificationForm(props) {
     
   useEffect(() => {
 
-    //get all notifications of a bill
+    //get all sent notifications for a bill
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
     .then(res => {
       setNotificationsBeforeAdding(res.data);
@@ -64,8 +64,7 @@ function SendNotificationForm(props) {
         type: "email",        
         placeholder: "Enter Your Friend's Email"
       }
-      ])
-      
+      ])      
       
   }//end addInput
 
@@ -141,11 +140,12 @@ function SendNotificationForm(props) {
 
       axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
         .then(res => {
-          console.log("response after sending a notification", res);
+          console.log("response after sending notifications", res);
           setNewNotifications({
             bill_id: props.expenseId,
             email: []
           })
+          //get all sent notifications for a bill
           axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
             .then(res => {
               //console.log("notifications for a specific bill in send notification form", res);
@@ -163,9 +163,7 @@ function SendNotificationForm(props) {
         })
         .catch(err => {
           console.log("post notification error", err.response);
-        })
-
-     
+        })     
 
       // reset inputs
       setInputs([
@@ -179,12 +177,9 @@ function SendNotificationForm(props) {
 
       window.location.reload(true);
 
-      }//end emailsAlreadyAdded else
+      }//end emailsAlreadyAdded else      
 
-      
-
-    }//end filterNewNotifications else
-    
+    }//end filterNewNotifications else   
 
   }//end submitNotifications
 
@@ -192,19 +187,17 @@ function SendNotificationForm(props) {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
     console.log("input", inputs);
-  }     
-
+  }   
   
   return (
 
-    numNotifications < numPeople ?    
+    numNotifications < numPeople ?  
     
     <form 
     onSubmit={(e) => submitNotifications(e)} 
     className="send-notification-form">        
 
-      {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}
-      
+      {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}      
       {inputs.map((input, index) => {
         return (
           <div key={index}>
@@ -239,22 +232,15 @@ function SendNotificationForm(props) {
         }}>
           Add Another Email
         </button>
-
         :
-
-        null
-        
+        null        
       }
 
-      </div>     
-              
+      </div>          
 
-    </form>    
-
+    </form> 
     :
-
-    <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>
-   
+    <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>   
   );
 }
 

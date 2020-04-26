@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { connect } from "react-redux";
+import { deleteExpense } from "../redux_store/actions";
 import { Icon, Card, Modal, Popup } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
@@ -11,13 +14,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { axiosWithAuth } from "../utils/axiosWithAuth";
-
 import AddExpenseForm from "./AddExpenseForm";
 import EditExpenseForm from "./EditExpenseForm";
 import ManageNotifications from "./ManageNotifications";
 import EmptyNotifications from "./ManageNotifications";
-
 import SendNotificationForm from "./SendNotificationForm";
 
 //popup/tooltip style
@@ -25,7 +25,7 @@ const style = {
     opacity: 0.7,    
 }
 
-export default function ExpenseCard(props) { 
+function ExpenseCard(props) { 
   
   // keeps track of expenses
   const [expenses, setExpenses] = useState([]);
@@ -42,6 +42,16 @@ export default function ExpenseCard(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+
+    if(props.deleteExpenseConfirmation){
+      // filter out the expense we just deleted using its "id" using setExpenses passed down from dashboard
+      props.setExpenses(props.expenses.filter(expense => expense.id !== props.expense.id))
+      //window.location.reload(true);
+    }
+
+  }, [props.deleteExpenseConfirmation])
 
   useEffect(() => {
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
@@ -82,20 +92,12 @@ export default function ExpenseCard(props) {
         })
     } else {
       //if there are no notifications for a bill
-      axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}`)
-        .then(res => {
-          console.log("delete expeses res", res);
-          // filter out the expense we just deleted using its "id"
-          props.setExpenses(props.expenses.filter(expense => expense.id !== props.expense.id))
-        })
-        .catch(err => {
-          console.log(err);
-        })
+      props.deleteExpense(expense.id);      
     }
 
     window.location.reload(true);
 
-  }
+  }//end deleteExpense
 
   return (
 
@@ -122,6 +124,8 @@ export default function ExpenseCard(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          {/*CALL THE DELETE EXPENSE DEFINED IN THIS COMPONENT. PROPS.deleteExpense from the redux store
+          is called from the deleteExpense method in this component*/}
           <Button class = "delete-bill-button" onClick={(e) => deleteExpense(e, props.expense)}>
             DELETE
           </Button>
@@ -129,9 +133,7 @@ export default function ExpenseCard(props) {
             CANCEL
           </Button>
         </DialogActions>
-      </Dialog>
-
-        
+      </Dialog>       
         
         </Card.Header>
 
@@ -248,4 +250,17 @@ export default function ExpenseCard(props) {
   </div>
 
   );
+
+}//end ExpenseCard
+
+const mapStateToProps = state => {
+  return {
+    deleteExpenseError: state.expensesReducerIndex.deleteExpenseError,
+    isDeletingExpense: state.expensesReducerIndex.isDeletingExpense,
+    deleteExpenseSuccess: state.expensesReducerIndex.deleteExpenseSuccess,
+    deleteExpenseConfirmation: state.expensesReducerIndex.deleteExpenseConfirmation
+  };
 }
+
+export default connect(mapStateToProps, { deleteExpense })(ExpenseCard);
+
