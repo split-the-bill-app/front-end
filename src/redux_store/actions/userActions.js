@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { axiosWithAuth } from '../../utils/axiosWithAuth.js';
 
 export const REGISTER_USER_START = 'REGISTER_USER_START';
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
@@ -7,6 +8,9 @@ export const LOGIN_USER_START = 'LOGIN_USER_START';
 export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE';
 export const LOGOUT_USER_SUCCESS = 'LOGOUT_USER_SUCCESS';
+export const GET_USER_DETAILS_START = 'GET_USER_DETAILS_START';
+export const GET_USER_DETAILS_SUCCESS = 'GET_USER_DETAILS_SUCCESS';
+export const GET_USER_DETAILS_FAILURE = 'GET_USER_DETAILS_FAILURE';
 
 export const registerUser = newUserInfo => dispatch => {
     dispatch({ type: REGISTER_USER_START });
@@ -46,9 +50,22 @@ export const loginUser = loginCredentials => dispatch => {
     })
 }//end loginUser
 
-export const logoutUser = () => dispatch => {
-   
-    dispatch({ type: LOGOUT_USER_SUCCESS });    
-
+export const logoutUser = () => dispatch => {   
+    dispatch({ type: LOGOUT_USER_SUCCESS });
 }
+
+export const getUserDetails = userId => dispatch => {
+    dispatch({ type: GET_USER_DETAILS_START });
+
+    axiosWithAuth().get(``)
+    .then(res => {
+        console.log("user details in actions", res.data);
+        dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: res.data });
+    })
+    .catch(err => {
+        dispatch({ type: GET_USER_DETAILS_FAILURE, error: err });
+    })
+}//end getUserDetails
+
+
 
