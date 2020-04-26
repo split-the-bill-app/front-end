@@ -118,7 +118,7 @@ function Dashboard (props) {
         // get user details and set them to state "user"
         axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}`)
             .then(res => {
-                //console.log("user object when the app loads", res);
+                console.log("user object when the app loads", res.data);
                 setUser(res.data);
                 //console.log("user object when the app loads => user", user);
 

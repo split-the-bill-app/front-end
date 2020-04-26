@@ -57,8 +57,7 @@ const initialState = {
     updateNotificationPaidStatusError: null, //update a notification from paid to unpaid or unpaid to paid
     isUpdatingNotificationPaidStatus: false,
     updateNotificationPaidStatusSuccess: false,
-    updateNotificationPaidStatusConfirmation: "", //returns a confirmation message
-   
+    updateNotificationPaidStatusConfirmation: "", //returns a confirmation message  
     
 }
 

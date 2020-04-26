@@ -26,7 +26,10 @@ const initialState = {
         email: "",
         firstname: "",
         lastname: ""
-    }
+    },
+    getUserDetailsError: null,
+    isGettingUserDetails: false,
+    getUserDetailsSuccess: false
 }
 
 export const usersReducer = (state = initialState, action) => {
@@ -83,10 +86,29 @@ export const usersReducer = (state = initialState, action) => {
                 userId: null,
                 token: null,
                 loggedOut: true
-            };       
+            }; 
+        case GET_USER_DETAILS_START:
+            return {
+                ...state,
+                getUserDetailsError: null,
+                isGettingUserDetails: true
+            };
+        case GET_USER_DETAILS_SUCCESS:
+            return {
+                ...state,
+                getUserDetailsError: null,
+                isGettingUserDetails: false,
+                getUserDetailsSuccess: true,
+                user: action.payload
+            };
+        case GET_USER_DETAILS_FAILURE:
+            return {
+                ...state,
+                getUserDetailsError: action.error,
+                isGettingUserDetails: false                
+            };    
         default:
             return state;
-
     }//end switch
 
 };//end usersReducer
