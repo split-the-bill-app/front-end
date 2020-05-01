@@ -127,9 +127,9 @@ export const expensesReducer = (state = initialState, action) => {
             return{
                 ...state,
                 isGettingAllExpenses: true,
-                getAllExpensesError: false
+                getAllExpensesError: null
             };
-        case GET_ALL_USER_EXPENSES_SUCCESS:
+        case GET_ALL_USER_EXPENSES_SUCCESS:           
             return{
                 ...state,
                 isGettingAllExpenses: false,

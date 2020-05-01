@@ -1,54 +1,39 @@
 import React from "react";
-
 import ExpenseCard from "./ExpenseCard.js";
 
 export default function ExpenseDetails({
-                                          expenses, 
-                                          setExpenses, 
-                                          addExpense, 
-                                          editExpense, 
-                                          setPaidBillsTotal,
-                                          setOwedNotifications,
+                                          expensesFromDashboard, 
+                                          //getAllExpensesFromDashboard,                                          
+                                          setPaidBillsTotal,                                          
                                           setOwedNotificationsCount,
                                           setOwedNotificationsTotal                                          
 
                                     }) {
-
     
-      return (
-       /*RENDER USERS TO SCREEN */
+      return (      
 
        <div className= "expense-list">
 
-            {expenses.map((expense, index) => (
-
-            /*<ExpenseCard key={expense.id} title = {expense.expensetitle} total = {expense.total} 
-                         numfriends = {expense.numfriends} name = {expense.name} email = {expense.email}
-            />  */
+            {expensesFromDashboard.map((expenseFromDashboard, index) => (           
             
-            <ExpenseCard              
-            setOwedNotificationsTotal = {setOwedNotificationsTotal}
-            setOwedNotifications = {setOwedNotifications} 
-            setOwedNotificationsCount = {setOwedNotificationsCount}
-            setPaidBillsTotal = {setPaidBillsTotal}         
-            editExpense={editExpense} 
-            addExpense={addExpense} 
-            expenses={expenses} 
-            setExpenses={setExpenses} 
-            expense={expense} 
-            key={index} 
-            expenseId={expense.id} 
-            date={expense.created_at} 
-            total={expense.split_sum} 
-            numpeople={expense.split_people_count}
-            />    
-   
+                  <ExpenseCard              
+                        setOwedNotificationsTotal = {setOwedNotificationsTotal}                        
+                        setOwedNotificationsCount = {setOwedNotificationsCount}
+                        setPaidBillsTotal = {setPaidBillsTotal}   
+                        //call props.getAllExpenses() in the components that need it instead of passing this down                    
+                        //getAllExpensesFromDashboard={getAllExpensesFromDashboard} 
+                        expenseFromDashboard = {expenseFromDashboard} 
+                        key={index} 
+                        expenseId = {expenseFromDashboard.id} 
+                        date={expenseFromDashboard.created_at} 
+                        total={expenseFromDashboard.split_sum} 
+                        numPeople={expenseFromDashboard.split_people_count}
+                  />   
 
        ))}
 
       </div>
 
-      );     
+      );
 
-
-}
+}//end ExpenseDetails

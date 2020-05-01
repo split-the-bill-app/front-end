@@ -33,7 +33,6 @@ const initialState = {
 }
 
 export const usersReducer = (state = initialState, action) => {
-
     switch(action.type){
 
         case REGISTER_USER_START:

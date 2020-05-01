@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from '../utils/axiosWithAuth';
-import { Icon, Button, Modal, Popup } from 'semantic-ui-react';
+import { Button, Modal, Popup } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { logoutUser } from '../redux_store/actions';
+import { 
+        getUserDetails,
+        getAllSentOwedNotifications, 
+        getAllSentPaidNotifications,        
+        getReceivedNotifications,
+        getAllExpenses,
+        addNewExpense,
+        logoutUser
+ } from "../redux_store/actions";
 import Badge from '@material-ui/core/Badge';
-import Tooltip from '@material-ui/core/Tooltip';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css';
 import AddExpenseForm from "./AddExpenseForm";
@@ -17,41 +23,27 @@ const style = {
     opacity: 0.7    
 }
 
-function Dashboard (props) {
+function Dashboard (props) {        
     
-    //logged in user
-    const [user, setUser] = useState({});
-    //keeps track of expenses
-    const [expenses, setExpenses] = useState([]);    
-    //keeps track of all the bills your friends have paid
-    const [paidBills, setPaidBills] = useState([]);
     //keeps track of the total $amount all the bills your friends have paid
-    const [paidBillsTotal, setPaidBillsTotal] = useState([]);
-    //keeps track of outstanding notifications/bills you owe
-    const [oweNotifications, setOweNotifications] = useState([]);
-    //keeps track of outstanding notifications/bills owed to you
-    const [owedNotifications, setOwedNotifications] = useState([]);
+    const [paidBillsTotal, setPaidBillsTotal] = useState([]);    
     //keeps track of the number of notifications/bills you owe your friends
     const [oweNotificationsCount, setOweNotificationsCount] = useState(0);
-    //keeps track of the number of notifications/bills your friends owe you
-    const [owedNotificationsCount, setOwedNotificationsCount] = useState(0);
     //keeps track of the dollar amount of notifications/bills you owe your friends
     const [oweNotificationsTotal, setOweNotificationsTotal] = useState(0);
+    //keeps track of the number of notifications/bills your friends owe you
+    const [owedNotificationsCount, setOwedNotificationsCount] = useState(0);    
     //keeps track of the dollar amount of notifications/bills your friends owe you
     const [owedNotificationsTotal, setOwedNotificationsTotal] = useState(0);    
 
-    //calculates how much your friends owe you  
-    //THIS IS NOT BEING USED ANYMORE. UNPAID BILLS ARE NOW BEING READ FROM THE SERVER AND CALCULATED
+    //calculates how much your friends owe you    
     let owedGrandTotal = 0;
     let eachPersonBill = 0;
     let owedForEachBill = 0;
     let owedForEachBillTotal = 0;
 
-    if (expenses.length > 0) {
-        expenses.forEach( expense => {
-            ///grandTotal += expense.split_sum;
-            //totalPeople += (expense.split_people_count - 1);
-            //count = count + 1;              
+    if (props.allExpenses && props.allExpenses.length > 0) {
+        props.allExpenses.forEach( expense => {              
             eachPersonBill = (expense.split_sum / expense.split_people_count) 
             owedForEachBill = expense.split_sum - eachPersonBill //subtract bill creator's portion
     
@@ -59,147 +51,118 @@ function Dashboard (props) {
 
         });
        
-        owedGrandTotal = owedForEachBillTotal.toFixed(2);
-        //owedTotal = ((grandTotal/totalPeople)*(totalPeople-count)).toFixed(2); 
-        //owedTotal = ((grandTotal / totalPeople) * count).toFixed(2);
+        owedGrandTotal = owedForEachBillTotal.toFixed(2);       
     }//end if
 
     const yourFriendsOweYou = owedGrandTotal - paidBillsTotal;
 
-    console.log("paidBillsTotal", paidBillsTotal);
+    /*console.log("paidBillsTotal", paidBillsTotal);
     console.log("owedGrandTotal", owedGrandTotal);
-    console.log("your friends owe you", yourFriendsOweYou);
+    console.log("your friends owe you", yourFriendsOweYou);*/    
 
     useEffect(() => {
+        //get user details
+        props.getUserDetails(localStorage.getItem('userId'));  
+        
+        // then get all bills for the user
+        props.getAllExpenses(localStorage.getItem('userId'));        
+        
+        //then get all notifications sent to the user (you owe your friends)
+        props.getReceivedNotifications(localStorage.getItem('userEmail'));       
 
-        //get all notifications/bills sent by the user (your friends owe you) and set them to state owedNotifications
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${localStorage.getItem('userId')}`)
-            .then(res => {           
-                //console.log("your friends owe you returned from server", res.data);
-                setOwedNotifications(res.data);            
-
-                let owedTotal = 0;
-
-                res.data.forEach(notification => {
-                    return owedTotal += notification.split_each_amount;
-                })
-
-                //console.log("your friends owe you total", owedTotal);
-                setOwedNotificationsCount(res.data.length);
-                setOwedNotificationsTotal(owedTotal);
-            })
-            .catch(err => {
-                console.log("get all notifications/bills your friends owe you error Dashboard", err.response);                                                        
-            })
+        //get all notifications/bills sent by the user (your friends owe you)
+        props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 
         //get all paid bills your friends owe you and set them to state paidBills
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/paid/${localStorage.getItem('userId')}`)
-            .then(res => {           
-                //console.log("paid bills your friends owe you returned from server", res.data);
-                setPaidBills(res.data);            
-    
-                let paidTotal = 0;
-    
-                res.data.forEach(paidBill => {
-                    return paidTotal += paidBill.split_each_amount;
-                })
-    
-                //console.log("paid bills your friends owe you total", paidTotal);             
-                setPaidBillsTotal(paidTotal);
-            })
-            .catch(err => {
-                console.log("paid bills your friends owe you total error Dashboard", err.response);                
-                         
-            })   
+        props.getAllSentPaidNotifications(localStorage.getItem('userId'));       
 
-    }, [])    
+    }, []) 
+
+    //continuously check for received notifications
+    useEffect(() => {
+        //then get all notifications sent to the user (you owe your friends)
+        props.getReceivedNotifications(localStorage.getItem('userEmail'));
+    })
+    
+    //get all expenses when a bill is added, updated, or deleted
+    useEffect(() => {
+
+        props.getAllExpenses(localStorage.getItem('userId'));
+
+    }, [props.addedExpenseSuccess, props.editExpenseSuccess, props.deleteExpenseSuccess])
 
     useEffect(() => {
-        // get user details and set them to state "user"
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}`)
-            .then(res => {
-                console.log("user object when the app loads", res.data);
-                setUser(res.data);
-                //console.log("user object when the app loads => user", user);
 
-                // then get all notifications sent to the user (you owe your friends) and set them to state oweNotifications
-                axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/${res.data.email}`)
-                .then(res => {
-                    //console.log(res);
-                    setOweNotifications(res.data);
-                    const unpaidNotifications = res.data.filter(notification => {
-                        return notification.paid === false
-                    })
+       //get all notifications/bills sent by the user (your friends owe you)
+       props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 
-                    let unpaidTotal = 0;
+    }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
 
-                    unpaidNotifications.forEach(notification => {
-                        return unpaidTotal += notification.split_each_amount;
-                    })
+    //when all notifications that you owe your friends are received
+    useEffect(() => {
+        if(props.allReceivedNotifications){
 
-                    //console.log("unpaid notifications total", unpaidTotal);
-                    setOweNotificationsCount(unpaidNotifications.length);
-                    setOweNotificationsTotal(unpaidTotal);
-                })
-                .catch(err => {
-                    //console.log("get all notifications/bills you owe your friends error", err.response);
-                })
-                
-        })//end then
-        .catch(err => {
-            console.log("get logged in user details error", err);
-        })       
-
-        // then get all bills for the user and set them to state "expenses"
-        axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${localStorage.getItem('userId')}/bills`)
-            .then(res => {
-                //console.log(res);
-                setExpenses(res.data);
-                console.log("list of bills for the user when the app loads", res.data);
+            //all notifications that were sent to you where paid status === false
+            const unpaidNotifications = props.allReceivedNotifications.filter(notification => {
+                return notification.paid === false
             })
-            .catch(err => {
-                //console.log("get all bills for uer error", err);
+
+            let unpaidTotal = 0;
+
+            unpaidNotifications.forEach(notification => {
+                return unpaidTotal += notification.split_each_amount;
+            }) 
+            
+            setOweNotificationsCount(unpaidNotifications.length);
+            setOweNotificationsTotal(unpaidTotal);
+        }
+
+    }, [props.allReceivedNotifications])
+
+    //when all unpaid notifications/bill you sent to your friends are returned from the server
+    useEffect(() => {
+        let owedTotal = 0;
+
+        if(props.allSentOwedNotifications){
+
+             //iterate over all sent owed notifications and calclate owedTotal
+             props.allSentOwedNotifications.forEach(notification => {
+                return owedTotal += notification.split_each_amount;
             })
-    
-    }, [])
-    // console.log(user);   
+        }       
+                  
+        setOwedNotificationsCount(props.allSentOwedNotifications.length);
+        setOwedNotificationsTotal(owedTotal);        
 
-    //adds an expense to the expenses array when the calculate button on the add expense form is clicked
-    const addExpense = (expense) => {
-        setExpenses([...expenses, expense]);
-        console.log("add expense when calculate button is clicked on add expense form", expense)
-    }
+    }, [
+        props.allSentOwedNotifications, //re-calculate owedTotals every time a notification is sent
+        owedNotificationsCount, 
+        owedNotificationsTotal         
+    ])
 
-    //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS
-    //OR THE SCREEN IS REFRESHED SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
-    //BY NOT USING event.preventDefault (INSEAD OF USING AN editExpense FUNCTION AND THE UPDATED BILL WILL 
-    //BE DISPLAYED. AFTER A BILL IS EDITED THE SERVER
-    //RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
+    useEffect(() => {
+        let paidTotal = 0;
 
-    const editExpense = (editedExpense) => {
-       
-        //create an array called expensesCopy and spread in the contents of the expenses array
-        const expensesCopy = [...expenses];
-        
-        //find the index in the expensesCopy array where the id of the bill at that index equals to the id of the 
-        //bill passed down from the editExpenseForm (submitHandler function) 
-        const expenseIndex = expensesCopy.findIndex(expense => expense.id === editedExpense.id);
+        if(props.getAllSentPaidNotifications){
+            //iterate over all sent owed notifications and calclate owedTotal
+            props.allSentPaidNotifications.forEach(paidBill => {
+                return paidTotal += paidBill.split_each_amount;
+            })
 
-        //when a match is found, replace the expense at the matched index with the bill passed down (editedExpense)
-        //from the EditExpenseForm
-        expensesCopy[expenseIndex] = editedExpense;
-        
-        //after making the switch, replace the expenses array with the expensesCopy array 
-        setExpenses (expensesCopy);
-    }     
-        
-    //const initialExpense = expenses.find(expense => expense.id.toString() === props.match.params.id);
+            setPaidBillsTotal(paidTotal);
+        }
+
+        if(props.allSentPaidNotifications){          
+            setPaidBillsTotal(paidTotal);
+
+        }
+
+    }, [props.getAllSentPaidNotifications])   
 
     // fire on logout button, clears token and pushes user back to login page
     const logoutHandler = (e) => {
         e.preventDefault();
-        props.logoutUser();    
-        
+        props.logoutUser();        
         localStorage.clear();
         props.history.push('/');
     }
@@ -226,11 +189,11 @@ function Dashboard (props) {
 
                     <Modal.Header>Add Expense</Modal.Header>
 
-                    <AddExpenseForm addExpense = {addExpense}/>                                     
+                    <AddExpenseForm /*addExpense = {addExpense}*//>                                     
 
                     </Modal>                  
 
-                        <h1>Hi {user.firstname}!</h1>
+                        <h1>Hi {props.user.firstname}!</h1>
 
                     <Button onClick={logoutHandler}> Log Out </Button>                  
                            
@@ -239,8 +202,8 @@ function Dashboard (props) {
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
                 <div className="totals-summary-div">
 
-                    {console.log("oweNotificationsCount in render", oweNotificationsCount)}
-                    {console.log("oweNotifications in render", oweNotifications)}
+                    {console.log("oweNotificationsCount in render", oweNotificationsCount)} 
+                    {console.log("owedNotificationsCount in render", owedNotificationsCount)}                                        
 
                     {/* DISPLAYS WHAT YOU OWE */}
                     <Modal trigger = {                        
@@ -260,9 +223,9 @@ function Dashboard (props) {
 
                         <Modal.Content image scrolling> 
 
-                        {oweNotifications.length > 0 ?
+                        {props.allReceivedNotifications.length > 0 ?
 
-                        <OweNotifications oweNotifications = {oweNotifications} />
+                        <OweNotifications oweNotifications = {props.allReceivedNotifications} />
                         :
                         <p>You have no outstanding notifications.</p> 
 
@@ -292,9 +255,9 @@ function Dashboard (props) {
 
                         <Modal.Content image scrolling> 
 
-                        {owedNotifications.length > 0 ?
+                        {props.allSentOwedNotifications.length > 0 ?
 
-                        <OwedNotifications owedNotifications = {owedNotifications} />
+                        <OwedNotifications owedNotifications = {props.allSentOwedNotifications} />
                         :
                         <p>Your friends have no outstanding notifications.</p> 
 
@@ -306,17 +269,12 @@ function Dashboard (props) {
                 </div>
                 
                 {/* LIST OF BILLS HISTORY */}
-                <div className = "bills-list-div">  
-                   
+                <div className = "bills-list-div">                   
                     {
-                        expenses.length > 0 ? 
-                        <ExpenseDetails 
-                            setExpenses={setExpenses} 
-                            expenses = {expenses} 
-                            addExpense = {addExpense} 
-                            editExpense = {editExpense}
-                            setPaidBillsTotal = {setPaidBillsTotal}
-                            setOwedNotifications = {setOwedNotifications}
+                        (props.allExpenses && props.allExpenses.length > 0) ? 
+                        <ExpenseDetails                            
+                            expensesFromDashboard = {props.allExpenses} //all expenses for the user                           
+                            setPaidBillsTotal = {setPaidBillsTotal}                        
                             setOwedNotificationsTotal = {setOwedNotificationsTotal}
                             setOwedNotificationsCount = {setOwedNotificationsCount}                            
                         />
@@ -328,11 +286,10 @@ function Dashboard (props) {
     
                             <Modal.Header>Add an Expense</Modal.Header>
     
-                            <AddExpenseForm addExpense = {addExpense} />                                     
+                            <AddExpenseForm /*addExpense = {addExpense}*/ />                                     
                
                         </Modal>
-                    }          
-                    
+                    }                    
                     
                 </div>  {/*end bills-list-div */}
 
@@ -344,11 +301,69 @@ function Dashboard (props) {
 
 }//end function
 
-const mapStateToProps = state => {
+const mapStateToProps = state => {    
     return {
-        loggedOut: state.usersReducerIndex.loggedOut
+        //user details
+        userId: state.usersReducerIndex.userId,
+        token: state.usersReducerIndex.token,
+        user: state.usersReducerIndex.user,        
+        isGettingUserDetails: state.usersReducerIndex.isGettingUserDetails,       
+        //expenses
+        getAllExpensesError: state.expensesReducerIndex.getAllExpensesError,
+        isGettingAllExpenses: state.expensesReducerIndex.isGettingAllExpenses,
+        allExpenses: state.expensesReducerIndex.allExpenses,
+        getAllExpensesSuccess: state.expensesReducerIndex.getAllExpensesSuccess,
+        //edit expense
+        editExpenseSuccess: state.expensesReducerIndex.editExpenseSuccess,
+        //add expense
+        addedExpenseSuccess: state.expensesReducerIndex.addedExpenseSuccess,
+        //delete a bill
+        deleteExpenseError: state.expensesReducerIndex.deleteExpenseError,
+        isDeletingExpense: state.expensesReducerIndex.isDeletingExpense,
+        deleteExpenseSuccess: state.expensesReducerIndex.deleteExpenseSuccess,
+        deleteExpenseConfirmation: state.expensesReducerIndex.deleteExpenseConfirmation,
+        //delete all notifications for a single bill
+        deleteAllBillNotificationsError: state.notificationsReducerIndex.deleteAllBillNotificationsError, 
+        isDeletingAllBillNotifications: state.notificationsReducerIndex.isDeletingAllBillNotifications,
+        deleteAllBillNotificationsSuccess: state.notificationsReducerIndex.deleteAllBillNotificationsSuccess,
+        deleteAllBillNotificationsConfirmation: state.notificationsReducerIndex.deleteAllBillNotificationsConfirmation,
+        //your friends owe you
+        getAllSentOwedNotificationsError: state.notificationsReducerIndex.getAllSentOwedNotificationsError,
+        isGettingAllSentOwedNotifications: state.notificationsReducerIndex.isGettingAllSentOwedNotifications,
+        getAllSentOwedNotificationsSuccess: state.notificationsReducerIndex.getAllSentOwedNotificationsSuccess,
+        allSentOwedNotifications: state.notificationsReducerIndex.allSentOwedNotifications,
+        //your friends paid what they owe you
+        getAllSentPaidNotificationsError: state.notificationsReducerIndex.getAllSentPaidNotificationsError,
+        isGettingAllSentPaidNotifications: state.notificationsReducerIndex.isGettingAllSentPaidNotifications,
+        getAllSentPaidNotificationsSuccess: state.notificationsReducerIndex.getAllSentPaidNotificationsSuccess,
+        allSentPaidNotifications: state.notificationsReducerIndex.allSentPaidNotifications,
+        //you owe your friends       
+        getAllReceivedNotificationsSuccess: state.notificationsReducerIndex.getAllReceivedNotificationsSuccess,
+        allReceivedNotifications: state.notificationsReducerIndex.allReceivedNotifications,        
+        //log out
+        loggedOut: state.usersReducerIndex.loggedOut,
+        //delete individual sent notifications
+        deleteSentNotificationError: state.notificationsReducerIndex.deleteSentNotificationError, 
+        isDeletingSentNotification: state.notificationsReducerIndex.isDeletingSentNotification,
+        deleteSentNotificationSuccess: state.notificationsReducerIndex.deleteSentNotificationSuccess,
+        deleteSentNotificationConfirmation: state.notificationsReducerIndex.deleteSentNotificationConfirmation,
+        //update a notification from paid to unpaid or unpaid to paid
+        updateNotificationPaidStatusError: state.notificationsReducerIndex.updateNotificationPaidStatusError, 
+        isUpdatingNotificationPaidStatus: state.notificationsReducerIndex.isUpdatingNotificationPaidStatus,
+        updateNotificationPaidStatusSuccess: state.notificationsReducerIndex.updateNotificationPaidStatusSuccess,
+        updateNotificationPaidStatusConfirmation: state.notificationsReducerIndex.updateNotificationPaidStatusConfirmation 
     }
 }
 
-export default connect(mapStateToProps, {logoutUser})(Dashboard);
+export default connect(
+    mapStateToProps, 
+    {
+        getUserDetails,
+        getAllSentOwedNotifications, 
+        getAllSentPaidNotifications,        
+        getReceivedNotifications,
+        getAllExpenses,
+        addNewExpense,
+        logoutUser
+    })(Dashboard);
 

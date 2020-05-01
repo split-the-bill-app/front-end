@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { connect } from 'react-redux'; //connect component to redux
 import { registerUser, loginUser } from '../redux_store/actions';
 import useDarkMode from "../utils/hook";
@@ -27,10 +26,10 @@ const Navbar = () => {
 
 const RegisterScreen = (props) => {
   const [newUserInfo, setNewUserInfo] = useState({
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: ''
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: ""
   })
 
   //useEffect that checks for updated state from the redux store and update userId & token accordingly
@@ -62,18 +61,16 @@ const RegisterScreen = (props) => {
   const handleSubmit = (e) => {
     console.log("new user info", newUserInfo)  
     e.preventDefault();
-    props.registerUser(newUserInfo); 
-      
+    props.registerUser(newUserInfo);     
   }
 
   return (
     <div className="register-screen">
       <div className="register-form-container">
 
-      <h2 className="register-form-title">Sign Up for Split the Bill</h2>
+      <h2 className="register-form-title">Sign Up to Start $plitting</h2>
 
-        <form onSubmit={handleSubmit} className="register-form">
-          
+        <form onSubmit={handleSubmit} className="register-form">          
             <input 
             onChange={handleChange}
             name="firstname"                                    

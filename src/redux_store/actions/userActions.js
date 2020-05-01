@@ -57,7 +57,7 @@ export const logoutUser = () => dispatch => {
 export const getUserDetails = userId => dispatch => {
     dispatch({ type: GET_USER_DETAILS_START });
 
-    axiosWithAuth().get(``)
+    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${userId}`)
     .then(res => {
         console.log("user details in actions", res.data);
         dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: res.data });

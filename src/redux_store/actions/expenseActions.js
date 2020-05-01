@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { axiosWithAuth } from '../../utils/axiosWithAuth.js';
 
 export const ADD_EXPENSE_START = 'ADD_EXPENSE_START';
@@ -75,7 +74,7 @@ export const getAllExpenses = userId => dispatch => {
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${userId}/bills`)
     .then(res => {
         console.log("get all user expenses data in actions", res.data)
-        dispatch({ type: GET_ALL_USER_EXPENSES_SUCCESS, action: res.data })
+        dispatch({ type: GET_ALL_USER_EXPENSES_SUCCESS, payload: res.data })
     })
     .catch(err => {
         dispatch({ type: GET_ALL_USER_EXPENSES_FAILURE, error: err })

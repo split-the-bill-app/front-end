@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
-import { getExpenseToEdit, editExistingExpense } from "../redux_store/actions"
-import axios from "axios";
-import {axiosWithAuth} from "../utils/axiosWithAuth.js";
+import { getExpenseToEdit, editExistingExpense } from "../redux_store/actions";
 
 function EditExpenseForm(props) {
 
@@ -13,15 +11,15 @@ function EditExpenseForm(props) {
   const notesWordCount = 35;
   const descWordCount = 15;
 
+  //when the form loads get the expense to edit from the server
   useEffect (() => {
-
     console.log("expense id in edit expense form", props.expenseId)
-    props.getExpenseToEdit(props.expenseId);    
+    props.getExpenseToEdit(props.expenseId);  
     
   }, [])
 
-  useEffect (() => {
-    
+  //when the expense to edit is returned form the server, prepopulate the form fields with the expens data
+  useEffect (() => {    
     console.log("expense to edit in edit expense form before if", props.returnedExpenseToEdit);
     
     if(props.returnedExpenseToEdit){
@@ -29,46 +27,25 @@ function EditExpenseForm(props) {
       console.log("expense to edit in edit expense form", props.returnedExpenseToEdit);
     }   
     
-  }, [props.returnedExpenseToEdit])
+  }, [props.returnedExpenseToEdit]); 
 
-  useEffect( () => {
-    const split_each_amount = (expenseToEdit.split_sum/expenseToEdit.split_people_count).toFixed(2); 
+  const notesCounterHandler = (event) => {
 
-    if(props.editExpenseConfirmation){
-      props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
-     
-      //server actually returns a success message and not the edited expense     
-      console.log("edited expense returned from server", props.editExpenseConfirmation);     
-
-      window.location.reload(true);
-
-      //THE SERVER RETURNS THE ENTIRE LIST OF BILLS WHEN THE APP LOADS OR THE SCREEN IS REFRESHED 
-      //SO WHEN CALCULATE IS CLICKED ON THE EDIT EXPENSE FORM YOU COULD REFRESH THE SCREEN
-      //BY NOT USING event.preventDefault() OR USING window.location.reload(true) 
-      //OR USE THE props.editExpense function in dashboard FUNCTION AND THE UPDATED BILL WILL BE DISPLAYED. 
-      //AFTER A BILL IS EDITED THE SERVER RETURNS A SUCCESS MESSAGE AND NOT ACTUAL DATA
-
-      //props.editExpense in dashboard
-      //props.editExpense({...expenseToEdit, split_each_amount: split_each_amount});
-     
-      //window.location.reload(true);
-    
-    }
-
-  }, [props.editExpenseConfirmation])
-  
-
-  const handleChange = (event) => {  
-
-    //shows remaining characters in the notes field (out of 35)
+    //shows remaining characters in the description field (out of 15)
     if(notesCounter >= 0 && notesCounter <= notesWordCount){
       setNotesCounter(notesWordCount - event.target.value.length)
-    }     
-    
+    }
+  }
+
+  const descCounterHandler = (event) => {    
+
     //shows remaining characters in the description field (out of 15)
     if(descCounter >= 0 && descCounter <= descWordCount){
       setDescCounter(descWordCount - event.target.value.length)
-    }     
+    }
+  }
+
+  const handleChange = (event) => {    
     
     setExpenseToEdit ({
       ...expenseToEdit, [event.target.name]: event.target.value
@@ -83,6 +60,9 @@ function EditExpenseForm(props) {
     event.preventDefault();
 
     props.editExistingExpense({...expenseToEdit, split_each_amount: split_each_amount}, props.expenseId);    
+
+    //closes the edit form after calculate is clicked
+    window.location.reload(true);
   }
 
   return(
@@ -92,16 +72,20 @@ function EditExpenseForm(props) {
         <form onSubmit = {submitHandler} className = "expense-form">   
 
           <input type = "number" 
+                 className = "form-input"
                  name="split_sum"  
                  value = {expenseToEdit.split_sum} 
                  placeholder="How much was the bill?"
-                 onChange = {handleChange} />
+                 onChange = {handleChange} 
+                 required />
 
           <input type = "number" 
+                 className = "form-input"
                  name="split_people_count"  
                  value = {expenseToEdit.split_people_count} 
                  placeholder="How many people are paying?"
-                 onChange = {handleChange} />
+                 onChange = {handleChange} 
+                 required />
 
           <div className = "expense-description">    
             <input type = "text" 
@@ -110,7 +94,8 @@ function EditExpenseForm(props) {
                   value = {expenseToEdit.notes} 
                   placeholder="Notes... only you will be able to see this..."
                   maxLength="35"
-                  onChange = {handleChange}/>
+                  onInput = {notesCounterHandler}
+                  onChange = {handleChange} />
 
             <div className = "counter">{notesCounter}/{notesWordCount}</div>  
 
@@ -123,7 +108,8 @@ function EditExpenseForm(props) {
                   value = {expenseToEdit.description} 
                   placeholder="What is this for?"
                   maxLength="15"
-                  onChange = {handleChange}/>
+                  onInput = {descCounterHandler}
+                  onChange = {handleChange} />
 
             <div className = "counter">{descCounter}/{descWordCount}</div>  
 

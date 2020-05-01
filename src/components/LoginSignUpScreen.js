@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../redux_store/actions";
-import axios from "axios";
 
 const LoginSignupScreen = (props) => {
   const [loginCredentials, setLoginCredentials] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: ""
   });
 
   //useEffect that checks for updated state from the redux store and update userId & token accordingly
   useEffect(() => {
+
+    if(props.user){
+      localStorage.setItem('userEmail', props.user.email);
+    }
 
     if(props.userId){      
       localStorage.setItem('userId', props.userId);
@@ -25,7 +28,7 @@ const LoginSignupScreen = (props) => {
       props.history.push('/dashboard')
     }
 
-  }, [props.userId, props.token, props.loggedIn])
+  }, [props.user, props.userId, props.token, props.loggedIn])
   
   const handleChange = (e) => {
     setLoginCredentials({
@@ -46,7 +49,7 @@ const LoginSignupScreen = (props) => {
 
       <div className="login-form-container">
 
-        <h2 className="login-form-title">Sign In to Split the Bill</h2>
+        <h2 className="login-form-title">Sign In to Start $plitting</h2>
         
         <form onSubmit={handleSubmit} className="login-form">
           <input 
@@ -85,7 +88,7 @@ const mapStateToProps = state => {
     userId: state.usersReducerIndex.userId,
     token: state.usersReducerIndex.token,
     user: state.usersReducerIndex.user
-  } 
+  }
 
 }
 

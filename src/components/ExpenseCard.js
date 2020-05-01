@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { axiosWithAuth } from "../utils/axiosWithAuth";
+import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { deleteExpense } from "../redux_store/actions";
+import { 
+  getAllExpenses,
+  deleteExpense,
+  deleteSentNotificationsForABill,   
+  getAllSentNotificationsForABill
+  } from "../redux_store/actions";
 import { Icon, Card, Modal, Popup } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
-import Tooltip from '@material-ui/core/Tooltip';
-import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import AddExpenseForm from "./AddExpenseForm";
 import EditExpenseForm from "./EditExpenseForm";
 import ManageNotifications from "./ManageNotifications";
-import EmptyNotifications from "./ManageNotifications";
 import SendNotificationForm from "./SendNotificationForm";
 
 //popup/tooltip style
@@ -25,74 +24,96 @@ const style = {
     opacity: 0.7,    
 }
 
-function ExpenseCard(props) { 
-  
-  // keeps track of expenses
-  const [expenses, setExpenses] = useState([]);
-  // keeps track of notifications
-  const [notifications, setNotifications] = useState([])  
+function ExpenseCard(props) {  
 
   //delete confirmation modal
   const [open, setOpen] = React.useState(false);
 
+  //delete confirmation modal
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  //delete confirmation modal
   const handleClose = () => {
     setOpen(false);
   };
+    
+  useEffect(() => {
+
+    //get all notifications sent for this bill
+    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
+
+    //this is passed down to managenotifications now
+    // notificationsFromExpenseCard = {props.allSentNotifications}
+
+    //get all notifications for this bill and just like in dashboard pass them down
+    //to manage notifications as notificationsFromExpenseCard
+    //then set up a useEffect here that calls getAllNotifications when a notification for a bill
+    //is added, edited, or deleted
+
+    //****if there is a 404 error when props.getAllSentNotificationsForABill is called????? */
+   
+    //notifications/ setNotifications is passed down to send SendNotificationForm and manageNotifications,
+    //when notifications change in these two components we want to get all the notifications for a bill
+    //in ExpenseCard
+  }, []); 
 
   useEffect(() => {
 
-    if(props.deleteExpenseConfirmation){
-      // filter out the expense we just deleted using its "id" using setExpenses passed down from dashboard
-      props.setExpenses(props.expenses.filter(expense => expense.id !== props.expense.id))
-      //window.location.reload(true);
-    }
+    //get all notifications sent for this bill
+    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
 
-  }, [props.deleteExpenseConfirmation])
+  }, [props.sendNotificationsSuccess])
 
-  useEffect(() => {
-    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expense.id}/notifications`)
-      .then(res => {
-        //console.log(res);
-        setNotifications(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }, [notifications])  
+
+  /*useEffect(() => {
+
+    //get all notifications sent for this bill
+    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
+
+  }, [props.deleteAllBillNotificationsSuccess])*/
+
+  //get all expenses when a bill is added, updated, or deleted
+  /*useEffect(() => {
+
+    //get all notifications sent for this bill
+    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
+
+  }, [
+    props.updateNotificationPaidStatusSuccess, 
+    props.deleteSentNotificationSuccess,    
+    //props.getAllSentPaidNotificationsSuccess,
+    //props.getAllSentOwedNotificationsSuccess,
+    props.sendNotificationsSuccess,    
+    props.editExpenseSuccess    
+  ]) */
   
+  const deleteHandler = async (e, expenseIn) => {
 
-  {/* calculate what each person owes. not used anymore, 
-      this is calculated in AddExpenseForm and stored in the db */}
-  const splitBill = (props.total/props.numpeople).toFixed(2);
-  
-  const deleteExpense = (e, expense) => {
     e.preventDefault();
+
     //if there are notifications for a bill, delete them first before deleting the bill
-    if(notifications.length > 0) {
-      axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}/notifications`)
-        .then(res => {
-          console.log(res);
-          setNotifications([]);
-          axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expense.id}`)
-            .then(res => {
-              console.log(res);
-              // filter out the expense we just deleted using its "id"
-              props.setExpenses(props.expenses.filter(expense => expense.id !== props.expense.id))
-            })
-            .catch(err => {
-              console.log(err);
-            })
-        })
-        .catch(err => {
-          console.log(err);
-        })
+    if(props.allSentNotifications.length > 0) {
+      await props.deleteSentNotificationsForABill(expenseIn.id);
+
+      //then get all notifications which should reset allSentNotiications to []
+      await props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
+
+      //then delete the bill
+      await props.deleteExpense(expenseIn.id);
+
+      //reset the all expenses state
+      await props.getAllExpenses(localStorage.getItem('userId'));
+     
     } else {
+
       //if there are no notifications for a bill
-      props.deleteExpense(expense.id);      
+      await props.deleteExpense(expenseIn.id);   
+      
+      //reset the all expenses state
+      await props.getAllExpenses(localStorage.getItem('userId'));     
+      
     }
 
     window.location.reload(true);
@@ -108,33 +129,31 @@ function ExpenseCard(props) {
       <Card.Content>
         <Card.Header> {`Bill # ${props.expenseId}`}  
       
-        {/*DELETE CONFIRMATION MODAL THAT APPEARS WHEN X IS CLICKED ON EACH BILL */}
-        <Icon className = "delete-icon" name='delete' onClick={handleClickOpen}/>
-        <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description">
+            {/*DELETE CONFIRMATION MODAL THAT APPEARS WHEN X IS CLICKED ON EACH BILL */}
+            <Icon className = "delete-icon" name='delete' onClick={handleClickOpen}/>
+            <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description">
 
-        <DialogTitle id="alert-dialog-title">{"Delete Bill"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-             Are you sure you want to delete this bill? This will completely remove this bill and its
-             notifications for everyone involved, not just you.              
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          {/*CALL THE DELETE EXPENSE DEFINED IN THIS COMPONENT. PROPS.deleteExpense from the redux store
-          is called from the deleteExpense method in this component*/}
-          <Button class = "delete-bill-button" onClick={(e) => deleteExpense(e, props.expense)}>
-            DELETE
-          </Button>
-          <Button class = "cancel-delete-bill-button" onClick={handleClose} color="primary">
-            CANCEL
-          </Button>
-        </DialogActions>
-      </Dialog>       
-        
+              <DialogTitle id="alert-dialog-title">{"Delete Bill"}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to delete this bill? This will completely remove this bill and its
+                    notifications for everyone involved, not just you.              
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>                  
+                  <Button class = "delete-bill-button" onClick={(e) => deleteHandler(e, props.expenseFromDashboard)}>
+                    DELETE
+                  </Button>
+                  <Button class = "cancel-delete-bill-button" onClick={handleClose} color="primary">
+                    CANCEL
+                  </Button>
+                </DialogActions>  
+            </Dialog>       
+            
         </Card.Header>
 
         <Card.Description>
@@ -146,34 +165,30 @@ function ExpenseCard(props) {
         </Card.Description>
 
         <Card.Description>
-          {`Number of people: ${props.numpeople}`}
+          {`Number of people: ${props.numPeople}`}
         </Card.Description>   
 
-         <Card.Description>
+        <Card.Description>
          <Icon name="money bill alternate" />
-          {`Each of your friends owe you: $${props.expense.split_each_amount}`}
-        </Card.Description>   
+          {`Each of your friends owe you: $${props.expenseFromDashboard.split_each_amount}`}
+         </Card.Description>   
 
-        {props.expense.notes.length > 0 ? 
+        {props.expenseFromDashboard.notes && props.expenseFromDashboard.notes.length > 0 ? 
           <Card.Description className="sent-notifications">
-              {`Notes: ${props.expense.notes}`}
-          </Card.Description>   
-
+              {`Notes: ${props.expenseFromDashboard.notes}`}
+          </Card.Description>
           :
         null}
 
-      {props.expense.description.length > 0 ? 
+      {props.expenseFromDashboard.description && props.expenseFromDashboard.description.length > 0 ? 
 
         <Card.Description className="sent-notifications">
-            {`Details: ${props.expense.description}`}
-        </Card.Description>   
-        
+            {`Details: ${props.expenseFromDashboard.description}`}
+        </Card.Description>       
         :
         null}
 
-      </Card.Content>
-
-     
+      </Card.Content>     
 
       <Card.Content extra className = "expense-card-modal">     
 
@@ -191,14 +206,11 @@ function ExpenseCard(props) {
 
         <Modal.Header>Edit Expense</Modal.Header>
 
-          <EditExpenseForm expenseId={props.expenseId} addExpense = {props.addExpense} editExpense={props.editExpense} />                                   
+          <EditExpenseForm expenseId={props.expenseId} />                                   
 
-        </Modal>   
+        </Modal>  
 
-        {/*<Icon onClick={(e) => editExpense (e, props.expense)} name="edit outline" />  */}               
-          
-
-        {/*MODAL THAT TRIGGERS SEND NOTIFICATION /> */}             
+        {/*MODAL THAT TRIGGERS SEND NOTIFICATION FORM/> */}             
         <Modal trigger = {
         <div>
         <Popup content='Click to Send Notifications' inverted style = {style} trigger = {
@@ -209,7 +221,9 @@ function ExpenseCard(props) {
 
         <Modal.Header>Notify Friends</Modal.Header>        
 
-        <SendNotificationForm numPeople = {props.numpeople} notifications = {notifications} setNotifications={setNotifications} expenseId={props.expenseId}/>                                   
+        <SendNotificationForm 
+            numPeople = {props.numPeople}            
+            expenseId={props.expenseId}/>                                   
 
         </Modal>   
 
@@ -226,16 +240,16 @@ function ExpenseCard(props) {
 
         <Modal.Content image scrolling>          
         
-        {notifications.length > 0 ? 
-        <ManageNotifications 
-          notifications = {notifications} 
-          setNotifications = {setNotifications}
-          setPaidBillsTotal = {props.setPaidBillsTotal}
-          setOwedNotifications = {props.setOwedNotifications}
-          setOwedNotificationsCount = {props.setOwedNotificationsCount}
-          setOwedNotificationsTotal = {props.setOwedNotificationsTotal}
-          setExpenses = {props.setExpenses}
-        /> 
+        {props.allSentNotifications.length > 0 ? 
+          <ManageNotifications 
+            expenseFromDashboard = {props.expenseFromDashboard}            
+            //setPaidBillsTotal = {props.setPaidBillsTotal}           
+            //setOwedNotificationsCount = {props.setOwedNotificationsCount}
+            //setOwedNotificationsTotal = {props.setOwedNotificationsTotal}
+            //notificationsFromExpenseCard = {props.allSentNotifications} //all notifications for this bill 
+            //call props.getAllExpenses() in the components that need it instead of passing this down
+            //getAllExpensesFromDashboard={props.getAllExpensesFromDashboard}         
+          /> 
         : 
         <p>You haven't sent any notifications for this bill.</p> }   
 
@@ -255,12 +269,62 @@ function ExpenseCard(props) {
 
 const mapStateToProps = state => {
   return {
+    //delete a bill
     deleteExpenseError: state.expensesReducerIndex.deleteExpenseError,
     isDeletingExpense: state.expensesReducerIndex.isDeletingExpense,
     deleteExpenseSuccess: state.expensesReducerIndex.deleteExpenseSuccess,
-    deleteExpenseConfirmation: state.expensesReducerIndex.deleteExpenseConfirmation
+    deleteExpenseConfirmation: state.expensesReducerIndex.deleteExpenseConfirmation,
+     //expenses
+     getAllExpensesError: state.expensesReducerIndex.getAllExpensesError,
+     isGettingAllExpenses: state.expensesReducerIndex.isGettingAllExpenses,
+     allExpenses: state.expensesReducerIndex.allExpenses,
+     getAllExpensesSuccess: state.expensesReducerIndex.getAllExpensesSuccess,
+    //edit expense
+    editExpenseSuccess: state.expensesReducerIndex.editExpenseSuccess,
+    //delete all notifications for a single bill
+    deleteAllBillNotificationsError: state.notificationsReducerIndex.deleteAllBillNotificationsError, 
+    isDeletingAllBillNotifications: state.notificationsReducerIndex.isDeletingAllBillNotifications,
+    deleteAllBillNotificationsSuccess: state.notificationsReducerIndex.deleteAllBillNotificationsSuccess,
+    deleteAllBillNotificationsConfirmation: state.notificationsReducerIndex.deleteAllBillNotificationsConfirmation,
+    //delete individual sent notifications
+    deleteSentNotificationError: state.notificationsReducerIndex.deleteSentNotificationError, 
+    isDeletingSentNotification: state.notificationsReducerIndex.isDeletingSentNotification,
+    deleteSentNotificationSuccess: state.notificationsReducerIndex.deleteSentNotificationSuccess,
+    deleteSentNotificationConfirmation: state.notificationsReducerIndex.deleteSentNotificationConfirmation,
+    //get all sent notifications for a bill
+    getAllSentNotificationsError: state.notificationsReducerIndex.getAllSentNotificationsError,
+    isGettingAllSentNotifications: state.notificationsReducerIndex.isGettingAllSentNotifications,
+    getAllSentNotificationsSuccess: state.notificationsReducerIndex.getAllSentNotificationsSuccess,
+    allSentNotifications: state.notificationsReducerIndex.allSentNotifications,
+    //your friends owe you
+    getAllSentOwedNotificationsError: state.notificationsReducerIndex.getAllSentOwedNotificationsError,
+    isGettingAllSentOwedNotifications: state.notificationsReducerIndex.isGettingAllSentOwedNotifications,
+    getAllSentOwedNotificationsSuccess: state.notificationsReducerIndex.getAllSentOwedNotificationsSuccess,
+    allSentOwedNotifications: state.notificationsReducerIndex.allSentOwedNotifications,
+    //send a notification
+    sendNotificationsError: state.notificationsReducerIndex.sendNotificationsError,
+    isSendingNotifications: state.notificationsReducerIndex.isSendingNotifications,
+    sendNotificationsSuccess: state.notificationsReducerIndex.sendNotificationsSuccess,
+    sentNotificationsConfirmation: state.notificationsReducerIndex.sentNotificationsConfirmation,
+    //update a notification from paid to unpaid or unpaid to paid
+    updateNotificationPaidStatusError: state.notificationsReducerIndex.updateNotificationPaidStatusError, 
+    isUpdatingNotificationPaidStatus: state.notificationsReducerIndex.isUpdatingNotificationPaidStatus,
+    updateNotificationPaidStatusSuccess: state.notificationsReducerIndex.updateNotificationPaidStatusSuccess,
+    updateNotificationPaidStatusConfirmation: state.notificationsReducerIndex.updateNotificationPaidStatusConfirmation,
+    //your friends paid what they owe you
+    getAllSentPaidNotificationsError: state.notificationsReducerIndex.getAllSentPaidNotificationsError,
+    isGettingAllSentPaidNotifications: state.notificationsReducerIndex.isGettingAllSentPaidNotifications,
+    getAllSentPaidNotificationsSuccess: state.notificationsReducerIndex.getAllSentPaidNotificationsSuccess,
+    allSentPaidNotifications: state.notificationsReducerIndex.allSentPaidNotifications, 
   };
 }
 
-export default connect(mapStateToProps, { deleteExpense })(ExpenseCard);
+export default connect(mapStateToProps, 
+  { 
+    getAllExpenses,
+    deleteExpense, 
+    deleteSentNotificationsForABill,    
+    getAllSentNotificationsForABill 
+  })
+  (ExpenseCard);
 

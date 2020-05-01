@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import { withFormik, Form, Field } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
-import { Link, NavLink } from "react-router-dom";
-
-import ExpenseDetails from "./ExpenseDetails.js";
-import { axiosWithAuth } from "../utils/axiosWithAuth.js";
+import { connect } from "react-redux";
+import { getAllSentNotificationsForABill, sendNotificationsForABill } from "../redux_store/actions";
 import { Icon } from 'semantic-ui-react';
 
 function SendNotificationForm(props) {  
     
   let [iterator, setIterator] = useState(0);
-  const [numNotifications, setNumNotifications] = useState(props.notifications.length);
-  const numPeople = props.numPeople - 1;
-  //let inputsToDisplay = numPeople - numNotifications;
+  const [numNotifications, setNumNotifications] = useState(props.allSentNotifications.length);
+  const numPeople = props.numPeople - 1;  
 
   let[inputsToDisplay, setInputsToDisplay] = useState(numPeople - numNotifications);  
   
@@ -34,24 +27,38 @@ function SendNotificationForm(props) {
     }
   ])  
 
-  console.log("number of notifs", numNotifications); 
+  /*console.log("number of notifs", numNotifications); 
   console.log("number of ppl", numPeople); 
   console.log("inputsToDisplay", inputsToDisplay); 
-  console.log("inputs.length", inputs.length); 
+  console.log("inputs.length", inputs.length); */
     
   useEffect(() => {
 
-    //get all sent notifications for a bill
-    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
-    .then(res => {
-      setNotificationsBeforeAdding(res.data);
-      console.log("notificationsBeforeAdding right after axios call", notificationsBeforeAdding);
-    })
-    .catch(err => {
-      console.log("get all notifications of a bill before adding error", err);
-    })
-
+    //get all sent notifications for a bill when the form loads
+    props.getAllSentNotificationsForABill(props.expenseId);
+   
   }, [])
+
+  useEffect(() => {
+
+    if(props.allSentNotifications){
+      setNotificationsBeforeAdding(props.allSentNotifications);        
+
+      //set the number of notifications
+      setNumNotifications(props.allSentNotifications.length);
+
+      //reset the number of inputs to display after send is clicked
+      setInputsToDisplay(numPeople - props.allSentNotifications.length);
+    }
+
+  }, [props.allSentNotifications])
+
+  useEffect(() => {
+
+    //get all sent notifications for a bill
+    props.getAllSentNotificationsForABill(props.expenseId);   
+
+  }, [props.sentNotificationsConfirmation])  
 
   //adds another input field
   const addInput = (e) => {
@@ -137,33 +144,13 @@ function SendNotificationForm(props) {
       }//end if
 
     else {             
+      props.sendNotificationsForABill(newNotifications);
 
-      axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
-        .then(res => {
-          console.log("response after sending notifications", res);
-          setNewNotifications({
-            bill_id: props.expenseId,
-            email: []
-          })
-          //get all sent notifications for a bill
-          axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${props.expenseId}/notifications`)
-            .then(res => {
-              //console.log("notifications for a specific bill in send notification form", res);
-              props.setNotifications(res.data);
-              setNumNotifications(res.data.length);
-              console.log("props.notifications.length after axios get", res.data.length);
-
-              //reset the number of inputs to display after send is clicked
-              setInputsToDisplay(numPeople - res.data.length);
-              console.log("num inputs to display after axios get", inputsToDisplay);
-            })
-            .catch(err => {
-              console.log(err);
-            })
-        })
-        .catch(err => {
-          console.log("post notification error", err.response);
-        })     
+      //reset newNotifications
+      setNewNotifications({
+        bill_id: props.expenseId,
+        email: []
+      })     
 
       // reset inputs
       setInputs([
@@ -190,9 +177,7 @@ function SendNotificationForm(props) {
   }   
   
   return (
-
-    numNotifications < numPeople ?  
-    
+    numNotifications < numPeople ?      
     <form 
     onSubmit={(e) => submitNotifications(e)} 
     className="send-notification-form">        
@@ -242,6 +227,24 @@ function SendNotificationForm(props) {
     :
     <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>   
   );
+}//end SendNotificationForm
+
+const mapStateToProps = state => {
+  return {
+    getAllSentNotificationsError: state.notificationsReducerIndex.getAllSentNotificationsError,
+    isGettingAllSentNotifications: state.notificationsReducerIndex.isGettingAllSentNotifications,
+    getAllSentNotificationsSuccess: state.notificationsReducerIndex.getAllSentNotificationsSuccess,
+    allSentNotifications: state.notificationsReducerIndex.allSentNotifications,
+    sendNotificationsError: state.notificationsReducerIndex.sendNotificationsError,
+    isSendingNotifications: state.notificationsReducerIndex.isSendingNotifications,
+    sendNotificationsSuccess: state.notificationsReducerIndex.sendNotificationsSuccess,
+    sentNotificationsConfirmation: state.notificationsReducerIndex.sentNotificationsConfirmation
+  }
 }
 
-export default SendNotificationForm;
+export default connect(
+  mapStateToProps, {
+                    getAllSentNotificationsForABill, 
+                    sendNotificationsForABill
+                  })
+  (SendNotificationForm);

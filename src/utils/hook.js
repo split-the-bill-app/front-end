@@ -3,8 +3,7 @@ import { useLocalStorage } from "./useLocalStorage.js"
 
 const useDarkMode = () => {
 
-    const [isDark, setIsDark] = useLocalStorage(false)
-    console.log(isDark);
+    const [isDark, setIsDark] = useLocalStorage(false);    
 
     useEffect(() => {
 

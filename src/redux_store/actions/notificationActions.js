@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { axiosWithAuth } from '../../utils/axiosWithAuth.js';
 
 export const GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_START = 'GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_START';
@@ -31,7 +30,7 @@ export const getAllSentNotificationsForABill = expenseId => dispatch => {
 
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/${expenseId}/notifications`)
     .then(res => {
-        console.log("get all sent notfications for a bill in actions", res.data);
+        console.log(`get all sent notfications for a bill in actions expense id: ${expenseId}`, res.data);
         dispatch({ type: GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data});
     })
     .catch(err => {
@@ -42,7 +41,7 @@ export const getAllSentNotificationsForABill = expenseId => dispatch => {
 export const sendNotificationsForABill = newNotifications => dispatch => {
     dispatch({ type: SEND_NOTIFICATIONS_FOR_A_BILL_START})
 
-    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications')
+    axiosWithAuth().post('https://split-the-bill-app.herokuapp.com/api/notifications', newNotifications)
     .then(res => {
         console.log("send notifications for a bill in action", res.data)
         dispatch({ type: SEND_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data })
@@ -52,10 +51,11 @@ export const sendNotificationsForABill = newNotifications => dispatch => {
     })
 }//end sendNotificationsForABill
 
+//delete all notifications for a bill
 export const deleteSentNotificationsForABill = expenseId => dispatch => {
     dispatch({ type: DELETE_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_START });
 
-    axiosWithAuth().post(`https://split-the-bill-app.herokuapp.com/api/bills/$expenseId}/notification`)
+    axiosWithAuth().delete(`https://split-the-bill-app.herokuapp.com/api/bills/${expenseId}/notifications`)
     .then(res => {
         console.log("delete notification for a bill response in actions", res.data);
         dispatch({ type: DELETE_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data })
@@ -63,7 +63,6 @@ export const deleteSentNotificationsForABill = expenseId => dispatch => {
     .catch(err => {
         dispatch({ type: DELETE_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_FAILURE, error: err })
     })
-
 }//end deleteSentNotificationsForABill
 
 //get all sent notifications that are still outstanding
