@@ -43,20 +43,7 @@ function ExpenseCard(props) {
 
     //get all notifications sent for this bill
     props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
-
-    //this is passed down to managenotifications now
-    // notificationsFromExpenseCard = {props.allSentNotifications}
-
-    //get all notifications for this bill and just like in dashboard pass them down
-    //to manage notifications as notificationsFromExpenseCard
-    //then set up a useEffect here that calls getAllNotifications when a notification for a bill
-    //is added, edited, or deleted
-
-    //****if there is a 404 error when props.getAllSentNotificationsForABill is called????? */
-   
-    //notifications/ setNotifications is passed down to send SendNotificationForm and manageNotifications,
-    //when notifications change in these two components we want to get all the notifications for a bill
-    //in ExpenseCard
+    
   }, []); 
 
   useEffect(() => {
@@ -65,30 +52,7 @@ function ExpenseCard(props) {
     props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
 
   }, [props.sendNotificationsSuccess])
-
-
-  /*useEffect(() => {
-
-    //get all notifications sent for this bill
-    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
-
-  }, [props.deleteAllBillNotificationsSuccess])*/
-
-  //get all expenses when a bill is added, updated, or deleted
-  /*useEffect(() => {
-
-    //get all notifications sent for this bill
-    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
-
-  }, [
-    props.updateNotificationPaidStatusSuccess, 
-    props.deleteSentNotificationSuccess,    
-    //props.getAllSentPaidNotificationsSuccess,
-    //props.getAllSentOwedNotificationsSuccess,
-    props.sendNotificationsSuccess,    
-    props.editExpenseSuccess    
-  ]) */
-  
+ 
   const deleteHandler = async (e, expenseIn) => {
 
     e.preventDefault();
@@ -242,13 +206,7 @@ function ExpenseCard(props) {
         
         {props.allSentNotifications.length > 0 ? 
           <ManageNotifications 
-            expenseFromDashboard = {props.expenseFromDashboard}            
-            //setPaidBillsTotal = {props.setPaidBillsTotal}           
-            //setOwedNotificationsCount = {props.setOwedNotificationsCount}
-            //setOwedNotificationsTotal = {props.setOwedNotificationsTotal}
-            //notificationsFromExpenseCard = {props.allSentNotifications} //all notifications for this bill 
-            //call props.getAllExpenses() in the components that need it instead of passing this down
-            //getAllExpensesFromDashboard={props.getAllExpensesFromDashboard}         
+            expenseFromDashboard = {props.expenseFromDashboard}                  
           /> 
         : 
         <p>You haven't sent any notifications for this bill.</p> }   

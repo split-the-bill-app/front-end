@@ -2,8 +2,7 @@ import React from "react";
 import ExpenseCard from "./ExpenseCard.js";
 
 export default function ExpenseDetails({
-                                          expensesFromDashboard, 
-                                          //getAllExpensesFromDashboard,                                          
+                                          expensesFromDashboard,                                                                               
                                           setPaidBillsTotal,                                          
                                           setOwedNotificationsCount,
                                           setOwedNotificationsTotal                                          
@@ -19,9 +18,7 @@ export default function ExpenseDetails({
                   <ExpenseCard              
                         setOwedNotificationsTotal = {setOwedNotificationsTotal}                        
                         setOwedNotificationsCount = {setOwedNotificationsCount}
-                        setPaidBillsTotal = {setPaidBillsTotal}   
-                        //call props.getAllExpenses() in the components that need it instead of passing this down                    
-                        //getAllExpensesFromDashboard={getAllExpensesFromDashboard} 
+                        setPaidBillsTotal = {setPaidBillsTotal}                        
                         expenseFromDashboard = {expenseFromDashboard} 
                         key={index} 
                         expenseId = {expenseFromDashboard.id} 
