@@ -68,7 +68,7 @@ const LoginSignupScreen = (props) => {
           placeholder="Password"
           required
           />
-          <button>Sign In</button>
+          <button> {props.isLoggingIn ? "Signing In..." : "Sign In"} </button>
         </form>
 
         <div className="register-description">

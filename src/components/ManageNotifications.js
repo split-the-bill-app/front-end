@@ -10,23 +10,21 @@ import {
     } from "../redux_store/actions";
 import { Icon } from "semantic-ui-react";
 
-function ManageNotifications(props){    
-    
-   
+function ManageNotifications(props){
+       
     useEffect(() => {       
 
         props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);          
              
-    }, [])  
+    })  
     
     //get all notifications when a notifiction is deleted or updated
     useEffect(() => {
 
         props.getAllSentNotificationsForABill(props.expenseFromDashboard.id); 
 
-    }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])  
-   
-              
+    }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
+                 
     const deleteNotification = async (e, notificationIn) => {
         console.log("delete notification clicked");
 
@@ -38,7 +36,7 @@ function ManageNotifications(props){
 
             //then get all bills for the user to update state
             //without this the last notification for a bill is not removed until the screen is refreshed
-            props.getAllExpenses(localStorage.getItem('userId'));  
+            await props.getAllExpenses(localStorage.getItem('userId'));  
 
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 
@@ -63,7 +61,7 @@ function ManageNotifications(props){
             {event.target.value === "paid" ? paidStatus = true : paidStatus = false}
             console.log("paidStatus", paidStatus);   
             
-            await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});   
+            await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});                       
             
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 

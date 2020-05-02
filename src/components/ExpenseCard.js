@@ -44,7 +44,7 @@ function ExpenseCard(props) {
     //get all notifications sent for this bill
     props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
     
-  }, []); 
+  }); 
 
   useEffect(() => {
 

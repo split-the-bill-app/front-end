@@ -34,12 +34,11 @@ const initialState = {
 
 export const usersReducer = (state = initialState, action) => {
     switch(action.type){
-
         case REGISTER_USER_START:
             return {
                 ...state,
                 isRegistering: true,
-                registerError: null,
+                registerError: null
             };
         case REGISTER_USER_SUCCESS:
             return {
@@ -62,16 +61,16 @@ export const usersReducer = (state = initialState, action) => {
                 isLoggingIn: true,
                 loginError: null
             };
-        case LOGIN_USER_SUCCESS:            
-            return{
+        case LOGIN_USER_SUCCESS:       
+            return {
                 ...state,
                 loggedOut: false,
                 isLoggingIn: false,                
                 user: action.payload.user,
                 userId: action.payload.user.id,
                 token: action.payload.token,
-                loggedIn: true                
-            };
+                loggedIn: true               
+            };            
         case LOGIN_USER_FAILURE:
             return {
                 ...state,

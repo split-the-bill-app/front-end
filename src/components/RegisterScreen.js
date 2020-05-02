@@ -100,14 +100,13 @@ const RegisterScreen = (props) => {
             required
             />
          
-          <button>Sign Up</button>
+         <button> {props.isRegistering ? "Signing Up..." : "Sign Up"} </button>
         </form>
 
         <div className="login-description">
           <p>Already have an account? Login <Link to='/'>Here</Link></p>
         </div>
 
-        
       </div>
     </div>
   );

@@ -79,10 +79,10 @@ function Dashboard (props) {
     }, []) 
 
     //continuously check for received notifications
-    useEffect(() => {
+    /*useEffect(() => {
         //then get all notifications sent to the user (you owe your friends)
         props.getReceivedNotifications(localStorage.getItem('userEmail'));
-    })
+    })*/
     
     //get all expenses when a bill is added, updated, or deleted
     useEffect(() => {
@@ -96,7 +96,20 @@ function Dashboard (props) {
        //get all notifications/bills sent by the user (your friends owe you)
        props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 
+       //get all paid bills your friends owe you and set them to state paidBills
+       props.getAllSentPaidNotifications(localStorage.getItem('userId'));   
+
     }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
+
+    useEffect(() => {
+
+        //get all notifications/bills sent by the user (your friends owe you)
+       props.getAllSentOwedNotifications(localStorage.getItem('userId'));
+
+       //get all paid bills your friends owe you and set them to state paidBills
+       props.getAllSentPaidNotifications(localStorage.getItem('userId'));   
+
+    }, /*[props.getAllSentNotificationsSuccess, props.getAllSentNotificationsError]*/)
 
     //when all notifications that you owe your friends are received
     useEffect(() => {
@@ -208,7 +221,7 @@ function Dashboard (props) {
                     {/* DISPLAYS WHAT YOU OWE */}
                     <Modal trigger = {                        
                         <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
-                            <Popup content='Click to View Received Notifications' position= 'bottom center' style={style} inverted trigger={
+                            <Popup content='View Received Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owe-div">                      
 
                                 You Owe Your Friends
@@ -239,7 +252,7 @@ function Dashboard (props) {
                     <Modal trigger = {                           
                                      
                         <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
-                            <Popup content='Click to View Sent Notifications' position= 'bottom center' style={style} inverted trigger={
+                            <Popup content='View Unpaid Sent Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owed-div">                    
                                 Your Friends Owe You
                                 {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
@@ -339,7 +352,10 @@ const mapStateToProps = state => {
         allSentPaidNotifications: state.notificationsReducerIndex.allSentPaidNotifications,
         //you owe your friends       
         getAllReceivedNotificationsSuccess: state.notificationsReducerIndex.getAllReceivedNotificationsSuccess,
-        allReceivedNotifications: state.notificationsReducerIndex.allReceivedNotifications,        
+        allReceivedNotifications: state.notificationsReducerIndex.allReceivedNotifications,  
+        //notifications for a bill
+        getAllSentNotificationsSuccess: state.notificationsReducerIndex.getAllSentNotificationsSuccess,
+        getAllSentNotificationsError: state.notificationsReducerIndex.getAllSentNotificationsError,      
         //log out
         loggedOut: state.usersReducerIndex.loggedOut,
         //delete individual sent notifications
