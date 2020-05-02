@@ -4,7 +4,9 @@ import {
   getAllExpenses,
   deleteExpense,
   deleteSentNotificationsForABill,   
-  getAllSentNotificationsForABill
+  getAllSentNotificationsForABill,
+  getAllSentOwedNotifications,
+  getAllSentPaidNotifications
   } from "../redux_store/actions";
 import { Icon, Card, Modal, Popup } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.css'; 
@@ -38,20 +40,28 @@ function ExpenseCard(props) {
   const handleClose = () => {
     setOpen(false);
   };
-    
+
+  //manage sent notifications modal
+  const closeManageNotificationsModal = (e) => {   
+    window.location.reload(true);
+  }  
+  
+  useEffect(() => {
+    //get all notifications sent for this bill
+    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);    
+  }, []); 
+
+  
+  //every time a notification is sent, updated, or deleted
   useEffect(() => {
 
     //get all notifications sent for this bill
-    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
-    
-  }); 
+    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);    
 
-  useEffect(() => {
-
-    //get all notifications sent for this bill
-    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
-
-  }, [props.sendNotificationsSuccess])
+  }, [props.sentNotificationsConfirmation, 
+      props.updateNotificationPaidStatusConfirmation, 
+      props.deleteSentNotificationConfirmation
+    ])
  
   const deleteHandler = async (e, expenseIn) => {
 
@@ -197,8 +207,10 @@ function ExpenseCard(props) {
         <Popup content='Click to Manage Sent Notifications' inverted style = {style} trigger = {        
         <Icon  className = "dollar-icon" name="mail" size = "large" /> 
         }/>
-        </div>             
-        } closeIcon >
+        </div>                   
+        } 
+        onClose={closeManageNotificationsModal} 
+        closeIcon >
 
         <Modal.Header>Manage Sent Notifications</Modal.Header>
 
@@ -206,7 +218,7 @@ function ExpenseCard(props) {
         
         {props.allSentNotifications.length > 0 ? 
           <ManageNotifications 
-            expenseFromDashboard = {props.expenseFromDashboard}                  
+            expenseFromDashboard = {props.expenseFromDashboard}                           
           /> 
         : 
         <p>You haven't sent any notifications for this bill.</p> }   
@@ -282,7 +294,9 @@ export default connect(mapStateToProps,
     getAllExpenses,
     deleteExpense, 
     deleteSentNotificationsForABill,    
-    getAllSentNotificationsForABill 
+    getAllSentNotificationsForABill,
+    getAllSentOwedNotifications,
+    getAllSentPaidNotifications 
   })
   (ExpenseCard);
 

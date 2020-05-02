@@ -14,14 +14,38 @@ function ManageNotifications(props){
        
     useEffect(() => {       
 
-        props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);          
+        props.getAllSentNotificationsForABill(props.expenseFromDashboard.id); 
+        
+        props.getAllExpenses(localStorage.getItem('userId'));
              
-    })  
+    }, []) 
+
+    useEffect(() => {
+        props.getAllSentOwedNotifications(localStorage.getItem('userId'));
+
+        //when props.getAllSentOwedNotifications() is called props.allSentOwedNotifications is updated
+        //in dashboard so
+        //props.setOwedNotifications(res.data); becomes props.allSentOwedNotifications
+        //and props.setOwedNotifications(res.data) is therefore not needed
+        //so i wouldn't need this => setOwedNotifications = {setOwedNotifications} 
+        //when props.allSentOwedNotifications is updated, a useEffect that triggers
+        //owedNotificatins calculation is triggered
+        //so i wouldn't need this => setOwedNotificationsTotal = {setOwedNotificationsTotal}
+        //this would be updated in dashboard too => setOwedNotificationsCount = {setOwedNotificationsCount}
+        props.getAllSentPaidNotifications(localStorage.getItem('userId'));
+
+        //when props.getAllSentPaidNotifications() is called, 
+        //props.allSentPaidNotifications is updated and triggers a useEffect in dashboard that
+        //calculates paidNotifications
+        //so setPaidBillsTotal = {setPaidBillsTotal} is not needed
+    }, [])
     
     //get all notifications when a notifiction is deleted or updated
     useEffect(() => {
 
-        props.getAllSentNotificationsForABill(props.expenseFromDashboard.id); 
+        props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);   
+        
+        props.getAllExpenses(localStorage.getItem('userId'));
 
     }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
                  
@@ -61,7 +85,9 @@ function ManageNotifications(props){
             {event.target.value === "paid" ? paidStatus = true : paidStatus = false}
             console.log("paidStatus", paidStatus);   
             
-            await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});                       
+            await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});             
+           
+            await props.getAllExpenses(localStorage.getItem('userId'));  
             
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 
@@ -81,8 +107,7 @@ function ManageNotifications(props){
 
         <div className="manage-notifications">            
 
-            {
-           /* (props.allSentNotifications && props.allSentNotifications.length > 0) ? */
+            {          
 
             props.allSentNotifications.map((notification, index) => {
                 return <div className="notification" key={index}>

@@ -15,10 +15,7 @@ export default function ExpenseDetails({
 
             {expensesFromDashboard.map((expenseFromDashboard, index) => (           
             
-                  <ExpenseCard              
-                        setOwedNotificationsTotal = {setOwedNotificationsTotal}                        
-                        setOwedNotificationsCount = {setOwedNotificationsCount}
-                        setPaidBillsTotal = {setPaidBillsTotal}                        
+                  <ExpenseCard                                         
                         expenseFromDashboard = {expenseFromDashboard} 
                         key={index} 
                         expenseId = {expenseFromDashboard.id} 

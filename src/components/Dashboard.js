@@ -76,13 +76,7 @@ function Dashboard (props) {
         //get all paid bills your friends owe you and set them to state paidBills
         props.getAllSentPaidNotifications(localStorage.getItem('userId'));       
 
-    }, []) 
-
-    //continuously check for received notifications
-    /*useEffect(() => {
-        //then get all notifications sent to the user (you owe your friends)
-        props.getReceivedNotifications(localStorage.getItem('userEmail'));
-    })*/
+    }, [])     
     
     //get all expenses when a bill is added, updated, or deleted
     useEffect(() => {
@@ -91,25 +85,23 @@ function Dashboard (props) {
 
     }, [props.addedExpenseSuccess, props.editExpenseSuccess, props.deleteExpenseSuccess])
 
+    //when a notification is deleted, updated, or sent
     useEffect(() => {
+
+       // then get all bills for the user
+       props.getAllExpenses(localStorage.getItem('userId'));  
 
        //get all notifications/bills sent by the user (your friends owe you)
-       props.getAllSentOwedNotifications(localStorage.getItem('userId'));
-
+       props.getAllSentOwedNotifications(localStorage.getItem('userId'));   
+       
        //get all paid bills your friends owe you and set them to state paidBills
        props.getAllSentPaidNotifications(localStorage.getItem('userId'));   
 
-    }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
-
-    useEffect(() => {
-
-        //get all notifications/bills sent by the user (your friends owe you)
-       props.getAllSentOwedNotifications(localStorage.getItem('userId'));
-
-       //get all paid bills your friends owe you and set them to state paidBills
-       props.getAllSentPaidNotifications(localStorage.getItem('userId'));   
-
-    }, /*[props.getAllSentNotificationsSuccess, props.getAllSentNotificationsError]*/)
+    }, [
+        props.deleteSentNotificationSuccess, 
+        props.updateNotificationPaidStatusSuccess,        
+        props.sendNotificationsSuccess
+    ])
 
     //when all notifications that you owe your friends are received
     useEffect(() => {
@@ -149,15 +141,16 @@ function Dashboard (props) {
 
     }, [
         props.allSentOwedNotifications, //re-calculate owedTotals every time a notification is sent
-        owedNotificationsCount, 
-        owedNotificationsTotal         
+        props.updateNotificationPaidStatusConfirmation,
+        props.deleteSentNotificationConfirmation,
+        props.getAllSentOwedNotificationsError             
     ])
 
     useEffect(() => {
         let paidTotal = 0;
 
         if(props.getAllSentPaidNotifications){
-            //iterate over all sent owed notifications and calclate owedTotal
+            //iterate over all sent paid notifications and calclate paidTotal
             props.allSentPaidNotifications.forEach(paidBill => {
                 return paidTotal += paidBill.split_each_amount;
             })
@@ -167,10 +160,12 @@ function Dashboard (props) {
 
         if(props.allSentPaidNotifications){          
             setPaidBillsTotal(paidTotal);
-
         }
 
-    }, [props.getAllSentPaidNotifications])   
+    }, [props.allSentPaidNotifications, //re-calculate paidTotals every time a notification is sent
+        props.updateNotificationPaidStatusConfirmation,
+        props.deleteSentNotificationConfirmation,
+        props.getAllSentPaidNotificationsError])   
 
     // fire on logout button, clears token and pushes user back to login page
     const logoutHandler = (e) => {
@@ -264,7 +259,7 @@ function Dashboard (props) {
                        
                     } closeIcon>
 
-                        <Modal.Header>View Sent Notifications</Modal.Header>
+                        <Modal.Header>View Sent Unpaid Notifications</Modal.Header>
 
                         <Modal.Content image scrolling> 
 
@@ -286,10 +281,7 @@ function Dashboard (props) {
                     {
                         (props.allExpenses && props.allExpenses.length > 0) ? 
                         <ExpenseDetails                            
-                            expensesFromDashboard = {props.allExpenses} //all expenses for the user                           
-                            setPaidBillsTotal = {setPaidBillsTotal}                        
-                            setOwedNotificationsTotal = {setOwedNotificationsTotal}
-                            setOwedNotificationsCount = {setOwedNotificationsCount}                            
+                            expensesFromDashboard = {props.allExpenses} //all expenses for the user                                                    
                         />
                         : 
                         <Modal trigger = {
