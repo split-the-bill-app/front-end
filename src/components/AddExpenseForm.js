@@ -42,16 +42,16 @@ function AddExpenseForm(props) {
                   })
   }
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     const split_each_amount = (expenseToAdd.split_sum/expenseToAdd.split_people_count).toFixed(2);   
     console.log("split each amount in add expense form", split_each_amount);    
 
     event.preventDefault();
 
-    props.addNewExpense({...expenseToAdd, split_each_amount: split_each_amount, user_id: localStorage.getItem('userId')});   
+    await props.addNewExpense({...expenseToAdd, split_each_amount: split_each_amount, user_id: localStorage.getItem('userId')});   
    
     // then get all bills for the user and update the props.allExpenses state
-    props.getAllExpenses(localStorage.getItem('userId'));   
+    await props.getAllExpenses(localStorage.getItem('userId'));   
 
     resetForm();
 
