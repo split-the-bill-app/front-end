@@ -41,11 +41,12 @@ function ExpenseCard(props) {
     setOpen(false);
   };
 
-  //manage sent notifications modal
+  //manage sent notifications modal refresh when closed
   const closeManageNotificationsModal = (e) => {   
-    window.location.reload(true);
+    //window.location.reload(true);
   }  
 
+  //when the mail icon on expense card is clicked get all notifications for the bill
   const launchManageNotifications = (e) => {
     props.getAllSentNotificationsForABill(props.expenseId); 
   }

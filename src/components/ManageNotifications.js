@@ -41,10 +41,8 @@ function ManageNotifications(props){
 
         try{
             //delete the notification
-            await props.deleteSentNotification(notificationIn.id);
-
-            //then get all bills for the user to update state
-            //without this the last notification for a bill is not removed until the screen is refreshed
+            await props.deleteSentNotification(notificationIn.id);     
+            
             await props.getAllExpenses(localStorage.getItem('userId'));  
 
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
