@@ -14,36 +14,21 @@ function ManageNotifications(props){
        
     useEffect(() => {       
 
-        props.getAllSentNotificationsForABill(props.expenseFromDashboard.id); 
+        props.getAllSentNotificationsForABill(props.expenseId);         
         
         props.getAllExpenses(localStorage.getItem('userId'));
+
+        props.getAllSentOwedNotifications(localStorage.getItem('userId'));
+       
+        props.getAllSentPaidNotifications(localStorage.getItem('userId'));
              
     }, []) 
 
-    useEffect(() => {
-        props.getAllSentOwedNotifications(localStorage.getItem('userId'));
-
-        //when props.getAllSentOwedNotifications() is called props.allSentOwedNotifications is updated
-        //in dashboard so
-        //props.setOwedNotifications(res.data); becomes props.allSentOwedNotifications
-        //and props.setOwedNotifications(res.data) is therefore not needed
-        //so i wouldn't need this => setOwedNotifications = {setOwedNotifications} 
-        //when props.allSentOwedNotifications is updated, a useEffect that triggers
-        //owedNotificatins calculation is triggered
-        //so i wouldn't need this => setOwedNotificationsTotal = {setOwedNotificationsTotal}
-        //this would be updated in dashboard too => setOwedNotificationsCount = {setOwedNotificationsCount}
-        props.getAllSentPaidNotifications(localStorage.getItem('userId'));
-
-        //when props.getAllSentPaidNotifications() is called, 
-        //props.allSentPaidNotifications is updated and triggers a useEffect in dashboard that
-        //calculates paidNotifications
-        //so setPaidBillsTotal = {setPaidBillsTotal} is not needed
-    }, [])
-    
+       
     //get all notifications when a notifiction is deleted or updated
     useEffect(() => {
 
-        props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);   
+        props.getAllSentNotificationsForABill(props.expenseId);   
         
         props.getAllExpenses(localStorage.getItem('userId'));
 
@@ -67,7 +52,7 @@ function ManageNotifications(props){
             await props.getAllSentPaidNotifications(localStorage.getItem('userId')); 
 
             //reset the all sent notifications for a bill state
-            await props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);             
+            await props.getAllSentNotificationsForABill(props.expenseId);             
 
         }catch(err){
             console.error("Delete Notification in ManageNotification.js ERROR", err);
@@ -94,7 +79,7 @@ function ManageNotifications(props){
             await props.getAllSentPaidNotifications(localStorage.getItem('userId')); 
 
             //get all notifications for the bill from the server
-            await props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);          
+            await props.getAllSentNotificationsForABill(props.expenseId);          
               
         
         }catch(err){

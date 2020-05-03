@@ -58,8 +58,8 @@ function Dashboard (props) {
 
     /*console.log("paidBillsTotal", paidBillsTotal);
     console.log("owedGrandTotal", owedGrandTotal);
-    console.log("your friends owe you", yourFriendsOweYou);*/    
-
+    console.log("your friends owe you", yourFriendsOweYou);*/ 
+        
     useEffect(() => {
         //get user details
         props.getUserDetails(localStorage.getItem('userId'));  

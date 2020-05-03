@@ -45,11 +45,16 @@ function ExpenseCard(props) {
   const closeManageNotificationsModal = (e) => {   
     window.location.reload(true);
   }  
-  
+
+  const launchManageNotifications = (e) => {
+    props.getAllSentNotificationsForABill(props.expenseId); 
+  }
+
+   
   useEffect(() => {
     //get all notifications sent for this bill
-    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);    
-  }, []); 
+    props.getAllSentNotificationsForABill(props.expenseId);    
+  },[]); 
 
   
   //every time a notification is sent, updated, or deleted
@@ -205,7 +210,7 @@ function ExpenseCard(props) {
         <Modal trigger = {
         <div>
         <Popup content='Click to Manage Sent Notifications' inverted style = {style} trigger = {        
-        <Icon  className = "dollar-icon" name="mail" size = "large" /> 
+        <Icon  onClick = {launchManageNotifications} className = "dollar-icon" name="mail" size = "large" /> 
         }/>
         </div>                   
         } 
@@ -218,7 +223,7 @@ function ExpenseCard(props) {
         
         {props.allSentNotifications.length > 0 ? 
           <ManageNotifications 
-            expenseFromDashboard = {props.expenseFromDashboard}                           
+            expenseId = {props.expenseId}                           
           /> 
         : 
         <p>You haven't sent any notifications for this bill.</p> }   
