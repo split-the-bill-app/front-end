@@ -79,7 +79,7 @@ export const notificationsReducer = (state = initialState, action) => {
                 allSentNotifications: action.payload   
             };
         case GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_FAILURE:
-            console.log("get all notifications failure in reducer", action.error)
+            console.log("get all notifications for a bill failure in reducer", action.error)
             return{
                 ...state,
                 getAllSentNotificationsError: action.error,

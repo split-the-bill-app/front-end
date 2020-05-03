@@ -12,37 +12,53 @@ import { Icon } from "semantic-ui-react";
 
 function ManageNotifications(props){
        
-    useEffect(() => {       
-
-        props.getAllSentNotificationsForABill(props.expenseId);         
+    useEffect(() => {     
         
+        console.log("expense id in ManageNotifications.js", props.expenseId);
+        
+        //the formula in dashboard that calculates how much your friends owe you
+        //require all expenses, the owed notifications, and the paid notifications
+        //we then display all notifications for this bill        
         props.getAllExpenses(localStorage.getItem('userId'));
 
         props.getAllSentOwedNotifications(localStorage.getItem('userId'));
        
         props.getAllSentPaidNotifications(localStorage.getItem('userId'));
+
+        props.getAllSentNotificationsForABill(props.expenseId);  
              
     }, []) 
 
        
     //get all notifications when a notifiction is deleted or updated
     useEffect(() => {
+        
+        //the formula in dashboard that calculates how much your friends owe you
+        //require all expenses, the owed notifications, and the paid notifications
+        //we then display all notifications for this bill 
+        props.getAllExpenses(localStorage.getItem('userId'));
+
+        props.getAllSentOwedNotifications(localStorage.getItem('userId'));
+
+        props.getAllSentPaidNotifications(localStorage.getItem('userId')); 
 
         props.getAllSentNotificationsForABill(props.expenseId);   
-        
-        props.getAllExpenses(localStorage.getItem('userId'));
 
     }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
                  
-    const deleteNotification = async (e, notificationIn) => {
+    const deleteNotification = async (event, notificationIn) => {
         console.log("delete notification clicked");
-
-        e.preventDefault();
+       
+        event.preventDefault();
+        event.stopPropagation();
 
         try{
             //delete the notification
-            await props.deleteSentNotification(notificationIn.id);     
+            await props.deleteSentNotification(notificationIn.id);   
             
+            //the formula in dashboard that calculates how much your friends owe you
+            //require all expenses, the owed notifications, and the paid notifications
+            //we then display all notifications for this bill            
             await props.getAllExpenses(localStorage.getItem('userId'));  
 
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
@@ -59,7 +75,9 @@ function ManageNotifications(props){
     }//end deleteNotification   
 
     const paidHandler = async (event, notificationId) => {
+        
         event.preventDefault();
+        event.stopPropagation();
 
         let paidStatus = event.target.value;
 
@@ -68,15 +86,18 @@ function ManageNotifications(props){
             {event.target.value === "paid" ? paidStatus = true : paidStatus = false}
             console.log("paidStatus", paidStatus);   
             
+            //update notification
             await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});             
            
+            //the formula in dashboard that calculates how much your friends owe you
+            //require all expenses, the owed notifications, and the paid notifications
+            //we then display all notifications for this bill 
             await props.getAllExpenses(localStorage.getItem('userId'));  
             
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
 
-            await props.getAllSentPaidNotifications(localStorage.getItem('userId')); 
-
-            //get all notifications for the bill from the server
+            await props.getAllSentPaidNotifications(localStorage.getItem('userId'));
+            
             await props.getAllSentNotificationsForABill(props.expenseId);          
               
         
@@ -91,40 +112,41 @@ function ManageNotifications(props){
         <div className="manage-notifications">            
 
             {          
+            (props.allSentNotifications.length > 0) ? 
 
-            props.allSentNotifications.map((notification, index) => {
-                return <div className="notification" key={index}>
+                props.allSentNotifications.map((notification, index) => {
+                    return <div className="notification" key={index}>
+                        
+                        {notification.email !== null && notification.email.length > 10 ? (
+                                <p className = "email">{notification.email.slice(0, 13)}...</p>
+                            ): (
+                                <p className = "email">{notification.email}</p>
+                            )
+                        }
+                        <p>${notification.split_each_amount} </p>               
                     
-                    {notification.email !== null && notification.email.length > 10 ? (
-                            <p className = "email">{notification.email.slice(0, 13)}...</p>
-                        ): (
-                            <p className = "email">{notification.email}</p>
-                        )
-                    }
-                    <p>${notification.split_each_amount} </p>               
-                
-                    <p className = "description">{notification.description}</p>
+                        <p className = "description">{notification.description}</p>
 
-                    <p className = "paid-select">
-                        <select 
-                            key={notification.id}                                           
-                            type="select"
-                            name="payment"    
-                            onChange={(e) => paidHandler(e, notification.id)}
-                            className = "paid-select"> 
+                        <p className = "paid-select">
+                            <select 
+                                key={notification.id}                                           
+                                type="select"
+                                name="payment"    
+                                onChange={(e) => paidHandler(e, notification.id)}
+                                className = "paid-select"> 
 
-                            <option value ="" disabled selected hidden>{notification.paid ? "paid" : "unpaid"}</option>
-                            <option value = "paid">paid</option>
-                            <option value = "unpaid">unpaid</option>                         
+                                <option value ="" disabled selected hidden>{notification.paid ? "paid" : "unpaid"}</option>
+                                <option value = "paid">paid</option>
+                                <option value = "unpaid">unpaid</option>                         
 
-                        </select>                    
-                    </p>
-                    <p className = "delete-p">
-                    <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
-                    </p>
-                </div>
-                })
-            //: null
+                            </select>                    
+                        </p>
+                        <p className = "delete-p">
+                        <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
+                        </p>
+                    </div>
+                    })
+            : <p>You haven't sent any notifications for this bill.</p>
             }
         </div> 
             

@@ -62,7 +62,7 @@ function ExpenseCard(props) {
   useEffect(() => {
 
     //get all notifications sent for this bill
-    props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);    
+    props.getAllSentNotificationsForABill(props.expenseId);    
 
   }, [props.sentNotificationsConfirmation, 
       props.updateNotificationPaidStatusConfirmation, 
@@ -78,7 +78,7 @@ function ExpenseCard(props) {
       await props.deleteSentNotificationsForABill(expenseIn.id);
 
       //then get all notifications which should reset allSentNotiications to []
-      await props.getAllSentNotificationsForABill(props.expenseFromDashboard.id);
+      await props.getAllSentNotificationsForABill(props.expenseId);
 
       //then delete the bill
       await props.deleteExpense(expenseIn.id);
@@ -220,14 +220,11 @@ function ExpenseCard(props) {
 
         <Modal.Header>Manage Sent Notifications</Modal.Header>
 
-        <Modal.Content image scrolling>          
+         <Modal.Content image scrolling>      
         
-        {props.allSentNotifications.length > 0 ? 
           <ManageNotifications 
             expenseId = {props.expenseId}                           
-          /> 
-        : 
-        <p>You haven't sent any notifications for this bill.</p> }   
+          />       
 
          </Modal.Content>   
 

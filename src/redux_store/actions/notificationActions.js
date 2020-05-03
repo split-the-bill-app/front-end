@@ -71,7 +71,7 @@ export const getAllSentOwedNotifications = userId => dispatch => {
 
     axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/bills/notifications/owed/${userId}`)
     .then(res => {
-        console.log("get all sent notifications in actions", res.data);
+        console.log("get all sent owed notifications in actions", res.data);
         dispatch({ type: GET_ALL_SENT_OWED_NOTIFICATIONS_SUCCESS, payload: res.data });
     })
     .catch(err => {
