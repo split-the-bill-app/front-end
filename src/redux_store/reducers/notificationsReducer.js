@@ -174,7 +174,8 @@ export const notificationsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 getAllReceivedNotificationsError: null,//you owe your friends
-                isGettingAllReceivedNotifications: true                
+                isGettingAllReceivedNotifications: true,
+                allReceivedNotifications: []                
             };
         case GET_ALL_RECEIVED_NOTIFICATIONS_SUCCESS:
             return {
