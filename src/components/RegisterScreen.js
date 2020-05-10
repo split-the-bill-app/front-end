@@ -35,13 +35,17 @@ const RegisterScreen = (props) => {
   //useEffect that checks for updated state from the redux store and update userId & token accordingly
   useEffect(() => {
 
+    if(props.user){
+      localStorage.setItem('userEmail', props.user.email);
+    }
+
     if(props.userId){      
       localStorage.setItem('userId', props.userId);
     }
 
     if(props.token){      
       localStorage.setItem('token', props.token);
-    }
+    }    
 
     if(props.loggedIn){      
       props.history.push('/dashboard')
