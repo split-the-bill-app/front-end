@@ -48,6 +48,7 @@ export const loginUser = loginCredentials => dispatch => {
     .catch(err => {
         dispatch({ type: LOGIN_USER_FAILURE, error: err })
     })
+    
 }//end loginUser
 
 export const logoutUser = () => dispatch => {   
