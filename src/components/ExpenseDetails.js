@@ -24,9 +24,9 @@ export default function ExpenseDetails({
                         numPeople={expenseFromDashboard.split_people_count}
                   />   
 
-       ))}
+            ))}
 
-      </div>
+       </div>
 
       );
 
