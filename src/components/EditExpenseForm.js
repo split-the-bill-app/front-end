@@ -18,7 +18,7 @@ function EditExpenseForm(props) {
     
   }, [])
 
-  //when the expense to edit is returned form the server, prepopulate the form fields with the expens data
+  //when the expense to edit is returned form the server, prepopulate the form fields with the expense data
   useEffect (() => {    
     console.log("expense to edit in edit expense form before if", props.returnedExpenseToEdit);
     
