@@ -14,7 +14,7 @@ export const GET_USER_DETAILS_FAILURE = 'GET_USER_DETAILS_FAILURE';
 
 export const registerUser = newUserInfo => dispatch => {
     dispatch({ type: REGISTER_USER_START });
-    axios.post('https://split-the-bill-app.herokuapp.com/api/users/register', newUserInfo)
+    axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/register', newUserInfo)
     .then(res => { 
         console.log("register data in actions", res)            
         dispatch({ type: REGISTER_USER_SUCCESS, payload: res.data })        
@@ -25,7 +25,7 @@ export const registerUser = newUserInfo => dispatch => {
     //automatically logs the user in after registration
     .then(() => {
         dispatch ({ type: LOGIN_USER_START });
-        axios.post('https://split-the-bill-app.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
+        axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
         .then(res => {            
             console.log("login register data in actions", res.data)
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res.data})            
@@ -40,7 +40,7 @@ export const registerUser = newUserInfo => dispatch => {
 export const loginUser = loginCredentials => dispatch => {
 
     dispatch({ type: LOGIN_USER_START });
-    axios.post('https://split-the-bill-app.herokuapp.com/api/users/login', loginCredentials)
+    axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', loginCredentials)
     .then(res => {        
         console.log("login data in actions", res.data) 
         dispatch({ type: LOGIN_USER_SUCCESS, payload: res.data })         
@@ -58,7 +58,7 @@ export const logoutUser = () => dispatch => {
 export const getUserDetails = userId => dispatch => {
     dispatch({ type: GET_USER_DETAILS_START });
 
-    axiosWithAuth().get(`https://split-the-bill-app.herokuapp.com/api/users/${userId}`)
+    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/users/${userId}`)
     .then(res => {
         console.log("user details in actions", res.data);
         dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: res.data });
