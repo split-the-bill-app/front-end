@@ -14,15 +14,15 @@ const SplitProofHeader = () => {
       
       <h1>&#36;plit the Bill</h1>
 
-      {(localStorage.getItem("token")) ? 
+      {/* {(localStorage.getItem("token")) ?  */}
 
         <div className = "header-icons">
           <Navbar/>
           {/* <Search/> */}
         </div>
-      :
+      {/* :
       null
-    }
+    } */}
   </div>
   );
 }
