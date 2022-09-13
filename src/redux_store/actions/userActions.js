@@ -14,25 +14,43 @@ export const GET_USER_DETAILS_FAILURE = 'GET_USER_DETAILS_FAILURE';
 
 export const registerUser = newUserInfo => dispatch => {
     dispatch({ type: REGISTER_USER_START });
-    axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/register', newUserInfo)
+    axios.post('http://localhost:5000/api/users/register', newUserInfo)
     .then(res => { 
         console.log("register data in actions", res)            
         dispatch({ type: REGISTER_USER_SUCCESS, payload: res.data })        
     })
     .catch(err => {
-        dispatch({ type: REGISTER_USER_FAILURE, error: err })
-    })    
+        console.log('register error in front end', err.response);
+
+        let errorMsg = '';
+        if(err && err.response && err.response.data && err.response.data.errorMsg){
+            errorMsg = err.response.data.errorMsg;
+        }else{
+            errorMsg = 'A server error occurred during sign up.';
+        }
+        
+        dispatch({ type: REGISTER_USER_FAILURE, error: errorMsg })
+    }) 
     //automatically logs the user in after registration
-    .then(() => {
+    .then(() => {                             
         dispatch ({ type: LOGIN_USER_START });
-        axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
+        axios.post('http://localhost:5000/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
         .then(res => {            
-            console.log("login register data in actions", res.data)
+            console.log("automatic login after register data in front end", res.data)
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res.data})            
         })
     })
     .catch(err => {
-        dispatch({ type: LOGIN_USER_FAILURE, error: err })
+        console.log('automatic login error after register in front end', err.response);
+
+        let errorMsg = '';
+        if(err && err.response && err.response.data && err.response.data.errorMsg){
+            errorMsg = err.response.data.errorMsg;
+        }else{
+            errorMsg = 'A server error occurred during sign in.';
+        }
+
+        dispatch({ type: LOGIN_USER_FAILURE, error: errorMsg })
     })    
 
 }//end registerUser
@@ -40,13 +58,20 @@ export const registerUser = newUserInfo => dispatch => {
 export const loginUser = loginCredentials => dispatch => {
 
     dispatch({ type: LOGIN_USER_START });
-    axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', loginCredentials)
+    axios.post('http://localhost:5000/api/users/login', loginCredentials)
     .then(res => {        
         console.log("login data in actions", res.data) 
         dispatch({ type: LOGIN_USER_SUCCESS, payload: res.data })         
     })
     .catch(err => {
-        dispatch({ type: LOGIN_USER_FAILURE, error: err })
+        console.log('login failure in front end', err.response);
+        let errorMsg = '';
+        if(err && err.response && err.response.data && err.response.data.errorMsg){
+            errorMsg = err.response.data.errorMsg;
+        }else{
+            errorMsg = 'A server error occurred during sign in.';
+        }
+        dispatch({ type: LOGIN_USER_FAILURE, error: errorMsg })
     })
     
 }//end loginUser
@@ -58,7 +83,7 @@ export const logoutUser = () => dispatch => {
 export const getUserDetails = userId => dispatch => {
     dispatch({ type: GET_USER_DETAILS_START });
 
-    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/users/${userId}`)
+    axiosWithAuth().get(`http://localhost:5000/api/users/${userId}`)
     .then(res => {
         console.log("user details in actions", res.data);
         dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: res.data });

@@ -38,7 +38,8 @@ export const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isRegistering: true,
-                registerError: null
+                registerError: null,
+                loginError: null
             };
         case REGISTER_USER_SUCCESS:
             return {
@@ -59,17 +60,19 @@ export const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggingIn: true,
-                loginError: null
+                loginError: null,
+                registerError: null
             };
         case LOGIN_USER_SUCCESS:       
             return {
                 ...state,
                 loggedOut: false,
-                isLoggingIn: false,                
+                isLoggingIn: false, 
+                loginError: null,               
                 user: action.payload.user,
                 userId: action.payload.user.id,
                 token: action.payload.token,
-                loggedIn: true               
+                loggedIn: true                              
             };            
         case LOGIN_USER_FAILURE:
             return {

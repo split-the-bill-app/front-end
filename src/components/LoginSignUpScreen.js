@@ -68,8 +68,15 @@ const LoginSignupScreen = (props) => {
           placeholder="Password"
           required
           />
+
+          {props.loginError &&
+            <div className="register-description">
+              <p style={{ color: 'red' }}> {props.loginError} </p>
+            </div>
+          }
+
           <button> {props.isLoggingIn ? "Signing In..." : "Sign In"} </button>
-        </form>
+        </form>       
 
         <div className="register-description">
           <p>Don't have an account? Sign Up <Link to='/register'>Here</Link></p>

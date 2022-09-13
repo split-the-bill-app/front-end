@@ -103,8 +103,14 @@ const RegisterScreen = (props) => {
             type="password"
             required
             />
+
+          {props.registerError &&
+            <div style={{ backgroundColor: 'transparent' }} className="login-description">
+              <p style={{ color: 'red' }}> {props.registerError} </p>
+            </div>
+          }
          
-         <button> {props.isRegistering ? "Signing Up..." : "Sign Up"} </button>
+          <button> {props.isRegistering ? "Signing Up..." : "Sign Up"} </button>
         </form>
 
         <div className="login-description">

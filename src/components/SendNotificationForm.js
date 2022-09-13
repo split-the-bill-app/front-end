@@ -79,28 +79,21 @@ function SendNotificationForm(props) {
   // according to the input we get from the user
   const handleChange = (event, i) => {
     event.preventDefault();
-
-    inputs[i].value = event.target.value; 
-    
-    console.log("inputs", inputs);
+    inputs[i].value = event.target.value;     
 
     setNewNotifications({
       ...newNotifications,
       email: inputs.map(input => input.value)
-    })
-    console.log('newnotifs in handleChange: ', newNotifications);
-   
+    })   
   }
 
   // reset inputs and post the newNotifications object
   const submitNotifications = (e) => {
     var nonDupNotifs = [];
-
     e.preventDefault();    
 
-    console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);    
-
-    console.log("newNotifications.email[0]", newNotifications.email[0]);   
+    // console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);    
+    // console.log("newNotifications.email[0]", newNotifications.email[0]);   
 
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
     var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
@@ -113,7 +106,7 @@ function SendNotificationForm(props) {
                     filterNewNotifications.join("\n") + "\n\n" +
                    "Please check your entries and try again.");
 
-      console.log("filterNewNotifications", filterNewNotifications);
+      //console.log("filterNewNotifications", filterNewNotifications);
 
     } 
     else {//if duplicate values were not entered before hitting send
@@ -132,9 +125,8 @@ function SendNotificationForm(props) {
         return result.email;
       })
 
-      console.log("result emails", resultEmails);
-
-      console.log("newNotifications.email", newNotifications.email);
+      //console.log("result emails", resultEmails);
+      //console.log("newNotifications.email", newNotifications.email);
 
       //if they were already added display a window.alert with the duplicate email adresses
       if(emailsAlreadyAdded.length > 0){          
@@ -173,7 +165,6 @@ function SendNotificationForm(props) {
   const deleteInput = (event, i) => {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
-    console.log("input", inputs);
   }   
   
   return (

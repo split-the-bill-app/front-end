@@ -179,10 +179,7 @@ function Dashboard (props) {
 
         /*main container for the dashboard elements */
         <div className = "dashboard-container">
-            {/* logo and log out button */}
-            <div className = "navbar">                 
-               
-            </div>
+            {/* logo and log out button */}           
 
             {/* dashboard*/}
             <div className = "dashboard-div">
