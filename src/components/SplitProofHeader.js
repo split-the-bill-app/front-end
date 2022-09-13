@@ -12,19 +12,14 @@ const SplitProofHeader = () => {
   return (
     <div className="splitproofheader">
       
-      <h1>&#36;plit the Bill</h1>
-
-      {/* {(localStorage.getItem("token")) ?  */}
+      <h1>&#36;plit the Bill</h1>      
 
         <div className = "header-icons">
           <Navbar/>
-          {/* <Search/> */}
+          {/* {(localStorage.getItem("token")) ? <Search/> : null } */}
         </div>
-      {/* :
-      null
-    } */}
-  </div>
+    </div>
   );
-}
+}     
 
 export default SplitProofHeader;
