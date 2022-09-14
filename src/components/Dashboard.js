@@ -209,7 +209,7 @@ function Dashboard (props) {
 
                     {/* DISPLAYS WHAT YOU OWE */}
                     <Modal trigger = {                        
-                        <Badge className = "owe-badge" overlap="rectangular" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
+                        <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
                             <Popup content='View Received Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owe-div">                      
 
@@ -240,7 +240,7 @@ function Dashboard (props) {
                     {/* DISPLAYS WHAT YOU ARE OWED */}    
                     <Modal trigger = {                           
                                      
-                        <Badge className = "owed-badge" overlap="rectangular" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
+                        <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
                             <Popup content='View Unpaid Sent Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owed-div">                    
                                 Your Friends Owe You
