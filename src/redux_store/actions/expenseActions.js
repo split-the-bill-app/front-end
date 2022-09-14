@@ -19,8 +19,8 @@ export const GET_ALL_USER_EXPENSES_FAILURE = 'GET_ALL_USER_EXPENSES_FAILURE';
 export const addNewExpense = newExpenseInfo => dispatch => {
 
     dispatch({ type: ADD_EXPENSE_START });
-    axiosWithAuth().post('http://localhost:5000/api/bills/', newExpenseInfo)
-    //axiosWithAuth().post('https://split-the-bill-app-main.herokuapp.com/api/bills/', newExpenseInfo)
+    //axiosWithAuth().post('http://localhost:5000/api/bills/', newExpenseInfo)
+    axiosWithAuth().post('https://split-the-bill-app-main.herokuapp.com/api/bills/', newExpenseInfo)
     .then(res => {                
         dispatch({ type: ADD_EXPENSE_SUCCESS, payload: res.data })        
     })    
@@ -32,8 +32,8 @@ export const addNewExpense = newExpenseInfo => dispatch => {
 
 export const getExpenseToEdit = (expenseId) => dispatch => {
     dispatch({ type: GET_EXPENSE_TO_EDIT_START })
-    axiosWithAuth().get(`http://localhost:5000/api/bills/${expenseId}`)
-    //axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}`)
+    //axiosWithAuth().get(`http://localhost:5000/api/bills/${expenseId}`)
+    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}`)
     .then(res => {        
         dispatch({ type: GET_EXPENSE_TO_EDIT_SUCCESS, payload: res.data })
     })
@@ -45,8 +45,8 @@ export const getExpenseToEdit = (expenseId) => dispatch => {
 
 export const editExistingExpense = (editExpenseInfo, expenseId) => dispatch => {
     dispatch({ type: EDIT_EXPENSE_START})
-    axiosWithAuth().put(`http://localhost:5000/api/bills/${expenseId}`, editExpenseInfo)
-    //axiosWithAuth().put(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}`, editExpenseInfo)
+    //axiosWithAuth().put(`http://localhost:5000/api/bills/${expenseId}`, editExpenseInfo)
+    axiosWithAuth().put(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}`, editExpenseInfo)
     .then(res => {       
         dispatch({ type: EDIT_EXPENSE_SUCCESS, payload: res.data})
     })
@@ -58,8 +58,8 @@ export const editExistingExpense = (editExpenseInfo, expenseId) => dispatch => {
 
 export const deleteExpense = (expenseId) => dispatch => {
     dispatch({ type: DELETE_EXPENSE_START })
-    axiosWithAuth().delete(`http://localhost:5000/api/bills/${expenseId}`)
-    //axiosWithAuth().delete(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}`)
+    //axiosWithAuth().delete(`http://localhost:5000/api/bills/${expenseId}`)
+    axiosWithAuth().delete(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}`)
     .then(res => {       
         dispatch({ type: DELETE_EXPENSE_SUCCESS, payload: res.data})
     })
@@ -71,8 +71,8 @@ export const deleteExpense = (expenseId) => dispatch => {
 
 export const getAllExpenses = userId => dispatch => {
     dispatch({ type: GET_ALL_USER_EXPENSES_START })
-    axiosWithAuth().get(`http://localhost:5000/api/users/${userId}/bills`)
-    //axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/users/${userId}/bills`)
+    //axiosWithAuth().get(`http://localhost:5000/api/users/${userId}/bills`)
+    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/users/${userId}/bills`)
     .then(res => {       
         dispatch({ type: GET_ALL_USER_EXPENSES_SUCCESS, payload: res.data })
     })
