@@ -96,7 +96,7 @@ function AddExpenseForm(props) {
 
           </div>  
 
-          <button type="submit" > Calculate </button>
+          <button type="submit" > Add </button>
         </form>            
 
     </div>

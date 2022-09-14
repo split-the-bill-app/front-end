@@ -125,10 +125,10 @@ function ExpenseCard(props) {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>                  
-                  <Button class = "delete-bill-button" onClick={(e) => deleteHandler(e, props.expenseFromDashboard)}>
+                  <Button className = "delete-bill-button" onClick={(e) => deleteHandler(e, props.expenseFromDashboard)}>
                     DELETE
                   </Button>
-                  <Button class = "cancel-delete-bill-button" onClick={handleClose} color="primary">
+                  <Button className = "cancel-delete-bill-button" onClick={handleClose} color="primary">
                     CANCEL
                   </Button>
                 </DialogActions>  
