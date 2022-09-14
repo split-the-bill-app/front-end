@@ -38,8 +38,7 @@ const LoginSignupScreen = (props) => {
    
   }
 
-  const handleSubmit = (e) => {
-    console.log('login creds: ', loginCredentials)
+  const handleSubmit = (e) => {   
     e.preventDefault();   
     props.loginUser(loginCredentials);        
   }
@@ -96,7 +95,6 @@ const mapStateToProps = state => {
     token: state.usersReducerIndex.token,
     user: state.usersReducerIndex.user
   }
-
 }
 
 export default connect(mapStateToProps, { loginUser })(LoginSignupScreen);

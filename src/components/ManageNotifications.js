@@ -12,10 +12,7 @@ import { Icon } from "semantic-ui-react";
 
 function ManageNotifications(props){
        
-    useEffect(() => {     
-        
-        console.log("expense id in ManageNotifications.js", props.expenseId);
-        
+    useEffect(() => {                    
         //the formula in dashboard that calculates how much your friends owe you
         //require all expenses, the owed notifications, and the paid notifications
         //we then display all notifications for this bill        
@@ -46,9 +43,7 @@ function ManageNotifications(props){
 
     }, [props.deleteSentNotificationSuccess, props.updateNotificationPaidStatusSuccess])
                  
-    const deleteNotification = async (event, notificationIn) => {
-        console.log("delete notification clicked");
-       
+    const deleteNotification = async (event, notificationIn) => {        
         event.preventDefault();
         event.stopPropagation();
 
@@ -83,8 +78,7 @@ function ManageNotifications(props){
 
         try{        
 
-            {event.target.value === "paid" ? paidStatus = true : paidStatus = false}
-            console.log("paidStatus", paidStatus);   
+            {event.target.value === "paid" ? paidStatus = true : paidStatus = false}           
             
             //update notification
             await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});             
@@ -154,7 +148,6 @@ function ManageNotifications(props){
 }//end ManageNotifications
 
 const mapStateToProps = state => {
-    console.log("notifications in ManageNotifications", state.notificationsReducerIndex.allSentNotifications)
     return {
         //all sent notifications for a single bill
         getAllSentNotificationsError: state.notificationsReducerIndex.getAllSentNotificationsError,

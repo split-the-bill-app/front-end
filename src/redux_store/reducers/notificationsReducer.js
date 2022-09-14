@@ -69,8 +69,7 @@ export const notificationsReducer = (state = initialState, action) => {
                 getAllSentNotificationsError: null,
                 isGettingAllSentNotifications: true                  
             };
-        case GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS:
-            console.log("all sent notifications for a bill in reducer", action.payload)
+        case GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS:            
             return{
                 ...state,
                 getAllSentNotificationsError: null,
@@ -79,7 +78,6 @@ export const notificationsReducer = (state = initialState, action) => {
                 allSentNotifications: action.payload   
             };
         case GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_FAILURE:
-            console.log("get all notifications for a bill failure in reducer", action.error)
             return{
                 ...state,
                 getAllSentNotificationsError: action.error,
@@ -141,7 +139,6 @@ export const notificationsReducer = (state = initialState, action) => {
                 allSentOwedNotifications: action.payload
             };
         case GET_ALL_SENT_OWED_NOTIFICATIONS_FAILURE:
-            console.log("get all sent owed notifications failure in reducer", action.error)
             return{
                 ...state,
                 getAllSentOwedNotificationsError: action.error,
@@ -163,7 +160,6 @@ export const notificationsReducer = (state = initialState, action) => {
                 allSentPaidNotifications: action.payload
             };
         case GET_ALL_SENT_PAID_NOTIFICATIONS_FAILURE:
-            console.log("get all sent paid notifications failure in reducer", action.error)            
             return {
                 ...state,
                 getAllSentPaidNotificationsError: action.error,
@@ -198,7 +194,6 @@ export const notificationsReducer = (state = initialState, action) => {
                 isDeletingSentNotification: true
             };                
         case DELETE_SENT_NOTIFICATION_SUCCESS:
-            console.log("delete sent notification for a bill confirmation in reducer", action.payload)
             return {
                 ...state,
                 deleteSentNotificationError: null,

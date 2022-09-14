@@ -68,8 +68,7 @@ export const expensesReducer = (state = initialState, action) => {
                 isGettingExpenseToEdit: true,
                 getExpenseToEditError: null, //for cases where we are transitioning from an error state
             };
-        case GET_EXPENSE_TO_EDIT_SUCCESS:
-            //console.log("expense to edit in reducer", action.payload)
+        case GET_EXPENSE_TO_EDIT_SUCCESS:           
             return{
                 ...state,                
                 isGettingExpenseToEdit: false,                

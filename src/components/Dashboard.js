@@ -105,12 +105,12 @@ function Dashboard (props) {
 
     //when all notifications that you owe your friends are received
     useEffect(() => {
-        if(props.allReceivedNotifications){
+        if(props.allReceivedNotifications){           
 
             //all notifications that were sent to you where paid status === false
             const unpaidNotifications = props.allReceivedNotifications.filter(notification => {
-                return notification.paid === false
-            })
+                return notification.paid === false || notification.paid === 0
+            })           
 
             let unpaidTotal = 0;
 
@@ -119,7 +119,7 @@ function Dashboard (props) {
             }) 
             
             setOweNotificationsCount(unpaidNotifications.length);
-            setOweNotificationsTotal(unpaidTotal);
+            setOweNotificationsTotal(unpaidTotal);           
         }
 
     }, [props.allReceivedNotifications])
@@ -205,14 +205,11 @@ function Dashboard (props) {
                 </div>
                 
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
-                <div className="totals-summary-div">
-
-                    {console.log("oweNotificationsCount in render", oweNotificationsCount)} 
-                    {console.log("owedNotificationsCount in render", owedNotificationsCount)}                                        
+                <div className="totals-summary-div">                                                        
 
                     {/* DISPLAYS WHAT YOU OWE */}
                     <Modal trigger = {                        
-                        <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
+                        <Badge className = "owe-badge" overlap="rectangular" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
                             <Popup content='View Received Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owe-div">                      
 
@@ -243,7 +240,7 @@ function Dashboard (props) {
                     {/* DISPLAYS WHAT YOU ARE OWED */}    
                     <Modal trigger = {                           
                                      
-                        <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
+                        <Badge className = "owed-badge" overlap="rectangular" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
                             <Popup content='View Unpaid Sent Notifications' position= 'bottom center' style={style} inverted trigger={
                             <div className = "owed-div">                    
                                 Your Friends Owe You

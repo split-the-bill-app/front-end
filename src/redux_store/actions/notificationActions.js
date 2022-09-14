@@ -28,10 +28,9 @@ export const SET_NOTIFICATION_PAID_OR_UNPAID_FAILURE = 'SET_NOTIFICATION_PAID_OR
 export const getAllSentNotificationsForABill = expenseId => dispatch => {
     dispatch({ type: GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_START })
 
-    //axiosWithAuth().get(`http://localhost:5000/api/bills/${expenseId}/notifications`)
-    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}/notifications`)
-    .then(res => {
-        console.log(`get all sent notfications for a bill in actions expense id: ${expenseId}`, res.data);
+    axiosWithAuth().get(`http://localhost:5000/api/bills/${expenseId}/notifications`)
+    //axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}/notifications`)
+    .then(res => {       
         dispatch({ type: GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data});
     })
     .catch(err => {
@@ -42,10 +41,9 @@ export const getAllSentNotificationsForABill = expenseId => dispatch => {
 export const sendNotificationsForABill = newNotifications => dispatch => {
     dispatch({ type: SEND_NOTIFICATIONS_FOR_A_BILL_START})
 
-    //axiosWithAuth().post('http://localhost:5000/api/notifications', newNotifications)
-    axiosWithAuth().post('https://split-the-bill-app-main.herokuapp.com/api/notifications', newNotifications)
-    .then(res => {
-        console.log("send notifications for a bill in action", res.data)
+    axiosWithAuth().post('http://localhost:5000/api/notifications', newNotifications)
+    //axiosWithAuth().post('https://split-the-bill-app-main.herokuapp.com/api/notifications', newNotifications)
+    .then(res => {       
         dispatch({ type: SEND_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data })
     })
     .catch(err => {
@@ -57,10 +55,9 @@ export const sendNotificationsForABill = newNotifications => dispatch => {
 export const deleteSentNotificationsForABill = expenseId => dispatch => {
     dispatch({ type: DELETE_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_START });
 
-    //axiosWithAuth().delete(`http://localhost:5000/api/bills/${expenseId}/notifications`)
-    axiosWithAuth().delete(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}/notifications`)
-    .then(res => {
-        console.log("delete notification for a bill response in actions", res.data);
+    axiosWithAuth().delete(`http://localhost:5000/api/bills/${expenseId}/notifications`)
+    //axiosWithAuth().delete(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}/notifications`)
+    .then(res => {        
         dispatch({ type: DELETE_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data })
     })
     .catch(err => {
@@ -72,10 +69,9 @@ export const deleteSentNotificationsForABill = expenseId => dispatch => {
 export const getAllSentOwedNotifications = userId => dispatch => {
     dispatch({ type: GET_ALL_SENT_OWED_NOTIFICATIONS_START });
 
-    //axiosWithAuth().get(`http://localhost:5000/api/bills/notifications/owed/${userId}`)
-    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/notifications/owed/${userId}`)
-    .then(res => {
-        console.log("get all sent owed notifications in actions", res.data);
+    axiosWithAuth().get(`http://localhost:5000/api/bills/notifications/owed/${userId}`)
+    //axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/notifications/owed/${userId}`)
+    .then(res => {       
         dispatch({ type: GET_ALL_SENT_OWED_NOTIFICATIONS_SUCCESS, payload: res.data });
     })
     .catch(err => {
@@ -87,10 +83,9 @@ export const getAllSentOwedNotifications = userId => dispatch => {
 export const getAllSentPaidNotifications = userId => dispatch => {
     dispatch({ type: GET_ALL_SENT_PAID_NOTIFICATIONS_START });
 
-    //axiosWithAuth().get(`http://localhost:5000/api/bills/notifications/paid/${userId}`)
-    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/notifications/paid/${userId}`)
-    .then(res => {
-        console.log("get all sent paid notifications in actions", res.data);
+    axiosWithAuth().get(`http://localhost:5000/api/bills/notifications/paid/${userId}`)
+    //axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/notifications/paid/${userId}`)
+    .then(res => {        
         dispatch({ type: GET_ALL_SENT_PAID_NOTIFICATIONS_SUCCESS, payload: res.data });
     })
     .catch(err => {
@@ -102,10 +97,9 @@ export const getAllSentPaidNotifications = userId => dispatch => {
 export const getReceivedNotifications = userEmail => dispatch => {
     dispatch({ type: GET_ALL_RECEIVED_NOTIFICATIONS_START });
 
-    //axiosWithAuth().get(`http://localhost:5000/api/bills/notifications/${userEmail}`)
-    axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/notifications/${userEmail}`)
-    .then(res => {
-        console.log("get received notifications in actions", res.data );
+    axiosWithAuth().get(`http://localhost:5000/api/bills/notifications/${userEmail}`)
+    //axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/notifications/${userEmail}`)
+    .then(res => {        
         dispatch({ type: GET_ALL_RECEIVED_NOTIFICATIONS_SUCCESS, payload: res.data });
     })
     .catch(err => {
@@ -117,10 +111,9 @@ export const getReceivedNotifications = userEmail => dispatch => {
 export const deleteSentNotification = notificationId => dispatch => {
     dispatch({ type: DELETE_SENT_NOTIFICATION_START })
 
-    //axiosWithAuth().delete(`http://localhost:5000/api/notifications/${notificationId}`)
-    axiosWithAuth().delete(`https://split-the-bill-app-main.herokuapp.com/api/notifications/${notificationId}`)
+    axiosWithAuth().delete(`http://localhost:5000/api/notifications/${notificationId}`)
+    //axiosWithAuth().delete(`https://split-the-bill-app-main.herokuapp.com/api/notifications/${notificationId}`)
     .then(res => {
-        console.log("delete sent notification in actions", res.data);
         dispatch({ type: DELETE_SENT_NOTIFICATION_SUCCESS, payload: res.data })
     })
     .catch(err => {
@@ -131,10 +124,9 @@ export const deleteSentNotification = notificationId => dispatch => {
 export const updateNotificationPaidStatus = (notificationId, paidStatus) => dispatch => {
     dispatch({ type: SET_NOTIFICATION_PAID_OR_UNPAID_START })
 
-    //axiosWithAuth().put(`http://localhost:5000/api/notifications/${notificationId}`, paidStatus)
-    axiosWithAuth().put(`https://split-the-bill-app-main.herokuapp.com/api/notifications/${notificationId}`, paidStatus)
-    .then(res => {
-        console.log("updated notification paid status in actions", res.data)
+    axiosWithAuth().put(`http://localhost:5000/api/notifications/${notificationId}`, paidStatus)
+    //axiosWithAuth().put(`https://split-the-bill-app-main.herokuapp.com/api/notifications/${notificationId}`, paidStatus)
+    .then(res => {        
         dispatch({ type: SET_NOTIFICATION_PAID_OR_UNPAID_SUCCESS, payload: res.data })
     })
     .catch(err => {

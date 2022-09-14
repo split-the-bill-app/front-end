@@ -6,7 +6,6 @@ import useDarkMode from "../utils/hook";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useDarkMode();
-  console.log(darkMode);
   const toggleMode = e => {
     e.preventDefault();
     setDarkMode(!darkMode);
@@ -62,8 +61,7 @@ const RegisterScreen = (props) => {
          
   };
   
-  const handleSubmit = (e) => {
-    console.log("new user info", newUserInfo)  
+  const handleSubmit = (e) => {   
     e.preventDefault();
     props.registerUser(newUserInfo);     
   }

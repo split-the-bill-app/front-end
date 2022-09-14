@@ -13,20 +13,14 @@ function EditExpenseForm(props) {
 
   //when the form loads get the expense to edit from the server
   useEffect (() => {
-    console.log("expense id in edit expense form", props.expenseId)
-    props.getExpenseToEdit(props.expenseId);  
-    
+    props.getExpenseToEdit(props.expenseId);      
   }, [])
 
   //when the expense to edit is returned form the server, prepopulate the form fields with the expense data
-  useEffect (() => {    
-    console.log("expense to edit in edit expense form before if", props.returnedExpenseToEdit);
-    
+  useEffect (() => {   
     if(props.returnedExpenseToEdit){
-      setExpenseToEdit(props.returnedExpenseToEdit); //props.expenseToEdit is the redux state
-      console.log("expense to edit in edit expense form", props.returnedExpenseToEdit);
-    }   
-    
+      setExpenseToEdit(props.returnedExpenseToEdit); //props.expenseToEdit is the redux state     
+    }       
   }, [props.returnedExpenseToEdit]); 
 
   const notesCounterHandler = (event) => {
@@ -54,11 +48,8 @@ function EditExpenseForm(props) {
   }
 
   const submitHandler = (event) => {
-    const split_each_amount = (expenseToEdit.split_sum/expenseToEdit.split_people_count).toFixed(2);   
-    console.log("split each amount in edit expense form", split_each_amount);    
-
     event.preventDefault();
-
+    const split_each_amount = (expenseToEdit.split_sum/expenseToEdit.split_people_count).toFixed(2);   
     props.editExistingExpense({...expenseToEdit, split_each_amount: split_each_amount}, props.expenseId);    
 
     //closes the edit form after calculate is clicked
@@ -124,8 +115,7 @@ function EditExpenseForm(props) {
   );
 }
 
-const mapStateToProps = state => {
-  //console.log("returned expense to edit in map state to props", state.expensesReducerIndex.expenseToEdit)
+const mapStateToProps = state => {  
   return {
     isGettingExpenseToEdit: state.expensesReducerIndex.isGettingExpenseToEdit,                
     returnedExpenseToEdit: state.expensesReducerIndex.expenseToEdit,

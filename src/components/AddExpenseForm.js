@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { connect } from 'react-redux';
 import { addNewExpense, getAllExpenses } from "../redux_store/actions";
 
-function AddExpenseForm(props) {  
-
+function AddExpenseForm(props) {
   const [expenseToAdd, setExpenseToAdd] = useState({});
   let [notesCounter, setNotesCounter] = useState(0);
   let [descCounter, setDescCounter] = useState(0);
@@ -11,7 +10,6 @@ function AddExpenseForm(props) {
   const descWordCount = 15; 
 
   const notesCounterHandler = (event) => {
-
     //shows remaining characters in the description field (out of 15)
     if(notesCounter >= 0 && notesCounter <= notesWordCount){
       setNotesCounter(notesWordCount - event.target.value.length)
@@ -19,7 +17,6 @@ function AddExpenseForm(props) {
   }
 
   const descCounterHandler = (event) => {    
-
     //shows remaining characters in the description field (out of 15)
     if(descCounter >= 0 && descCounter <= descWordCount){
       setDescCounter(descWordCount - event.target.value.length)
@@ -27,7 +24,6 @@ function AddExpenseForm(props) {
   }
     
   const handleChange = (event) => {
-
     setExpenseToAdd({
       ...expenseToAdd, [event.target.name]: event.target.value
     })
@@ -43,18 +39,12 @@ function AddExpenseForm(props) {
   }
 
   const submitHandler = async (event) => {
-    const split_each_amount = (expenseToAdd.split_sum/expenseToAdd.split_people_count).toFixed(2);   
-    console.log("split each amount in add expense form", split_each_amount);    
-
     event.preventDefault();
-
-    await props.addNewExpense({...expenseToAdd, split_each_amount: split_each_amount, user_id: localStorage.getItem('userId')});   
-   
+    const split_each_amount = (expenseToAdd.split_sum/expenseToAdd.split_people_count).toFixed(2);       
+    await props.addNewExpense({...expenseToAdd, split_each_amount: split_each_amount, user_id: localStorage.getItem('userId')});    
     // then get all bills for the user and update the props.allExpenses state
     await props.getAllExpenses(localStorage.getItem('userId'));   
-
     resetForm();
-
   }
 
   return(
@@ -62,7 +52,6 @@ function AddExpenseForm(props) {
     <div className = "expense-form-div">  
 
         <form onSubmit = {submitHandler} className = "expense-form">   
-
           <input type = "number" 
                  className = "form-input"
                  name="split_sum"  
@@ -108,7 +97,6 @@ function AddExpenseForm(props) {
           </div>  
 
           <button type="submit" > Calculate </button>
-
         </form>            
 
     </div>

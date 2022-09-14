@@ -91,10 +91,7 @@ function SendNotificationForm(props) {
   const submitNotifications = (e) => {
     var nonDupNotifs = [];
     e.preventDefault();    
-
-    // console.log("notifications before adding in submitNotifications", notificationsBeforeAdding);    
-    // console.log("newNotifications.email[0]", newNotifications.email[0]);   
-
+   
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
     var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
         return inputArray.indexOf(item) == index;
@@ -105,8 +102,6 @@ function SendNotificationForm(props) {
       window.alert("You entered the following email address(es) more than once:\n" +
                     filterNewNotifications.join("\n") + "\n\n" +
                    "Please check your entries and try again.");
-
-      //console.log("filterNewNotifications", filterNewNotifications);
 
     } 
     else {//if duplicate values were not entered before hitting send
@@ -123,10 +118,7 @@ function SendNotificationForm(props) {
       //extract the email addresses from emailsAlreadyAdded
       const resultEmails = emailsAlreadyAdded.map(result => {
         return result.email;
-      })
-
-      //console.log("result emails", resultEmails);
-      //console.log("newNotifications.email", newNotifications.email);
+      })      
 
       //if they were already added display a window.alert with the duplicate email adresses
       if(emailsAlreadyAdded.length > 0){          
