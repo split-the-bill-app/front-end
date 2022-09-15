@@ -75,13 +75,14 @@ function ExpenseCard(props) {
 
     //if there are notifications for a bill, delete them first before deleting the bill
     if(props.allSentNotifications.length > 0) {
+      //delete the bill
+      await props.deleteExpense(expenseIn.id);
+
+      //then delete all notifications for a bill
       await props.deleteSentNotificationsForABill(expenseIn.id);
 
       //then get all notifications which should reset allSentNotiications to []
-      await props.getAllSentNotificationsForABill(props.expenseId);
-
-      //then delete the bill
-      await props.deleteExpense(expenseIn.id);
+      await props.getAllSentNotificationsForABill(props.expenseId);      
 
       //reset the all expenses state
       await props.getAllExpenses(localStorage.getItem('userId'));
