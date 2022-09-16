@@ -69,15 +69,13 @@ function ManageNotifications(props){
 
     }//end deleteNotification   
 
-    const paidHandler = async (event, notificationId) => {
-        
+    const paidHandler = async (event, notificationId) => {  
         event.preventDefault();
         event.stopPropagation();
 
         let paidStatus = event.target.value;
 
         try{        
-
             {event.target.value === "paid" ? paidStatus = true : paidStatus = false}           
             
             //update notification
@@ -92,8 +90,7 @@ function ManageNotifications(props){
 
             await props.getAllSentPaidNotifications(localStorage.getItem('userId'));
             
-            await props.getAllSentNotificationsForABill(props.expenseId);          
-              
+            await props.getAllSentNotificationsForABill(props.expenseId);                    
         
         }catch(err){
             console.error("Update Notification in ManageNotification.js ERROR", err);
@@ -104,7 +101,6 @@ function ManageNotifications(props){
     return (
 
         <div className="manage-notifications">            
-
             {          
             (props.allSentNotifications.length > 0) ? 
 

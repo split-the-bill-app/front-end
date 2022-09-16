@@ -51,7 +51,6 @@ function ExpenseCard(props) {
     props.getAllSentNotificationsForABill(props.expenseId); 
   }
 
-   
   useEffect(() => {
     //get all notifications sent for this bill
     props.getAllSentNotificationsForABill(props.expenseId);    
@@ -65,8 +64,12 @@ function ExpenseCard(props) {
     props.getAllSentNotificationsForABill(props.expenseId);    
 
   }, [props.sentNotificationsConfirmation, 
-      props.updateNotificationPaidStatusConfirmation, 
-      props.deleteSentNotificationConfirmation
+      /***adding the below two dependencies results in  props.getAllSentNotificationsForABill() being called consecutively
+      with each expense id (all the expenses on the dashboard) and not just the current expense. 
+      this causes inaccurate results - the notifications for the last bill is displayed - regardless of the currrent bill
+      on the ManageNotifications panel***/
+      //props.updateNotificationPaidStatusConfirmation,
+      //props.deleteSentNotificationConfirmation
     ])
  
   const deleteHandler = async (e, expenseIn) => {
@@ -75,6 +78,7 @@ function ExpenseCard(props) {
 
     //if there are notifications for a bill, delete them first before deleting the bill
     if(props.allSentNotifications.length > 0) {
+      //delete sent notifications
       await props.deleteSentNotificationsForABill(expenseIn.id);
 
       //then get all notifications which should reset allSentNotiications to []
@@ -92,8 +96,7 @@ function ExpenseCard(props) {
       await props.deleteExpense(expenseIn.id);   
       
       //reset the all expenses state
-      await props.getAllExpenses(localStorage.getItem('userId'));     
-      
+      await props.getAllExpenses(localStorage.getItem('userId'));           
     }
 
     window.location.reload(true);
