@@ -26,8 +26,7 @@ const style = {
     opacity: 0.7,    
 }
 
-function ExpenseCard(props) {  
-
+function ExpenseCard(props) {
   //delete confirmation modal
   const [open, setOpen] = React.useState(false);
 

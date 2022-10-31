@@ -13,6 +13,8 @@ export const GET_USER_DETAILS_SUCCESS = 'GET_USER_DETAILS_SUCCESS';
 export const GET_USER_DETAILS_FAILURE = 'GET_USER_DETAILS_FAILURE';
 
 export const registerUser = newUserInfo => dispatch => {
+    let registerError = false;
+
     dispatch({ type: REGISTER_USER_START });
     //axios.post('http://localhost:5000/api/users/register', newUserInfo)
     axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/register', newUserInfo)
@@ -27,11 +29,17 @@ export const registerUser = newUserInfo => dispatch => {
             errorMsg = 'A server error occurred during sign up.';
         }
         
-        dispatch({ type: REGISTER_USER_FAILURE, error: errorMsg })
-    }) 
+        dispatch({ type: REGISTER_USER_FAILURE, error: errorMsg })    
+        registerError = true;    
+    })    
     //automatically logs the user in after registration
-    .then(() => {                             
+    .then(() => {  
+        if(registerError){
+            return;
+        }
+
         dispatch ({ type: LOGIN_USER_START });
+
         //axios.post('http://localhost:5000/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
         axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
         .then(res => {           

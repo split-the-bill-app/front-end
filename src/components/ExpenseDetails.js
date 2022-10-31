@@ -2,17 +2,12 @@ import React from "react";
 import ExpenseCard from "./ExpenseCard.js";
 
 export default function ExpenseDetails({
-                                          expensesFromDashboard,                                                                               
-                                          setPaidBillsTotal,                                          
-                                          setOwedNotificationsCount,
-                                          setOwedNotificationsTotal                                          
-
+                                          expensesFromDashboard
                                     }) {
     
       return (      
 
        <div className= "expense-list">
-
             {expensesFromDashboard.map((expenseFromDashboard, index) => (           
             
                   <ExpenseCard                                         
@@ -22,10 +17,8 @@ export default function ExpenseDetails({
                         date={expenseFromDashboard.created_at} 
                         total={expenseFromDashboard.split_sum} 
                         numPeople={expenseFromDashboard.split_people_count}
-                  />   
-
+                  />
             ))}
-
        </div>
 
       );

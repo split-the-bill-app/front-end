@@ -73,7 +73,7 @@ export const getAllExpenses = userId => dispatch => {
     dispatch({ type: GET_ALL_USER_EXPENSES_START })
     //axiosWithAuth().get(`http://localhost:5000/api/users/${userId}/bills`)
     axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/users/${userId}/bills`)
-    .then(res => {       
+    .then(res => {   
         dispatch({ type: GET_ALL_USER_EXPENSES_SUCCESS, payload: res.data })
     })
     .catch(err => {

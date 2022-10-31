@@ -2,26 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; //connect component to redux
 import { registerUser, loginUser } from '../redux_store/actions';
-import useDarkMode from "../utils/hook";
-
-const Navbar = () => {
-  const [darkMode, setDarkMode] = useDarkMode();
-  const toggleMode = e => {
-    e.preventDefault();
-    setDarkMode(!darkMode);
-  };
-  return (
-    <nav className="navbar">
-      <h1>split the bill</h1>
-      <div className="dark-mode__toggle">
-        <div
-          onClick={toggleMode}
-          className={darkMode ? 'toggle toggled' : 'toggle'}
-        />
-      </div>
-    </nav>
-  );
-};
 
 const RegisterScreen = (props) => {
   const [newUserInfo, setNewUserInfo] = useState({

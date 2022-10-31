@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import { getAllSentNotificationsForABill, sendNotificationsForABill } from "../redux_store/actions";
 import { Icon } from 'semantic-ui-react';
 
-function SendNotificationForm(props) {  
-    
+function SendNotificationForm(props) {     
   let [iterator, setIterator] = useState(0);
   const [numNotifications, setNumNotifications] = useState(props.allSentNotifications.length);
+  //- 1 because the person sending the bill is excluded from the number of notification recipients
   const numPeople = props.numPeople - 1;  
 
   let[inputsToDisplay, setInputsToDisplay] = useState(numPeople - numNotifications);  
@@ -16,7 +16,7 @@ function SendNotificationForm(props) {
   const [newNotifications, setNewNotifications] = useState({
     bill_id: props.expenseId,
     email: []
-  })  
+  });
 
   const [inputs, setInputs] = useState([
     {
@@ -25,22 +25,14 @@ function SendNotificationForm(props) {
       placeholder: "Enter Your Friend's Email",
       value: ''
     }
-  ])  
-
-  /*console.log("number of notifs", numNotifications); 
-  console.log("number of ppl", numPeople); 
-  console.log("inputsToDisplay", inputsToDisplay); 
-  console.log("inputs.length", inputs.length); */
+  ]);  
     
   useEffect(() => {
-
     //get all sent notifications for a bill when the form loads
-    props.getAllSentNotificationsForABill(props.expenseId);
-   
-  }, [])
+    props.getAllSentNotificationsForABill(props.expenseId);   
+  }, []);
 
   useEffect(() => {
-
     if(props.allSentNotifications){
       setNotificationsBeforeAdding(props.allSentNotifications);        
 
@@ -51,7 +43,7 @@ function SendNotificationForm(props) {
       setInputsToDisplay(numPeople - props.allSentNotifications.length);
     }
 
-  }, [props.allSentNotifications])
+  }, [props.allSentNotifications]);
 
   useEffect(() => {
 
@@ -163,9 +155,7 @@ function SendNotificationForm(props) {
     numNotifications < numPeople ?      
     <form 
     onSubmit={(e) => submitNotifications(e)} 
-    className="send-notification-form">        
-
-      {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}      
+    className="send-notification-form">                 
       {inputs.map((input, index) => {
         return (
           <div key={index}>
@@ -187,25 +177,23 @@ function SendNotificationForm(props) {
       })}               
       
       <div className = "button-div">
+        <button  className="send-notification-btn" type="submit">Send</button>
 
-      <button  className="send-notification-btn" type="submit">Send</button>
-
-      {inputs.length < inputsToDisplay ? 
-      <button        
-        type="button"
-        className="send-notification-btn"
-        onClick={(e) => {
-          return console.log("clicked"),              
-          addInput(e)      
-        }}>
-          Add Another Email
-        </button>
-        :
-        null        
-      }
-
-      </div>          
-
+        {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}   
+        {inputs.length < inputsToDisplay ? 
+        <button        
+          type="button"
+          className="send-notification-btn"
+          onClick={(e) => {
+            return console.log("add another email clicked"),              
+            addInput(e)      
+          }}>
+            Add Another Email
+          </button>
+          :
+          null        
+        }
+      </div>
     </form> 
     :
     <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>   

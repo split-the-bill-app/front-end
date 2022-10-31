@@ -1,13 +1,15 @@
 import React from 'react';
-import useDarkMode from "../utils/hook";
+import useDarkMode from "../utils/darkModeHook.js";
 
-const Navbar = () => {
+//dark mode toggle button and functionality
+const DarkModeSwitch = () => {
     const [darkMode, setDarkMode] = useDarkMode();
     
     const toggleMode = e => {
         e.preventDefault();
         setDarkMode(!darkMode);
     };
+
     return (
         <nav className="navbar">
             <div className="dark-mode__toggle">
@@ -19,4 +21,4 @@ const Navbar = () => {
         </nav>
     );
 };
-export default Navbar
+export default DarkModeSwitch;

@@ -24,7 +24,6 @@ function EditExpenseForm(props) {
   }, [props.returnedExpenseToEdit]); 
 
   const notesCounterHandler = (event) => {
-
     //shows remaining characters in the description field (out of 15)
     if(notesCounter >= 0 && notesCounter <= notesWordCount){
       setNotesCounter(notesWordCount - event.target.value.length)
@@ -32,15 +31,13 @@ function EditExpenseForm(props) {
   }
 
   const descCounterHandler = (event) => {    
-
     //shows remaining characters in the description field (out of 15)
     if(descCounter >= 0 && descCounter <= descWordCount){
       setDescCounter(descWordCount - event.target.value.length)
     }
   }
 
-  const handleChange = (event) => {    
-    
+  const handleChange = (event) => {        
     setExpenseToEdit ({
       ...expenseToEdit, [event.target.name]: event.target.value
     })
@@ -59,9 +56,7 @@ function EditExpenseForm(props) {
   return(
 
     <div className = "expense-form-div">  
-
         <form onSubmit = {submitHandler} className = "expense-form">   
-
           <input type = "number" 
                  className = "form-input"
                  name="split_sum"  
@@ -107,9 +102,7 @@ function EditExpenseForm(props) {
           </div>  
 
           <button type="submit" > Edit </button>
-
-        </form>            
-
+        </form>
     </div>
 
   );

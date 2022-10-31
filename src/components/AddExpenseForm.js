@@ -50,7 +50,6 @@ function AddExpenseForm(props) {
   return(
 
     <div className = "expense-form-div">  
-
         <form onSubmit = {submitHandler} className = "expense-form">   
           <input type = "number" 
                  className = "form-input"
@@ -97,8 +96,7 @@ function AddExpenseForm(props) {
           </div>  
 
           <button type="submit" > Add </button>
-        </form>            
-
+        </form>       
     </div>
 
   );//end return

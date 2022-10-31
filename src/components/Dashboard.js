@@ -48,7 +48,6 @@ function Dashboard (props) {
             owedForEachBill = expense.split_sum - eachPersonBill //subtract bill creator's portion
     
             owedForEachBillTotal += owedForEachBill
-
         });
        
         owedGrandTotal = owedForEachBillTotal.toFixed(2);       
@@ -211,7 +210,7 @@ function Dashboard (props) {
                     <Modal trigger = {                        
                         <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
                             <Popup content='View Received Notifications' position= 'bottom center' style={style} inverted trigger={
-                            <div className = "owe-div">                      
+                            <div className = "owe-div">               
 
                                 You Owe Your Friends
                                 <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal.toFixed(2)}` : "$0"} </p> {/* update the totals here */}

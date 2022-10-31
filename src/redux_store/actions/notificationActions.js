@@ -30,7 +30,7 @@ export const getAllSentNotificationsForABill = expenseId => dispatch => {
 
     //axiosWithAuth().get(`http://localhost:5000/api/bills/${expenseId}/notifications`)
     axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/bills/${expenseId}/notifications`)
-    .then(res => {       
+    .then(res => {  
         dispatch({ type: GET_ALL_SENT_NOTIFICATIONS_FOR_A_BILL_SUCCESS, payload: res.data});
     })
     .catch(err => {
