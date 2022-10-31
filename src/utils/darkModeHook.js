@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useLocalStorage } from "./useLocalStorage.js"
 
 const useDarkMode = () => {
-    const [isDark, setIsDark] = useLocalStorage(false);    
+    const [darkMode, setDarkMode] = useLocalStorage(false);    
 
     useEffect(() => {
-        if (isDark === true) {
+        if (darkMode === true) {
             document.body.classList.add('dark-mode');
             if (document.querySelector('.dashboard-header-div')){
                 document.querySelector('.dashboard-header-div').classList.add('dark-mode');
@@ -19,8 +19,8 @@ const useDarkMode = () => {
             document.querySelector('.totals-summary-div').classList.remove('dark-mode');
             }
         }
-    }, [isDark]);
+    }, [darkMode]);
 
-    return [isDark, setIsDark];
+    return [darkMode, setDarkMode];
 }
 export default useDarkMode; 

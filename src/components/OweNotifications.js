@@ -4,7 +4,6 @@ import React from "react";
 function OweNotifications(props){       
 
     return (
-
         <div className="manage-notifications">
             {props.oweNotifications.map((notification, index) => {
             return <div className="notification" key={index}> 

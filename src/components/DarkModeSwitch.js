@@ -21,4 +21,4 @@ const DarkModeSwitch = () => {
         </nav>
     );
 };
-export default DarkModeSwitch;
+export default DarkModeSwitch; 

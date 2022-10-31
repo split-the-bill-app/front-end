@@ -69,13 +69,13 @@ function AddExpenseForm(props) {
 
           <div className = "expense-description">    
             <input type = "text" 
-                   className = "form-input-description"
-                   name="notes"  
-                   value = {expenseToAdd.notes} 
-                   placeholder="Notes... only you will be able to see this..."
-                   maxLength="35"
-                   onInput = {notesCounterHandler}
-                   onChange = {handleChange} />
+                    className = "form-input-description"
+                    name="notes"  
+                    value = {expenseToAdd.notes} 
+                    placeholder="Notes... only you will be able to see this..."
+                    maxLength="35"
+                    onInput = {notesCounterHandler}
+                    onChange = {handleChange} />
 
             <div className = "counter">{notesCounter}/{notesWordCount}</div>  
 
@@ -91,8 +91,7 @@ function AddExpenseForm(props) {
                    onInput = {descCounterHandler}
                    onChange = {handleChange} />
 
-            <div className = "counter">{descCounter}/{descWordCount}</div>  
-
+            <div className = "counter">{descCounter}/{descWordCount}</div> 
           </div>  
 
           <button type="submit" > Add </button>

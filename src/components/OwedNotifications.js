@@ -4,7 +4,6 @@ import React from "react";
 function OwedNotifications(props){  
       
     return (
-
         <div className="manage-notifications">            
 
             {props.owedNotifications.map((notification, index) => {
