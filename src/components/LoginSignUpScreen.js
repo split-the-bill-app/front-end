@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { loginUser } from "../redux_store/actions";
 
 const LoginSignupScreen = (props) => {
+  
   const [loginCredentials, setLoginCredentials] = useState({
     email: "",
     password: ""
@@ -11,7 +12,6 @@ const LoginSignupScreen = (props) => {
 
   //useEffect that checks for updated state from the redux store and update userId & token accordingly
   useEffect(() => {
-
     if(props.user){
       localStorage.setItem('userEmail', props.user.email);
     }
@@ -25,6 +25,7 @@ const LoginSignupScreen = (props) => {
     }
 
     if(props.loggedIn){      
+      //props.history passed down from <Route>
       props.history.push('/dashboard')
     }
 
@@ -34,8 +35,7 @@ const LoginSignupScreen = (props) => {
     setLoginCredentials({
       ...loginCredentials,
       [e.target.name]: e.target.value
-    })
-   
+    })   
   }
 
   const handleSubmit = (e) => {   
@@ -45,27 +45,27 @@ const LoginSignupScreen = (props) => {
 
   return (
     <div className="login-screen">
-
       <div className="login-form-container">
 
         <h2 className="login-form-title">Sign In to Start $plitting</h2>
         
         <form onSubmit={handleSubmit} className="login-form">
           <input 
-          onChange={handleChange}
-          className="input-email"
-          name="email"
-          type="email"
-          placeholder="Email"
-          required
+            onChange={handleChange}
+            className="input-email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            required
           />
+          
           <input 
-          onChange={handleChange}
-          className="input-password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          required
+            onChange={handleChange}
+            className="input-password"
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
           />
 
           {props.loginError &&

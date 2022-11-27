@@ -8,9 +8,7 @@ function Search(props){
         <div>
             <Icon circular size='large' name='search' />
         </div>
-
     );   
-
 }
 
 export default Search;

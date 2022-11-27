@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux'; //connect component to redux
+import { connect } from 'react-redux';
 import { registerUser, loginUser } from '../redux_store/actions';
 
 const RegisterScreen = (props) => {
+  
   const [newUserInfo, setNewUserInfo] = useState({
     firstname: "",
     lastname: "",
@@ -13,7 +14,6 @@ const RegisterScreen = (props) => {
 
   //useEffect that checks for updated state from the redux store and update userId & token accordingly
   useEffect(() => {
-
     if(props.user){
       localStorage.setItem('userEmail', props.user.email);
     }
@@ -38,7 +38,6 @@ const RegisterScreen = (props) => {
       ...newUserInfo,
       [e.target.name]: e.target.value
     })    
-         
   };
   
   const handleSubmit = (e) => {   
@@ -54,32 +53,35 @@ const RegisterScreen = (props) => {
 
         <form onSubmit={handleSubmit} className="register-form">          
             <input 
-            onChange={handleChange}
-            name="firstname"                                    
-            placeholder="First Name"
-            type="text"
-            required
+              onChange={handleChange}
+              name="firstname"                                    
+              placeholder="First Name"
+              type="text"
+              required
             />
+
             <input 
-            onChange={handleChange}
-            name="lastname"
-            placeholder="Last Name"
-            type="text"
-            required
-            />        
+              onChange={handleChange}
+              name="lastname"
+              placeholder="Last Name"
+              type="text"
+              required
+            />    
+
             <input 
-            onChange={handleChange}
-            name="email"
-            placeholder="Desired Email"
-            type="email"
-            required
+              onChange={handleChange}
+              name="email"
+              placeholder="Desired Email"
+              type="email"
+              required
             />
+
             <input 
-            onChange={handleChange}
-            name="password"
-            placeholder="Desired Password"
-            type="password"
-            required
+              onChange={handleChange}
+              name="password"
+              placeholder="Desired Password"
+              type="password"
+              required
             />
 
           {props.registerError &&
@@ -112,6 +114,6 @@ const mapStateToProps = state => {
     token: state.usersReducerIndex.token,
     user: state.usersReducerIndex.user
   }
-
 }
-export default connect(mapStateToProps, {registerUser, loginUser})(RegisterScreen);
+
+export default connect(mapStateToProps, { registerUser, loginUser })(RegisterScreen);

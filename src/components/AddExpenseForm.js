@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addNewExpense, getAllExpenses } from "../redux_store/actions";
 
 function AddExpenseForm(props) {
+
   const [expenseToAdd, setExpenseToAdd] = useState({});
   let [notesCounter, setNotesCounter] = useState(0);
   let [descCounter, setDescCounter] = useState(0);
@@ -10,7 +11,7 @@ function AddExpenseForm(props) {
   const descWordCount = 15; 
 
   const notesCounterHandler = (event) => {
-    //shows remaining characters in the description field (out of 15)
+    //shows remaining characters in the notes field (out of 35)
     if(notesCounter >= 0 && notesCounter <= notesWordCount){
       setNotesCounter(notesWordCount - event.target.value.length)
     }
@@ -78,7 +79,6 @@ function AddExpenseForm(props) {
                     onChange = {handleChange} />
 
             <div className = "counter">{notesCounter}/{notesWordCount}</div>  
-
           </div>  
 
           <div className = "expense-description">    
@@ -112,4 +112,3 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, { addNewExpense, getAllExpenses })(AddExpenseForm);
-

@@ -109,7 +109,6 @@ export const usersReducer = (state = initialState, action) => {
                 isGettingUserDetails: false                
             };    
         default:
-            return state;
+            return state;            
     }//end switch
-
 };//end usersReducer

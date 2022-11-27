@@ -36,8 +36,7 @@ const initialState = {
     getAllExpensesError: null,
     isGettingAllExpenses: false,
     allExpenses: [],
-    getAllExpensesSuccess: false
-    
+    getAllExpensesSuccess: false    
 }
     
 export const expensesReducer = (state = initialState, action) => {
@@ -142,8 +141,6 @@ export const expensesReducer = (state = initialState, action) => {
                 getAllExpensesError: action.error
             }
         default:
-            return state;       
-
+            return state; 
     }//end switch
-
 }//end expensesReducer

@@ -4,13 +4,11 @@ import { getAllSentNotificationsForABill, sendNotificationsForABill } from "../r
 import { Icon } from 'semantic-ui-react';
 
 function SendNotificationForm(props) {     
-  let [iterator, setIterator] = useState(0);
-  const [numNotifications, setNumNotifications] = useState(props.allSentNotifications.length);
+
   //- 1 because the person sending the bill is excluded from the number of notification recipients
   const numPeople = props.numPeople - 1;  
-
-  let[inputsToDisplay, setInputsToDisplay] = useState(numPeople - numNotifications);  
-  
+  const [numNotifications, setNumNotifications] = useState(props.allSentNotifications.length);
+  let[inputsToDisplay, setInputsToDisplay] = useState(numPeople - numNotifications);    
   const [notificationsBeforeAdding, setNotificationsBeforeAdding] = useState([]);
 
   const [newNotifications, setNewNotifications] = useState({
@@ -46,7 +44,6 @@ function SendNotificationForm(props) {
   }, [props.allSentNotifications]);
 
   useEffect(() => {
-
     //get all sent notifications for a bill
     props.getAllSentNotificationsForABill(props.expenseId);   
 
@@ -63,16 +60,13 @@ function SendNotificationForm(props) {
         type: "email",        
         placeholder: "Enter Your Friend's Email"
       }
-      ])      
-      
-  }//end addInput
+    ])           
+  }
 
-  // update the shape of the newNotifications object
-  // according to the input we get from the user
   const handleChange = (event, i) => {
-    event.preventDefault();
+    event.preventDefault();    
     inputs[i].value = event.target.value;     
-
+    
     setNewNotifications({
       ...newNotifications,
       email: inputs.map(input => input.value)
@@ -151,26 +145,26 @@ function SendNotificationForm(props) {
     setInputs(inputs.filter((input, index) => index !== i));
   }   
   
-  return (
+  return (     
     numNotifications < numPeople ?      
     <form 
-    onSubmit={(e) => submitNotifications(e)} 
-    className="send-notification-form">                 
+      onSubmit={(e) => submitNotifications(e)} 
+      className="send-notification-form">                  
       {inputs.map((input, index) => {
         return (
           <div key={index}>
-            <input 
-            onChange={(event) => handleChange(event, index)}
-            placeholder={input.placeholder} 
-            name={input.name}
-            value={input.value}
-            type="email"
-            required
+            <input              
+              onChange={(event) => handleChange(event, index)}
+              placeholder={input.placeholder} 
+              name={input.name}
+              value={input.value}
+              type="email"
+              required
             />
             <Icon 
-            onClick={(event) => deleteInput(event, index)} 
-            className="delete-icon" 
-            name="delete"
+              onClick={(event) => deleteInput(event, index)} 
+              className="delete-icon" 
+              name="delete"
             />
           </div>
         )
@@ -179,16 +173,16 @@ function SendNotificationForm(props) {
       <div className = "button-div">
         <button  className="send-notification-btn" type="submit">Send</button>
 
-        {/*THIS BUTTON ADDS ANOTHER INPUT FIELD WHEN CLICKED */}   
+        {/*ADDS ANOTHER INPUT FIELD WHEN CLICKED */}   
         {inputs.length < inputsToDisplay ? 
-        <button        
-          type="button"
-          className="send-notification-btn"
-          onClick={(e) => {
-            return console.log("add another email clicked"),              
-            addInput(e)      
-          }}>
-            Add Another Email
+          <button        
+            type="button"
+            className="send-notification-btn"
+            onClick={(e) => {
+              return console.log("add another email clicked"),              
+              addInput(e)      
+            }}>
+              Add Another Email
           </button>
           :
           null        

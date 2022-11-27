@@ -7,17 +7,12 @@ import RegisterScreen from './components/RegisterScreen';
 import Dashboard from "./components/Dashboard.js";
 
 function App() {  
-  return (
-    // app (root component) wrapped in a router component, starts by default with login page
-    // will route users to dashboard once signed in or registered
+  return (    
     <Router>
       <div className="App">
-        <AppHeader />        
-        
-        {/*Switch: if a route matches multiple routes enclosed in a switch statement, the browser will only 
-        render the first component it comes across. This can come in handy when considering nested routes.*/}
-        <Switch>
-          {/*exact: home or login screen will only be displayed if it matches the / path exactly*/}
+        <AppHeader />                
+       
+        <Switch>         
           <Route exact path="/" component={LoginSignUpScreen}/>
           <Route path ="/register" component={RegisterScreen}/>
           <PrivateRoute path="/dashboard" component={Dashboard}/>        

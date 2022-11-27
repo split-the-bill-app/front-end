@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
+//Component is a destructuring alias for component
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route

@@ -27,6 +27,7 @@ const style = {
 }
 
 function ExpenseCard(props) {
+
   //delete confirmation modal
   const [open, setOpen] = React.useState(false);
 
@@ -56,23 +57,15 @@ function ExpenseCard(props) {
   },[]); 
 
   
-  //every time a notification is sent, updated, or deleted
+  //every time a notification is sent
   useEffect(() => {
 
     //get all notifications sent for this bill
     props.getAllSentNotificationsForABill(props.expenseId);    
 
-  }, [props.sentNotificationsConfirmation, 
-      /***adding the below two dependencies results in  props.getAllSentNotificationsForABill() being called consecutively
-      with each expense id (all the expenses on the dashboard) and not just the current expense. 
-      this causes inaccurate results - the notifications for the last bill is displayed - regardless of the currrent bill
-      on the ManageNotifications panel***/
-      //props.updateNotificationPaidStatusConfirmation,
-      //props.deleteSentNotificationConfirmation
-    ])
+  }, [props.sentNotificationsConfirmation])
  
   const deleteHandler = async (e, expenseIn) => {
-
     e.preventDefault();
 
     //if there are notifications for a bill, delete them first before deleting the bill
@@ -90,7 +83,6 @@ function ExpenseCard(props) {
       await props.getAllExpenses(localStorage.getItem('userId'));
      
     } else {
-
       //if there are no notifications for a bill
       await props.deleteExpense(expenseIn.id);   
       
@@ -105,139 +97,121 @@ function ExpenseCard(props) {
   return (
 
     <div className = "expense-card-div">
+      {/* semantic ui card component that displays each expense details */}
+      <Card>
+        <Card.Content>
+          <Card.Header> {`Bill # ${props.expenseId}`}         
+              {/*DELETE CONFIRMATION MODAL THAT APPEARS WHEN X IS CLICKED ON EACH BILL */}
+              <Icon className = "delete-icon" name='delete' onClick={handleClickOpen}/>
+              <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description">
 
-    {/* semantic ui card component that displays each expense details */}
-    <Card>
-      <Card.Content>
-        <Card.Header> {`Bill # ${props.expenseId}`}  
-      
-            {/*DELETE CONFIRMATION MODAL THAT APPEARS WHEN X IS CLICKED ON EACH BILL */}
-            <Icon className = "delete-icon" name='delete' onClick={handleClickOpen}/>
-            <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description">
-
-              <DialogTitle id="alert-dialog-title">{"Delete Bill"}</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to delete this bill? This will completely remove this bill and its
-                    notifications for everyone involved, not just you.              
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>                  
-                  <Button className = "delete-bill-button" onClick={(e) => deleteHandler(e, props.expenseFromDashboard)}>
-                    DELETE
-                  </Button>
-                  <Button className = "cancel-delete-bill-button" onClick={handleClose} color="primary">
-                    CANCEL
-                  </Button>
-                </DialogActions>  
-            </Dialog>       
-            
-        </Card.Header>
-
-        <Card.Description>
-          {`Date: ${props.date}`}
-        </Card.Description>
-
-        <Card.Description>
-          {`Bill Total: $${props.total}`}
-        </Card.Description>
-
-        <Card.Description>
-          {`Number of people: ${props.numPeople}`}
-        </Card.Description>   
-
-        <Card.Description>
-         <Icon name="money bill alternate" />
-          {`Each of your friends owe you: $${props.expenseFromDashboard.split_each_amount}`}
-         </Card.Description>   
-
-        {props.expenseFromDashboard.notes && props.expenseFromDashboard.notes.length > 0 ? 
-          <Card.Description className="sent-notifications">
-              {`Notes: ${props.expenseFromDashboard.notes}`}
-          </Card.Description>
-          :
-        null}
-
-      {props.expenseFromDashboard.description && props.expenseFromDashboard.description.length > 0 ? 
-
-        <Card.Description className="sent-notifications">
-            {`Details: ${props.expenseFromDashboard.description}`}
-        </Card.Description>       
-        :
-        null}
-
-      </Card.Content>     
-
-      <Card.Content extra className = "expense-card-modal">     
-
-        {/*MODAL THAT TRIGGERS THE EDIT EXPENSE FORM */}
-        <Modal trigger = { 
-        <div>
-        <Popup content='Click to Edit Bill' inverted style = {style} trigger = {
-       
-        <Icon  className = "edit-icon" name="edit" size = "large" /> 
-       
-        }/>
-        </div>
-
-        }closeIcon>
-
-        <Modal.Header>Edit Expense</Modal.Header>
-
-          <EditExpenseForm expenseId={props.expenseId} />                                   
-
-        </Modal>  
-
-        {/*MODAL THAT TRIGGERS SEND NOTIFICATION FORM/> */}             
-        <Modal trigger = {
-        <div>
-        <Popup content='Click to Send Notifications' inverted style = {style} trigger = {
-        <Icon className = "mail-icon" name="send" size = "large" />   
-        }/>
-        </div>        
-        } closeIcon>
-
-        <Modal.Header>Notify Friends</Modal.Header>        
-
-        <SendNotificationForm 
-            numPeople = {props.numPeople}            
-            expenseId={props.expenseId}/>                                   
-
-        </Modal>   
-
-        {/*MODAL THAT TRIGGERS SENT/MANAGE NOTIFICATIONS */}
-        <Modal trigger = {
-        <div>
-        <Popup content='Click to Manage Sent Notifications' inverted style = {style} trigger = {        
-        <Icon  onClick = {launchManageNotifications} className = "dollar-icon" name="mail" size = "large" /> 
-        }/>
-        </div>                   
-        } 
-        onClose={closeManageNotificationsModal} 
-        closeIcon >
-
-        <Modal.Header>Manage Sent Notifications</Modal.Header>
-
-         <Modal.Content image scrolling>      
-        
-          <ManageNotifications 
-            expenseId = {props.expenseId}                           
-          />       
-
-         </Modal.Content>   
-
-        </Modal>      
+                <DialogTitle id="alert-dialog-title">{"Delete Bill"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure you want to delete this bill? This will completely remove this bill and its
+                      notifications for everyone involved, not just you.              
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>                  
+                    <Button className = "delete-bill-button" onClick={(e) => deleteHandler(e, props.expenseFromDashboard)}>
+                      DELETE
+                    </Button>
+                    <Button className = "cancel-delete-bill-button" onClick={handleClose} color="primary">
+                      CANCEL
+                    </Button>
+                  </DialogActions>  
                   
-      </Card.Content>
+              </Dialog>                     
+          </Card.Header>
 
-    </Card>
-   
-  </div>
+          <Card.Description>
+            {`Date: ${props.date}`}
+          </Card.Description>
 
+          <Card.Description>
+            {`Bill Total: $${props.total}`}
+          </Card.Description>
+
+          <Card.Description>
+            {`Number of people: ${props.numPeople}`}
+          </Card.Description>   
+
+          <Card.Description>
+          <Icon name="money bill alternate" />
+            {`Each of your friends owe you: $${props.expenseFromDashboard.split_each_amount}`}
+          </Card.Description>   
+
+          {props.expenseFromDashboard.notes && props.expenseFromDashboard.notes.length > 0 ? 
+            <Card.Description className="sent-notifications">
+                {`Notes: ${props.expenseFromDashboard.notes}`}
+            </Card.Description>
+            :
+            null}
+
+        {props.expenseFromDashboard.description && props.expenseFromDashboard.description.length > 0 ? 
+          <Card.Description className="sent-notifications">
+              {`Details: ${props.expenseFromDashboard.description}`}
+          </Card.Description>       
+          :
+          null}
+
+        </Card.Content>     
+
+        <Card.Content extra className = "expense-card-modal">     
+
+          {/*MODAL THAT TRIGGERS THE EDIT EXPENSE FORM */}
+          <Modal trigger = { 
+            <div>
+              <Popup content='Click to Edit Bill' inverted style = {style} trigger = {        
+                <Icon  className = "edit-icon" name="edit" size = "large" />         
+              }/>
+            </div>
+          }closeIcon>
+
+            <Modal.Header>Edit Expense</Modal.Header>
+            <EditExpenseForm expenseId={props.expenseId} />                                   
+
+          </Modal>  
+
+          {/*MODAL THAT TRIGGERS SEND NOTIFICATION FORM/> */}             
+          <Modal trigger = {
+            <div>
+              <Popup content='Click to Send Notifications' inverted style = {style} trigger = {
+                <Icon className = "mail-icon" name="send" size = "large" />   
+              }/>
+            </div>        
+          } closeIcon>
+
+            <Modal.Header>Notify Friends</Modal.Header>      
+            <SendNotificationForm numPeople = {props.numPeople}  expenseId={props.expenseId}/>                                   
+
+          </Modal>   
+
+          {/*MODAL THAT TRIGGERS SENT/MANAGE NOTIFICATIONS */}
+          <Modal trigger = {
+            <div>
+              <Popup content='Click to Manage Sent Notifications' inverted style = {style} trigger = {        
+                <Icon  onClick = {launchManageNotifications} className = "dollar-icon" name="mail" size = "large" /> 
+              }/>
+            </div>                   
+          } 
+          onClose={closeManageNotificationsModal} 
+          closeIcon >
+
+            <Modal.Header>Manage Sent Notifications</Modal.Header>
+            <Modal.Content image scrolling>          
+              <ManageNotifications expenseId = {props.expenseId}/>       
+            </Modal.Content>   
+
+          </Modal>      
+                    
+        </Card.Content>
+      </Card>   
+    </div>
   );
 
 }//end ExpenseCard

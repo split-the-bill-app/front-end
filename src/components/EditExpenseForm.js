@@ -5,7 +5,6 @@ import { getExpenseToEdit, editExistingExpense } from "../redux_store/actions";
 function EditExpenseForm(props) {
 
   const [expenseToEdit, setExpenseToEdit] = useState({});
-
   let [notesCounter, setNotesCounter] = useState(0);
   let [descCounter, setDescCounter] = useState(0);
   const notesWordCount = 35;
@@ -24,7 +23,7 @@ function EditExpenseForm(props) {
   }, [props.returnedExpenseToEdit]); 
 
   const notesCounterHandler = (event) => {
-    //shows remaining characters in the description field (out of 15)
+    //shows remaining characters in the notes field (out of 35)
     if(notesCounter >= 0 && notesCounter <= notesWordCount){
       setNotesCounter(notesWordCount - event.target.value.length)
     }
@@ -84,7 +83,6 @@ function EditExpenseForm(props) {
                   onChange = {handleChange} />
 
             <div className = "counter">{notesCounter}/{notesWordCount}</div>  
-
           </div>  
 
           <div className = "expense-description">    
@@ -98,7 +96,6 @@ function EditExpenseForm(props) {
                   onChange = {handleChange} />
 
             <div className = "counter">{descCounter}/{descWordCount}</div>  
-
           </div>  
 
           <button type="submit" > Edit </button>

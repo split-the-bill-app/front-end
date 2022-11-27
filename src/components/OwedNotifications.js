@@ -4,11 +4,9 @@ import React from "react";
 function OwedNotifications(props){  
       
     return (
-        <div className="manage-notifications">            
-
+        <div className="manage-notifications">
             {props.owedNotifications.map((notification, index) => {
-            return <div className="notification" key={index}> 
-               
+            return <div className="notification" key={index}>               
                 <p className = "date">
                     {notification.created_at} 
                 </p>                            
@@ -20,17 +18,13 @@ function OwedNotifications(props){
                     )
                 }
                     
-                <p>${notification.split_each_amount} </p>               
-
-                <p className = "description">{notification.description}</p>
-                               
+                <p>${notification.split_each_amount} </p>
+                <p className = "description">{notification.description}</p>                               
                 <p> {notification.paid ? "paid" : "unpaid"} </p>                    
             </div>
             })}
-        </div> 
-
+        </div>
     );
-
 }
 
 export default OwedNotifications;

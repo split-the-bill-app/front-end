@@ -28,8 +28,7 @@ function ManageNotifications(props){
 
        
     //get all notifications when a notifiction is deleted or updated
-    useEffect(() => {
-        
+    useEffect(() => {        
         //the formula in dashboard that calculates how much your friends owe you
         //require all expenses, the owed notifications, and the paid notifications
         //we then display all notifications for this bill 
@@ -99,22 +98,19 @@ function ManageNotifications(props){
     }//end paidHandler
 
     return (
-
         <div className="manage-notifications">            
             {          
-            (props.allSentNotifications.length > 0) ? 
-
+            (props.allSentNotifications.length > 0) ?
                 props.allSentNotifications.map((notification, index) => {
-                    return <div className="notification" key={index}>
-                        
+                    return <div className="notification" key={index}>                        
                         {notification.email !== null && notification.email.length > 10 ? (
                                 <p className = "email">{notification.email.slice(0, 13)}...</p>
                             ): (
                                 <p className = "email">{notification.email}</p>
                             )
                         }
-                        <p>${notification.split_each_amount} </p>               
-                    
+
+                        <p>${notification.split_each_amount} </p>                   
                         <p className = "description">{notification.description}</p>
 
                         <p className = "paid-select">
@@ -132,14 +128,13 @@ function ManageNotifications(props){
                             </select>                    
                         </p>
                         <p className = "delete-p">
-                        <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
+                            <Icon onClick={(e) => deleteNotification(e, notification)} className = "delete-notification-icon" name='delete' />
                         </p>
                     </div>
                     })
             : <p>You haven't sent any notifications for this bill.</p>
             }
-        </div> 
-            
+        </div>             
     );
 }//end ManageNotifications
 

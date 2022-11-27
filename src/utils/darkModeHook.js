@@ -5,7 +5,7 @@ const useDarkMode = () => {
     const [darkMode, setDarkMode] = useLocalStorage(false);    
 
     useEffect(() => {
-        if (darkMode === true) {
+        if (darkMode === true) { 
             document.body.classList.add('dark-mode');
             if (document.querySelector('.dashboard-header-div')){
                 document.querySelector('.dashboard-header-div').classList.add('dark-mode');
@@ -15,8 +15,8 @@ const useDarkMode = () => {
         else {
             document.body.classList.remove('dark-mode');
             if (document.querySelector('.dashboard-header-div')) {
-            document.querySelector('.dashboard-header-div').classList.remove('dark-mode');
-            document.querySelector('.totals-summary-div').classList.remove('dark-mode');
+                document.querySelector('.dashboard-header-div').classList.remove('dark-mode');
+                document.querySelector('.totals-summary-div').classList.remove('dark-mode');
             }
         }
     }, [darkMode]);

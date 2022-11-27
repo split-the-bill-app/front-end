@@ -16,11 +16,12 @@ export const registerUser = newUserInfo => dispatch => {
     let registerError = false;
 
     dispatch({ type: REGISTER_USER_START });
+
     //axios.post('http://localhost:5000/api/users/register', newUserInfo)
     axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/register', newUserInfo)
     .then(res => {                   
         dispatch({ type: REGISTER_USER_SUCCESS, payload: res.data })        
-    })
+    }) 
     .catch(err => {      
         let errorMsg = '';
         if(err && err.response && err.response.data && err.response.data.errorMsg){
@@ -60,8 +61,8 @@ export const registerUser = newUserInfo => dispatch => {
 }//end registerUser
 
 export const loginUser = loginCredentials => dispatch => {
-
     dispatch({ type: LOGIN_USER_START });
+
     //axios.post('http://localhost:5000/api/users/login', loginCredentials)
     axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', loginCredentials)
     .then(res => {       
@@ -69,11 +70,13 @@ export const loginUser = loginCredentials => dispatch => {
     })
     .catch(err => {        
         let errorMsg = '';
+
         if(err && err.response && err.response.data && err.response.data.errorMsg){
             errorMsg = err.response.data.errorMsg;
         }else{
             errorMsg = 'A server error occurred during sign in.';
         }
+
         dispatch({ type: LOGIN_USER_FAILURE, error: errorMsg })
     })
     
@@ -94,6 +97,7 @@ export const getUserDetails = userId => dispatch => {
     .catch(err => {
         dispatch({ type: GET_USER_DETAILS_FAILURE, error: err });
     })
+
 }//end getUserDetails
 
 

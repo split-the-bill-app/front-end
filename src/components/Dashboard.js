@@ -53,11 +53,7 @@ function Dashboard (props) {
         owedGrandTotal = owedForEachBillTotal.toFixed(2);       
     }//end if
 
-    const yourFriendsOweYou = owedGrandTotal - paidBillsTotal;
-
-    /*console.log("paidBillsTotal", paidBillsTotal);
-    console.log("owedGrandTotal", owedGrandTotal);
-    console.log("your friends owe you", yourFriendsOweYou);*/ 
+    const yourFriendsOweYou = owedGrandTotal - paidBillsTotal;    
         
     useEffect(() => {
         //get user details
@@ -79,7 +75,6 @@ function Dashboard (props) {
     
     //get all expenses when a bill is added, updated, or deleted
     useEffect(() => {
-
         props.getAllExpenses(localStorage.getItem('userId'));
 
     }, [props.addedExpenseSuccess, props.editExpenseSuccess, props.deleteExpenseSuccess])
@@ -177,30 +172,24 @@ function Dashboard (props) {
     return (
 
         /*main container for the dashboard elements */
-        <div className = "dashboard-container">
-            {/* logo and log out button */}           
+        <div className = "dashboard-container">               
 
             {/* dashboard*/}
             <div className = "dashboard-div">
-
-                {/* dashboard*/}
+                
                 <div className = "dashboard-header-div">
-
                     <Modal trigger = {
-
-                    <Button>Add Expense</Button>               
+                        <Button>Add Expense</Button>               
                     } closeIcon>
 
-                    <Modal.Header>Add Expense</Modal.Header>
+                        <Modal.Header>Add Expense</Modal.Header>
+                        <AddExpenseForm/>   
+                                           
+                    </Modal>               
 
-                    <AddExpenseForm /*addExpense = {addExpense}*//>                                     
+                    <h1>Hi {props.user.firstname}!</h1>
 
-                    </Modal>                  
-
-                        <h1>Hi {props.user.firstname}!</h1>
-
-                    <Button onClick={logoutHandler}> Log Out </Button>                  
-                           
+                    <Button onClick={logoutHandler}> Log Out </Button>                        
                 </div>
                 
                 {/* DISPLAYS THE OWED AND OWES RUNNING TOTALS */}
@@ -210,60 +199,46 @@ function Dashboard (props) {
                     <Modal trigger = {                        
                         <Badge className = "owe-badge" badgeContent={oweNotificationsCount > 0 ? oweNotificationsCount: "0"} color="primary">
                             <Popup content='View Received Notifications' position= 'bottom center' style={style} inverted trigger={
-                            <div className = "owe-div">               
-
-                                You Owe Your Friends
-                                <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal.toFixed(2)}` : "$0"} </p> {/* update the totals here */}
-                            </div>  
+                                <div className = "owe-div">
+                                    You Owe Your Friends
+                                    <p className = "owedTotal"> {oweNotificationsTotal > 0 ? `$${oweNotificationsTotal.toFixed(2)}` : "$0"} </p> {/* update the totals here */}
+                                </div>  
                             } /> {/*end popup */}  
-                        </Badge>           
-                        
+                        </Badge>                      
                     } closeIcon>
 
                         <Modal.Header>View Received Notifications</Modal.Header>
-
-                        <Modal.Content image scrolling> 
-
-                        {props.allReceivedNotifications.length > 0 ?
-
-                        <OweNotifications oweNotifications = {props.allReceivedNotifications} />
-                        :
-                        <p>You have no outstanding notifications.</p> 
-
-                        }                            
-
-                        </Modal.Content>                            
+                        <Modal.Content image scrolling>
+                            {
+                                props.allReceivedNotifications.length > 0 ?
+                                <OweNotifications oweNotifications = {props.allReceivedNotifications} />
+                                :
+                                <p>You have no outstanding notifications.</p> 
+                            }
+                        </Modal.Content>
 
                     </Modal>
 
                     {/* DISPLAYS WHAT YOU ARE OWED */}    
-                    <Modal trigger = {                           
-                                     
+                    <Modal trigger = {                                     
                         <Badge className = "owed-badge" badgeContent={owedNotificationsCount > 0 ? owedNotificationsCount: "0"} color="primary">
                             <Popup content='View Unpaid Sent Notifications' position= 'bottom center' style={style} inverted trigger={
-                            <div className = "owed-div">                    
-                                Your Friends Owe You
-                                {/*<p className = "owedTotal"> ${owedTotal} </p>*/}
-                                <p className = "owedTotal"> {yourFriendsOweYou > 0 ? `$${yourFriendsOweYou.toFixed(2)}` : "$0"}  </p> {/* update the totals here */}
-
-                            </div>
+                                <div className = "owed-div">                    
+                                    Your Friends Owe You                                   
+                                    <p className = "owedTotal"> {yourFriendsOweYou > 0 ? `$${yourFriendsOweYou.toFixed(2)}` : "$0"}  </p> {/* update the totals here */}
+                                </div>
                             } /> {/*end popup*/}
-                        </Badge>
-                       
+                        </Badge>                       
                     } closeIcon>
 
                         <Modal.Header>View Sent Unpaid Notifications</Modal.Header>
-
                         <Modal.Content image scrolling> 
-
-                        {props.allSentOwedNotifications.length > 0 ?
-
-                        <OwedNotifications owedNotifications = {props.allSentOwedNotifications} />
-                        :
-                        <p>Your friends have no outstanding notifications.</p> 
-
-                        }                            
-
+                            {
+                                props.allSentOwedNotifications.length > 0 ?
+                                <OwedNotifications owedNotifications = {props.allSentOwedNotifications} />
+                                :
+                                <p>Your friends have no outstanding notifications.</p> 
+                            }
                         </Modal.Content>   
 
                     </Modal>
@@ -278,17 +253,14 @@ function Dashboard (props) {
                         />
                         : 
                         <Modal trigger = {
-
                             <Button>Add An Expense To Start Splitting</Button>               
-                            } closeIcon>
+                        } closeIcon>
     
-                            <Modal.Header>Add an Expense</Modal.Header>
-    
-                            <AddExpenseForm /*addExpense = {addExpense}*/ />                                     
+                            <Modal.Header>Add an Expense</Modal.Header>    
+                            <AddExpenseForm/>                                     
                
                         </Modal>
-                    }                    
-                    
+                    }                
                 </div>  {/*end bills-list-div */}
 
             </div> {/*end dashboard div */}

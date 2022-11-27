@@ -7,7 +7,6 @@ const rootReducer = combineReducers({
     usersReducerIndex: usersReducer,
     expensesReducerIndex: expensesReducer,
     notificationsReducerIndex: notificationsReducer
-
 });
 
 export default rootReducer;
