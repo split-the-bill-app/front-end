@@ -96,7 +96,7 @@ function SendNotificationForm(props) {
 
     // } 
     if(duplicateNewEmails.length > 0){
-      window.alert("You entered the following email address(es) more than once:\n" +
+      window.alert("You entered the following email address(es) more than once **:\n" +
                     duplicateNewEmails.join("\n") + "\n\n" +
                    "Please check your entries and try again.");
     } 
