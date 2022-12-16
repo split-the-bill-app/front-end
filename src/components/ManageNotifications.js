@@ -28,10 +28,7 @@ function ManageNotifications(props){
 
        
     //get all notifications when a notifiction is deleted or updated
-    useEffect(() => {        
-        //the formula in dashboard that calculates how much your friends owe you
-        //require all expenses, the owed notifications, and the paid notifications
-        //we then display all notifications for this bill 
+    useEffect(() => {               
         props.getAllExpenses(localStorage.getItem('userId'));
 
         props.getAllSentOwedNotifications(localStorage.getItem('userId'));
@@ -48,11 +45,8 @@ function ManageNotifications(props){
 
         try{
             //delete the notification
-            await props.deleteSentNotification(notificationIn.id);   
-            
-            //the formula in dashboard that calculates how much your friends owe you
-            //require all expenses, the owed notifications, and the paid notifications
-            //we then display all notifications for this bill            
+            await props.deleteSentNotification(notificationIn.id);            
+                   
             await props.getAllExpenses(localStorage.getItem('userId'));  
 
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));
@@ -78,11 +72,8 @@ function ManageNotifications(props){
             {event.target.value === "paid" ? paidStatus = true : paidStatus = false}           
             
             //update notification
-            await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});             
-           
-            //the formula in dashboard that calculates how much your friends owe you
-            //require all expenses, the owed notifications, and the paid notifications
-            //we then display all notifications for this bill 
+            await props.updateNotificationPaidStatus(notificationId, {paid: paidStatus});            
+                      
             await props.getAllExpenses(localStorage.getItem('userId'));  
             
             await props.getAllSentOwedNotifications(localStorage.getItem('userId'));

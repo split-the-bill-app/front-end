@@ -1,8 +1,7 @@
 import React from "react";
 
 //bills that your friends owe you
-function OwedNotifications(props){  
-      
+function OwedNotifications(props){        
     return (
         <div className="manage-notifications">
             {props.owedNotifications.map((notification, index) => {

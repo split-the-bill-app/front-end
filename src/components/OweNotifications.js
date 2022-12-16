@@ -1,8 +1,7 @@
 import React from "react";
 
 //bills that you need to pay
-function OweNotifications(props){       
-
+function OweNotifications(props){      
     return (
         <div className="manage-notifications">
             {props.oweNotifications.map((notification, index) => {
