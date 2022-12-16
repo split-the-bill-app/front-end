@@ -74,8 +74,7 @@ function SendNotificationForm(props) {
 
   // reset inputs and post the newNotifications object
   const submitNotifications = (e) => {   
-    e.preventDefault();    
-    var nonDupNotifs = [];
+    e.preventDefault();        
     var duplicateNewEmails = [];
    
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
@@ -153,6 +152,10 @@ function SendNotificationForm(props) {
   const deleteInput = (event, i) => {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
+
+    newNotifications.email.filter( (item, index) => {
+      return index !== i;
+    });      
   }   
   
   return (     
