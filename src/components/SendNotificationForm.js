@@ -76,18 +76,29 @@ function SendNotificationForm(props) {
   const submitNotifications = (e) => {   
     e.preventDefault();    
     var nonDupNotifs = [];
+    var duplicateNewEmails = [];
    
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
     var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
-        return inputArray.indexOf(item) == index;
+        //return inputArray.indexOf(item) == index;
+        if(inputArray.indexOf(item) === index){
+          return item;
+        }else{
+          duplicateNewEmails.push(item);
+        }
     });
     
     //display window alert if the same email was entered more than once in the input fields before submission
-    if(filterNewNotifications.length !== newNotifications.email.length){
-      window.alert("You entered the following email address(es) more than once:\n" +
-                    filterNewNotifications.join("\n") + "\n\n" +
-                   "Please check your entries and try again.");
+    // if(filterNewNotifications.length !== newNotifications.email.length){
+    //   window.alert("You entered the following email address(es) more than once:\n" +
+    //                 filterNewNotifications.join("\n") + "\n\n" +
+    //                "Please check your entries and try again.");
 
+    // } 
+    if(duplicateNewEmails.length > 0){
+      window.alert("You entered the following email address(es) more than once:\n" +
+                    duplicateNewEmails.join("\n") + "\n\n" +
+                   "Please check your entries and try again.");
     } 
     else {//if duplicate values were not entered before hitting send
     
