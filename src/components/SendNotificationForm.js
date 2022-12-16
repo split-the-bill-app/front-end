@@ -4,7 +4,6 @@ import { getAllSentNotificationsForABill, sendNotificationsForABill } from "../r
 import { Icon } from 'semantic-ui-react';
 
 function SendNotificationForm(props) {     
-
   //- 1 because the person sending the bill is excluded from the number of notification recipients
   const numPeople = props.numPeople - 1;  
   const [numNotifications, setNumNotifications] = useState(props.allSentNotifications.length);
@@ -74,9 +73,9 @@ function SendNotificationForm(props) {
   }
 
   // reset inputs and post the newNotifications object
-  const submitNotifications = (e) => {
-    var nonDupNotifs = [];
+  const submitNotifications = (e) => {   
     e.preventDefault();    
+    var nonDupNotifs = [];
    
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
     var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
@@ -178,10 +177,7 @@ function SendNotificationForm(props) {
           <button        
             type="button"
             className="send-notification-btn"
-            onClick={(e) => {
-              return console.log("add another email clicked"),              
-              addInput(e)      
-            }}>
+            onClick={ (e) => addInput(e) }>
               Add Another Email
           </button>
           :
@@ -191,7 +187,7 @@ function SendNotificationForm(props) {
     </form> 
     :
     <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>   
-  );
+  );//end return
 }//end SendNotificationForm
 
 const mapStateToProps = state => {

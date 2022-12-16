@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { addNewExpense, getAllExpenses } from "../redux_store/actions";
 
 function AddExpenseForm(props) {
-
   const [expenseToAdd, setExpenseToAdd] = useState({});
   let [notesCounter, setNotesCounter] = useState(0);
   let [descCounter, setDescCounter] = useState(0);
@@ -49,7 +48,6 @@ function AddExpenseForm(props) {
   }
 
   return(
-
     <div className = "expense-form-div">  
         <form onSubmit = {submitHandler} className = "expense-form">   
           <input type = "number" 
@@ -97,7 +95,6 @@ function AddExpenseForm(props) {
           <button type="submit" > Add </button>
         </form>       
     </div>
-
   );//end return
   
 }//end AddExpenseForm

@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser, loginUser } from '../redux_store/actions';
 
-const RegisterScreen = (props) => {
-  
+const RegisterScreen = (props) => {  
   const [newUserInfo, setNewUserInfo] = useState({
     firstname: "",
     lastname: "",

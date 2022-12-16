@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { getExpenseToEdit, editExistingExpense } from "../redux_store/actions";
 
 function EditExpenseForm(props) {
-
   const [expenseToEdit, setExpenseToEdit] = useState({});
   let [notesCounter, setNotesCounter] = useState(0);
   let [descCounter, setDescCounter] = useState(0);
@@ -39,8 +38,7 @@ function EditExpenseForm(props) {
   const handleChange = (event) => {        
     setExpenseToEdit ({
       ...expenseToEdit, [event.target.name]: event.target.value
-    })
-    
+    })    
   }
 
   const submitHandler = (event) => {
@@ -53,7 +51,6 @@ function EditExpenseForm(props) {
   }
 
   return(
-
     <div className = "expense-form-div">  
         <form onSubmit = {submitHandler} className = "expense-form">   
           <input type = "number" 
@@ -101,7 +98,6 @@ function EditExpenseForm(props) {
           <button type="submit" > Edit </button>
         </form>
     </div>
-
   );
 }
 

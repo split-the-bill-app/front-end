@@ -4,7 +4,6 @@ import DarkModeSwitch from './DarkModeSwitch.js';
 import Search from './Search.js';
 
 const AppHeader = (props) => {
-
   useEffect( () => {
     localStorage.getItem("token");
   }, []);

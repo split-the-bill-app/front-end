@@ -9,7 +9,7 @@ import {
         getAllExpenses,
         addNewExpense,
         logoutUser
- } from "../redux_store/actions";
+} from "../redux_store/actions";
 import Badge from '@material-ui/core/Badge';
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css';
@@ -23,8 +23,7 @@ const style = {
     opacity: 0.7    
 }
 
-function Dashboard (props) {        
-    
+function Dashboard (props) {            
     //keeps track of the total $amount all the bills your friends have paid
     const [paidBillsTotal, setPaidBillsTotal] = useState([]);    
     //keeps track of the number of notifications/bills you owe your friends
@@ -170,7 +169,6 @@ function Dashboard (props) {
     }
 
     return (
-
         /*main container for the dashboard elements */
         <div className = "dashboard-container">               
 
@@ -265,11 +263,9 @@ function Dashboard (props) {
 
             </div> {/*end dashboard div */}
         
-        </div> /*end container div */
-    
+        </div> /*end container div */    
     );//end return
-
-}//end function
+}//end Dashboard
 
 const mapStateToProps = state => {    
     return {

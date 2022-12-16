@@ -7,7 +7,7 @@ import {
   getAllSentNotificationsForABill,
   getAllSentOwedNotifications,
   getAllSentPaidNotifications
-  } from "../redux_store/actions";
+} from "../redux_store/actions";
 import { Icon, Card, Modal, Popup } from "semantic-ui-react";
 import 'semantic-ui-css/semantic.css'; 
 import 'semantic-ui-css/semantic.min.css'; 
@@ -27,7 +27,6 @@ const style = {
 }
 
 function ExpenseCard(props) {
-
   //delete confirmation modal
   const [open, setOpen] = React.useState(false);
 
@@ -59,10 +58,8 @@ function ExpenseCard(props) {
   
   //every time a notification is sent
   useEffect(() => {
-
     //get all notifications sent for this bill
     props.getAllSentNotificationsForABill(props.expenseId);    
-
   }, [props.sentNotificationsConfirmation])
  
   const deleteHandler = async (e, expenseIn) => {
@@ -95,7 +92,6 @@ function ExpenseCard(props) {
   }//end deleteExpense
 
   return (
-
     <div className = "expense-card-div">
       {/* semantic ui card component that displays each expense details */}
       <Card>
@@ -152,17 +148,15 @@ function ExpenseCard(props) {
             :
             null}
 
-        {props.expenseFromDashboard.description && props.expenseFromDashboard.description.length > 0 ? 
-          <Card.Description className="sent-notifications">
-              {`Details: ${props.expenseFromDashboard.description}`}
-          </Card.Description>       
-          :
+          {props.expenseFromDashboard.description && props.expenseFromDashboard.description.length > 0 ? 
+            <Card.Description className="sent-notifications">
+                {`Details: ${props.expenseFromDashboard.description}`}
+            </Card.Description>       
+            :
           null}
-
         </Card.Content>     
 
         <Card.Content extra className = "expense-card-modal">     
-
           {/*MODAL THAT TRIGGERS THE EDIT EXPENSE FORM */}
           <Modal trigger = { 
             <div>
@@ -207,13 +201,11 @@ function ExpenseCard(props) {
               <ManageNotifications expenseId = {props.expenseId}/>       
             </Modal.Content>   
 
-          </Modal>      
-                    
+          </Modal>                    
         </Card.Content>
       </Card>   
     </div>
   );
-
 }//end ExpenseCard
 
 const mapStateToProps = state => {

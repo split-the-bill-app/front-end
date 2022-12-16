@@ -1,8 +1,7 @@
 import React from "react";
 import ExpenseCard from "./ExpenseCard.js";
 
-export default function ExpenseDetails({ expensesFromDashboard }) {
-    
+export default function ExpenseDetails({ expensesFromDashboard }) {    
       return (
             <div className= "expense-list">
                   {expensesFromDashboard.map((expenseFromDashboard, index) => (                
@@ -17,5 +16,4 @@ export default function ExpenseDetails({ expensesFromDashboard }) {
                   ))}
             </div>
       );
-
-}//end ExpenseDetails
+}

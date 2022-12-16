@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../redux_store/actions";
 
-const LoginSignupScreen = (props) => {
-  
+const LoginSignupScreen = (props) => {  
   const [loginCredentials, setLoginCredentials] = useState({
     email: "",
     password: ""
