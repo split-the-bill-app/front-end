@@ -81,7 +81,7 @@ function SendNotificationForm(props) {
     //filter newNotifications.email to make sure duplicate email addresses are not being sent for the same bill
     var filterNewNotifications = newNotifications.email.filter( function (item, index, inputArray ) {
         //return inputArray.indexOf(item) == index;
-        if(inputArray.indexOf(item) === index){
+        if(inputArray.indexOf(item) == index){
           return item;
         }else{
           duplicateNewEmails.push(item);
