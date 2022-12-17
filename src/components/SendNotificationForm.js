@@ -153,9 +153,11 @@ function SendNotificationForm(props) {
     event.preventDefault();
     setInputs(inputs.filter((input, index) => index !== i));
 
-    newNotifications.email.filter( (item, index) => {
+    let updatedNewNotifications = newNotifications.email.filter( (item, index) => {
       return index !== i;
-    });      
+    }); 
+    
+    newNotifications.email = [...updatedNewNotifications];
   }   
   
   return (     
