@@ -127,7 +127,7 @@ function ManageNotifications(props){
             }
         </div>             
     );
-}//end ManageNotifications
+}
 
 const mapStateToProps = state => {
     return {

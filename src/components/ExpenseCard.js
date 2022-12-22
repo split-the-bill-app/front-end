@@ -206,7 +206,7 @@ function ExpenseCard(props) {
       </Card>   
     </div>
   );
-}//end ExpenseCard
+}
 
 const mapStateToProps = state => {
   return {

@@ -95,9 +95,9 @@ function AddExpenseForm(props) {
           <button type="submit" > Add </button>
         </form>       
     </div>
-  );//end return
+  );
   
-}//end AddExpenseForm
+}
  
 const mapStateToProps = state => { 
   return {                    

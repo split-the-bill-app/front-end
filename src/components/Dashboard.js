@@ -264,8 +264,8 @@ function Dashboard (props) {
             </div> {/*end dashboard div */}
         
         </div> /*end container div */    
-    );//end return
-}//end Dashboard
+    );
+}
 
 const mapStateToProps = state => {    
     return {

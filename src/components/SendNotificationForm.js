@@ -194,8 +194,8 @@ function SendNotificationForm(props) {
     </form> 
     :
     <p> You already sent {numNotifications}/{numPeople} notification(s) for this bill. Delete a notification on the Manage Sent Notifications modal to send a new notification.</p>   
-  );//end return
-}//end SendNotificationForm
+  );
+}
 
 const mapStateToProps = state => {
   return {
