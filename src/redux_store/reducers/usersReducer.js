@@ -110,5 +110,5 @@ export const usersReducer = (state = initialState, action) => {
             };    
         default:
             return state;            
-    }//end switch
-};//end usersReducer
+    }
+};

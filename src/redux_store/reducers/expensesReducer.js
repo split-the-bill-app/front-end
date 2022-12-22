@@ -142,5 +142,5 @@ export const expensesReducer = (state = initialState, action) => {
             }
         default:
             return state; 
-    }//end switch
-}//end expensesReducer
+    }
+}

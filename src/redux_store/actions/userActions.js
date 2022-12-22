@@ -16,8 +16,7 @@ export const registerUser = newUserInfo => dispatch => {
     let registerError = false;
 
     dispatch({ type: REGISTER_USER_START });
-
-    //axios.post('http://localhost:5000/api/users/register', newUserInfo)
+    
     axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/register', newUserInfo)
     .then(res => {                   
         dispatch({ type: REGISTER_USER_SUCCESS, payload: res.data })        
@@ -40,8 +39,7 @@ export const registerUser = newUserInfo => dispatch => {
         }
 
         dispatch ({ type: LOGIN_USER_START });
-
-        //axios.post('http://localhost:5000/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
+        
         axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', {email: newUserInfo.email, password: newUserInfo.password})
         .then(res => {           
             dispatch({ type: LOGIN_USER_SUCCESS, payload: res.data})            
@@ -57,13 +55,11 @@ export const registerUser = newUserInfo => dispatch => {
 
         dispatch({ type: LOGIN_USER_FAILURE, error: errorMsg })
     })    
-
-}//end registerUser
+}
 
 export const loginUser = loginCredentials => dispatch => {
     dispatch({ type: LOGIN_USER_START });
-
-    //axios.post('http://localhost:5000/api/users/login', loginCredentials)
+    
     axios.post('https://split-the-bill-app-main.herokuapp.com/api/users/login', loginCredentials)
     .then(res => {       
         dispatch({ type: LOGIN_USER_SUCCESS, payload: res.data })         
@@ -78,9 +74,8 @@ export const loginUser = loginCredentials => dispatch => {
         }
 
         dispatch({ type: LOGIN_USER_FAILURE, error: errorMsg })
-    })
-    
-}//end loginUser
+    })    
+}
 
 export const logoutUser = () => dispatch => {   
     dispatch({ type: LOGOUT_USER_SUCCESS });
@@ -88,8 +83,7 @@ export const logoutUser = () => dispatch => {
 
 export const getUserDetails = userId => dispatch => {
     dispatch({ type: GET_USER_DETAILS_START });
-
-    //axiosWithAuth().get(`http://localhost:5000/api/users/${userId}`)
+   
     axiosWithAuth().get(`https://split-the-bill-app-main.herokuapp.com/api/users/${userId}`)
     .then(res => {       
         dispatch({ type: GET_USER_DETAILS_SUCCESS, payload: res.data });
@@ -97,8 +91,7 @@ export const getUserDetails = userId => dispatch => {
     .catch(err => {
         dispatch({ type: GET_USER_DETAILS_FAILURE, error: err });
     })
-
-}//end getUserDetails
+}
 
 
 

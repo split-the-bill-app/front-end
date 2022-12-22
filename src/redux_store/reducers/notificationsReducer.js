@@ -229,5 +229,5 @@ export const notificationsReducer = (state = initialState, action) => {
             };
         default:
             return state;
-    }//end switch
-}//end notificationsReducer
+    }
+}
