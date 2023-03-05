@@ -77,7 +77,7 @@ function SendNotificationForm(props) {
     e.preventDefault();        
     var duplicateNewEmails = [];
    
-    //filter newNotifications.email to prevent duplicate email addresses from being added for the same bill
+    //to prevent duplicate email addresses from being added for the same bill
     newNotifications.email.filter( (item, index, emailArray) => {     
         if(emailArray.indexOf(item) !== index){          
           duplicateNewEmails.push(item);
@@ -96,7 +96,8 @@ function SendNotificationForm(props) {
       var emailsAlreadyAdded = notificationsBeforeAdding.filter(function(o1){
         // filter out (!) items in result2
         return newNotifications.email.some(function(o2){
-            return o1.email === o2;          // assumes unique id
+            //check if any of the emails in newNotifications match those in notificationsBeforeAdding
+            return o1.email === o2;
         });
       
       });
@@ -109,9 +110,9 @@ function SendNotificationForm(props) {
       //if they were already added display a window.alert with the duplicate email adresses
       if(emailsAlreadyAdded.length > 0){          
         window.alert("You already sent notification(s) for this bill to: \n" + resultEmails.join("\n") + "\n\n" +
-                     "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")               
+                     "Please delete the existing notification(s) for the email address(es) listed if you would like to resend.")       
         
-      }//end if
+      }
 
     else {             
       props.sendNotificationsForABill(newNotifications);

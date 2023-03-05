@@ -1,7 +1,6 @@
 import axios from "axios";
 
-export const axiosWithAuth = () => {
-  // set the token from local storage to a variable
+export const axiosWithAuth = () => {  
   const token = localStorage.getItem("token");
 
   // return the token as the header prop 'Authorization' 
